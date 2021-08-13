@@ -82,7 +82,7 @@ export default {
         password: ''
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur', message:"请输入职工号" }],
+        username: [{ required: true, trigger: 'blur', message: '请输入职工号' }],
         password: [{ required: true, trigger: 'blur', validator: validatePassword }]
       },
       loading: false,
@@ -109,9 +109,9 @@ export default {
         this.$refs.password.focus()
       })
     },
-    //重置表单
-    resetForm(loginForm){
-      this.$refs[loginForm].resetFields();
+    // 重置表单
+    resetForm(loginForm) {
+      this.$refs[loginForm].resetFields()
     },
     handleLogin() {
       this.$refs.loginForm.validate(valid => {

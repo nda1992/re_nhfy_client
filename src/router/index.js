@@ -32,10 +32,10 @@ import Layout from '@/layout'
  */
 export const constantRoutes = [
   {
-      //用户注册页面
-      path: '/register',
-      component:()=>import("@/views/register/index"),
-      hidden:true,
+    //用户注册页面
+    path: '/register',
+    component: () => import("@/views/register/index"),
+    hidden: true,
   },
   {
     //用户登录

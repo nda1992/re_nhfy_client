@@ -8,7 +8,7 @@ export function login(data) {
   })
 }
 
-export function getInfo(token,userCode) {
+export function getInfo(token, userCode) {
   return request({
     url: '/users/info',
     method: 'get',
@@ -23,5 +23,3 @@ export function logout() {
     method: 'post'
   })
 }
-
-

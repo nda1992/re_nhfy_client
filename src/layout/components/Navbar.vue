@@ -4,6 +4,11 @@
 
     <breadcrumb class="breadcrumb-container" />
     <div class="title"><span>信息系统集成平台</span></div>
+
+<!--    <div class="welcome">-->
+<!--      <h2>欢迎{{name}}访问系统</h2>-->
+<!--    </div>-->
+
     <div class="right-menu">
       <!-- 用户头像 -->
       <div class="avatar">
@@ -14,7 +19,7 @@
           action="aaa"
           :before-upload="beforeUploadFile">
           <el-tooltip effect="dark" content="点击更换头像" placement="bottom-end">
-            <el-avatar shape="square" :size="40" :src="imgUrl" v-if="imgUrl"></el-avatar>
+            <el-avatar shape="square" :size="40" :src="avatar" v-if="avatar"></el-avatar>
           </el-tooltip>
           </el-upload>
         </div>
@@ -38,6 +43,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
+
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 export default {
@@ -45,16 +51,22 @@ export default {
     Breadcrumb,
     Hamburger
   },
-  data(){
-    return {
-      imgUrl:'@/assets/defaultImg.png'
-    }
-  },
+  // data() {
+  //   return {
+  //
+  //     }
+  //   },
   computed: {
-    ...mapGetters([
-      'sidebar',
-      'avatar'
-    ])
+    avatar() {
+      return localStorage.getItem('avatar')
+    },
+    userCode() {
+      return localStorage.getItem('userCode')
+    },
+    name() {
+      return localStorage.getItem('name')
+    },
+    ...mapGetters(['sidebar', 'device', 'name'])
   },
   methods: {
     toggleSideBar() {
@@ -64,6 +76,12 @@ export default {
       await this.$store.dispatch('user/logout')
       // this.$router.push(`/login?redirect=${this.$route.fullPath}`)
       this.$router.push(`/login`)
+    },
+    deleteUser() {
+      alert('该功能暂未开放，请联系管理员')
+    },
+    updateUserinfo() {
+      alert('该功能暂未开放，请联系管理员')
     }
   }
 }
@@ -112,12 +130,13 @@ export default {
     left: 1140px;
     display: flex;
     align-items: center;
-    justify-content:space-around;
+    justify-content:space-between;
     .avatar{
         .block{
           .el-tooltip{
             display:flex;
             align-items:center;
+            justify-content: center;
             .el-avatar{
             background-color: #E4E7ED;
             box-shadow: 0 0 1px 1px rgba(203, 220, 224, 0.333);
