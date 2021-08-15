@@ -64,10 +64,10 @@
             </template>
           </el-table-column>
           <!--操作按钮-->
-          <el-table-column label="操作" align="center" min-width="20px" class-name="small-padding fixed-width">
+          <el-table-column label="操作" align="center" min-width="24px" class-name="small-padding fixed-width">
             <template slot-scope="{row,$index}">
-              <el-button type="primary" size="mini" @click="handleUpdate(row)">编辑</el-button>
-              <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="handleDelete(row,$index)">删除</el-button>
+              <el-button type="primary" size="mini" @click="handleUpdate(row)" icon="el-icon-edit">编辑</el-button>
+              <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="handleDelete(row,$index)" icon="el-icon-delete">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -166,7 +166,7 @@ export default {
     methods:{
       // 按关键字进行搜索
       handleFilter(type){
-        if(type==='部门名称'){
+        if(type ==='部门名称'){
           this.searchList=this.list.filter(item=>{return item.deptName.match(this.searchVal)})
         }else if(type==='部门负责人'){
           this.searchList=this.list.filter(item=>{return item.deptLeader.match(this.searchVal)})
@@ -278,14 +278,13 @@ export default {
           })
         })
       },
-      //数据导出
+      //导出excel
       handleDownload(){
         this.downloadLoading = true
         import('@/vendor/Export2Excel').then(excel => {
           const tHeader = ['科室编号', '科室名称', '科室领导', '科室级别', '科室地址', '科室简介']
           const filterVal = ['科室编号', '科室名称', '科室领导', '科室级别', '科室地址', '科室简介']
           const data = this.formatJson(filterVal)
-          console.log(data)
           excel.export_json_to_excel({
             header: tHeader,
             data,
@@ -312,6 +311,11 @@ export default {
       width: 720px;
       display: flex;
       justify-content: space-around;
+    }
+    .el-table{
+      &:hover{
+        box-shadow: 0 0 20px #e8ecef;
+      }
     }
   }
 </style>

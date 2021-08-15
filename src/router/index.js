@@ -91,6 +91,14 @@ export const constantRoutes = [
           meta: { title: '新闻发布', icon: 'el-icon-edit-outline' },
       },
       {
+        //新闻更新页面
+        path:'edit/:id(\\d+)',
+        name:'Edit',
+        component:()=>import("@/views/news/edit"),
+        meta: { title: '新闻更新'},
+        hidden: true
+      },
+      {
           //发文可视化分析
           path:'analysis',
           name:'Analysis',
