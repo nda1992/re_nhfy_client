@@ -43,23 +43,25 @@
 
 <script>
 import { mapGetters } from 'vuex'
-
+// import { beforeUploadFile } from '@/api/user'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
+import { uuid } from '@/utils/uuid'
+import axios from 'axios'
 export default {
   components: {
     Breadcrumb,
     Hamburger
   },
-  // data() {
-  //   return {
-  //
-  //     }
-  //   },
-  computed: {
-    avatar() {
-      return localStorage.getItem('avatar')
+  data() {
+    return {
+        avatar:localStorage.getItem('avatar')
+      }
     },
+  computed: {
+    // avatar() {
+    //   return localStorage.getItem('avatar')
+    // },
     userCode() {
       return localStorage.getItem('userCode')
     },
@@ -82,6 +84,24 @@ export default {
     },
     updateUserinfo() {
       alert('该功能暂未开放，请联系管理员')
+    },
+    // 头像上传处理函数
+    beforeUploadFile(file) {
+      let formdata = new FormData();
+      formdata.append("file",file)
+      formdata.append("userCode",localStorage.getItem('userCode'))
+      formdata.append("avatar",localStorage.getItem('avatar'))
+      const {data} = axios.post("http://localhost:3000/users/uploadAvatar",formdata,{headers:{token:localStorage.getItem('token'),uuid:uuid()}}).then(res=>{
+        const { data } = res
+        if(data.code ===200){
+          this.avatar = data.avatar
+          localStorage.setItem('avatar',data.avatar)
+          this.$store.dispatch('/user/uploadavatar')
+          this.$message.success(data.msg)
+        }else{
+          this.$message.success('头像上传失败')
+        }
+      })
     }
   }
 }
