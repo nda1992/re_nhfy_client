@@ -10,6 +10,14 @@
       <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload" style="margin-left: 0">导出表格</el-button>
     </div>
     <el-divider></el-divider>
+    <el-table v-loading="listLoading" :data="searchList" border fit highlight-current-row style="width: 100%">
+      <el-table-column align="center" label="ID" width="80">
+        <template slot-scope="scope">
+          <span>{{ scope.row.id }}</span>
+        </template>
+      </el-table-column>
+
+    </el-table>
   </div>
 </template>
 
