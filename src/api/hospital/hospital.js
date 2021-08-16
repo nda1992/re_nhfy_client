@@ -1,5 +1,5 @@
 import request from '@/utils/request'
-//获取部门列表
+// 获取部门列表
 export function getdeptList(listQuery) {
   return request({
     url: '/hospital/getdeptList',
@@ -8,8 +8,8 @@ export function getdeptList(listQuery) {
   })
 }
 
-//新增部门
-export function createDept(data){
+// 新增部门
+export function createDept(data) {
   return request({
     url: '/hospital/addDept',
     method: 'post',
@@ -17,8 +17,8 @@ export function createDept(data){
   })
 }
 
-//更新部门
-export function updateDept(data){
+// 更新部门
+export function updateDept(data) {
   return request({
     url: '/hospital/updateDept',
     method: 'post',
@@ -26,14 +26,11 @@ export function updateDept(data){
   })
 }
 
-//删除部门
-export function deleteDept(id){
+// 删除部门
+export function deleteDept(id) {
   return request({
     url: '/hospital/deleteDept',
     method: 'delete',
-    params:{id}
+    params: { id }
   })
 }
-
-
-

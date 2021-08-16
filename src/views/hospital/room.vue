@@ -105,9 +105,9 @@
     </div>
 </template>
 <script>
-  import waves from '@/directive/waves'
-  import Pagination from '@/components/Pagination'
-  import { getdeptList,createDept,updateDept,deleteDept } from '@/api/hospital/hospital'
+import waves from '@/directive/waves'
+import Pagination from '@/components/Pagination'
+import { getdeptList, createDept, updateDept, deleteDept } from '@/api/hospital/hospital'
 export default {
     components: { Pagination },
     directives: { waves },
@@ -130,7 +130,7 @@ export default {
           //对话框
           textMap: {
             update: '更新部门信息',
-            create: '新增部门'
+            create: '新增科室'
           },
           dialogStatus: '',
           dialogFormVisible: false,
@@ -163,15 +163,15 @@ export default {
     mounted() {
       this.getdeptList()
     },
-    methods:{
+    methods: {
       // 按关键字进行搜索
-      handleFilter(type){
-        if(type ==='部门名称'){
-          this.searchList=this.list.filter(item=>{return item.deptName.match(this.searchVal)})
-        }else if(type==='部门负责人'){
-          this.searchList=this.list.filter(item=>{return item.deptLeader.match(this.searchVal)})
-        }else if(type==='部门地址'){
-          this.searchList=this.list.filter(item=>{return item.deptAddr.match(this.searchVal)})
+      handleFilter(type) {
+        if (type === '部门名称') {
+          this.searchList = this.list.filter(item => { return item.deptName.match(this.searchVal) })
+        } else if (type === '部门负责人'){
+          this.searchList = this.list.filter(item => { return item.deptLeader.match(this.searchVal) })
+        } else if (type === '部门地址') {
+          this.searchList = this.list.filter(item => { return item.deptAddr.match(this.searchVal) })
         }
       },
       // 获取部门列表
@@ -198,7 +198,7 @@ export default {
         }
       },
       //新增科室
-      handleCreate(){
+      handleCreate() {
         this.resetTemp()
         this.dialogStatus = 'create'
         this.dialogFormVisible = true
@@ -279,7 +279,7 @@ export default {
         })
       },
       //导出excel
-      handleDownload(){
+      handleDownload() {
         this.downloadLoading = true
         import('@/vendor/Export2Excel').then(excel => {
           const tHeader = ['科室编号', '科室名称', '科室领导', '科室级别', '科室地址', '科室简介']
@@ -301,7 +301,7 @@ export default {
           data.push(temp)
         })
         return data
-      },
+      }
     }
 }
 </script>

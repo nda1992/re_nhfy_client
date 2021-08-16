@@ -55,7 +55,7 @@ export default {
   },
   data() {
     return {
-        avatar:localStorage.getItem('avatar')
+        avatar: localStorage.getItem('avatar')
       }
     },
   computed: {
@@ -87,18 +87,18 @@ export default {
     },
     // 头像上传处理函数
     beforeUploadFile(file) {
-      let formdata = new FormData();
-      formdata.append("file",file)
-      formdata.append("userCode",localStorage.getItem('userCode'))
-      formdata.append("avatar",localStorage.getItem('avatar'))
-      const {data} = axios.post("http://localhost:3000/users/uploadAvatar",formdata,{headers:{token:localStorage.getItem('token'),uuid:uuid()}}).then(res=>{
+      let formdata = new FormData()
+      formdata.append('file', file)
+      formdata.append('userCode', localStorage.getItem('userCode'))
+      formdata.append('avatar', localStorage.getItem('avatar'))
+      const { data } = axios.post('http://localhost:3000/users/uploadAvatar', formdata, { headers: { token: localStorage.getItem('token'), uuid: uuid() }}).then(res => {
         const { data } = res
-        if(data.code ===200){
+        if (data.code === 200) {
           this.avatar = data.avatar
-          localStorage.setItem('avatar',data.avatar)
+          localStorage.setItem('avatar', data.avatar)
           this.$store.dispatch('/user/uploadavatar')
           this.$message.success(data.msg)
-        }else{
+        } else {
           this.$message.success('头像上传失败')
         }
       })
