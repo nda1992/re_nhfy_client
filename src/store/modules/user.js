@@ -9,7 +9,7 @@ const getDefaultState = () => {
     avatar: '', // 用户头像
     userCode: '', // 用户职工号
     deptName: '', // 所属部门
-    role:''       //用户角色
+    role: '' // 用户角色
   }
 }
 
@@ -34,8 +34,8 @@ const mutations = {
   SET_DEPTNAME: (state, deptName) => {
     state.deptName = localStorage.setItem('deptName', deptName)
   },
-  SET_ROLE: (state,role) => {
-    state.role = localStorage.setItem('role',role)
+  SET_ROLE: (state, role) => {
+    state.role = localStorage.setItem('role', role)
   }
 }
 
@@ -48,7 +48,7 @@ const actions = {
         const { data } = response
         commit('SET_TOKEN', data.token)
         commit('SET_USERCODE', data.userCode)
-        commit('SET_ROLE',data.role)
+        commit('SET_ROLE', data.role)
         // setToken(data.token)
         resolve()
       }).catch(error => {
@@ -73,7 +73,7 @@ const actions = {
         commit('SET_AVATAR', avatar)
         commit('SET_DEPTNAME', deptname)
         commit('SET_USERCODE', usercode)
-        commit('SET_NAME',name)
+        commit('SET_NAME', name)
         resolve(data)
       }).catch(error => {
         reject(error)
@@ -85,6 +85,11 @@ const actions = {
   logout({ commit, state }) {
     return new Promise((resolve, reject) => {
       logout(state.token).then(() => {
+        localStorage.removeItem('avatar')
+        localStorage.removeItem('deptName')
+        localStorage.removeItem('role')
+        localStorage.removeItem('name')
+        localStorage.removeItem('userCode')
         removeToken() // must remove  token  first
         resetRouter()
         commit('RESET_STATE')
@@ -95,10 +100,10 @@ const actions = {
     })
   },
 
-  //upload avatar
+  // upload avatar
   uploadavatar({ commit, state }) {
-    return new Promise((resolve,reject)=>{
-      commit('SET_AVATAR',state.avatar)
+    return new Promise((resolve, reject) => {
+      commit('SET_AVATAR', state.avatar)
       resolve()
     })
   },
