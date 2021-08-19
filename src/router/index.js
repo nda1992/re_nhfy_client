@@ -34,7 +34,7 @@ export const constantRoutes = [
   {
     // 用户注册页面
     path: '/register',
-    component: () => import('[@/views/register/index'),
+    component: () => import('@/views/register/index'),
     hidden: true
   },
   {
@@ -51,8 +51,8 @@ export const constantRoutes = [
     hidden: true
   },
   {
-    path: '/auth-redirect',
-    component: () => import('@/views/login/auth-redirect'),
+    path: '/401',
+    component: () => import('@/views/error-page/401'),
     hidden: true
   },
   {
@@ -78,7 +78,7 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/news/home',
     name: 'News',
-    meta: { title: '新闻管理', icon: 'el-icon-document' },
+    meta: { title: '新闻管理', icon: 'el-icon-news' },
     children: [{
       // 新闻管理首页
       path: 'home',
@@ -208,6 +208,22 @@ export const constantRoutes = [
         name: 'Intpatient',
         component: () => import('@/views/report/inpatient'),
         meta: { title: '住院报表查询', icon: 'el-icon-s-unfold' }
+      },
+      // 401页面
+      {
+        path: '401',
+        component: () => import('@/views/error-page/401'),
+        name: 'Page401',
+        meta: { title: '401', noCache: true },
+        hidden: true
+      },
+      // 404页面
+      {
+        path: '404',
+        component: () => import('@/views/error-page/404'),
+        name: 'Page404',
+        meta: { title: '404', noCache: true },
+        hidden: true
       }
     ]
   },
@@ -309,7 +325,7 @@ export const constantRoutes = [
         path: 'home',
         name: 'Home',
         component: () => import('@/views/others/index'),
-        meta: { title: '第三方工具', icon: 'el-icon-news' }
+        meta: { title: '第三方工具', icon: 'el-icon-connection' }
       }
     ]
   },
@@ -327,6 +343,22 @@ export const constantRoutes = [
         name: 'Home',
         component: () => import('@/views/settings/index'),
         meta: { title: '系统设置', icon: 'el-icon-setting' }
+      }
+    ]
+  },
+  // 文档下载
+  {
+    path: '/document',
+    component: Layout,
+    redirect: '/document/home',
+    name: 'document',
+    children: [
+      {
+        // 首页
+        path: 'home',
+        name: 'Home',
+        component: () => import('@/views/document/index'),
+        meta: { title: '文档下载', icon: 'el-icon-document' }
       }
     ]
   },

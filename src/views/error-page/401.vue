@@ -8,51 +8,77 @@
         <h1 class="text-jumbo text-ginormous">
           Oops!
         </h1>
-        gif来源<a href="https://zh.airbnb.com/" target="_blank">airbnb</a> 页面
-        <h2>你没有权限去该页面</h2>
-        <h6>如有不满请联系你领导</h6>
-        <ul class="list-unstyled">
-          <li>或者你可以去:</li>
-          <li class="link-type">
-            <router-link to="/dashboard">
-              回首页
-            </router-link>
-          </li>
-          <li class="link-type">
-            <a href="https://www.taobao.com/">随便看看</a>
-          </li>
-          <li><a href="#" @click.prevent="dialogVisible=true">点我看图</a></li>
-        </ul>
+        <h2>您没有权限访问该页面</h2>
+        <h6>如有不满请联系管理员</h6>
+        <h6 class="list-unstyled"><a href="#" @click.prevent="handlerAdvice">请提交您需要反馈的建议</a></h6>
       </el-col>
       <el-col :span="12">
         <img :src="errGif" width="313" height="428" alt="Girl has dropped her ice cream.">
       </el-col>
     </el-row>
-    <el-dialog :visible.sync="dialogVisible" title="随便看">
-      <img :src="ewizardClap" class="pan-img">
+    <el-dialog :visible.sync="dialogVisible" title="建议反馈">
+      <el-form ref="dataForm" :model="temp" label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
+        <el-input v-model="temp.content" type="textarea" placeholder="请输入您需要反馈的建议"></el-input>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="createData">确定</el-button>
+      </div>
     </el-dialog>
   </div>
 </template>
 
 <script>
 import errGif from '@/assets/401_images/401.gif'
-
+import { createAdvice } from '@/api/report/report'
 export default {
   name: 'Page401',
   data() {
     return {
       errGif: errGif + '?' + +new Date(),
       ewizardClap: 'https://wpimg.wallstcn.com/007ef517-bafd-4066-aae4-6883632d9646',
-      dialogVisible: false
+      dialogVisible: false,
+      temp: { userCode: '', content: '' }
     }
   },
   methods: {
     back() {
-      if (this.$route.query.noGoBack) {
-        this.$router.push({ path: '/dashboard' })
-      } else {
-        this.$router.go(-1)
+      this.$router.push({ path: '/dashboard' })
+    },
+    // 重置表单
+    resetTemp() {
+      this.temp = {
+        userCode: '',
+        content: ''
       }
+    },
+    handlerAdvice() {
+      this.resetTemp()
+      this.dialogVisible = true
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
+    },
+    createData() {
+      this.temp.userCode = localStorage.getItem('userCode')
+      if (this.temp.content === '') {
+        this.$message.error('提交的反馈不能为空')
+        return
+      }
+      this.$confirm('是否提交?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning' }).then(() => {
+        createAdvice(this.temp).then(() => {
+          this.dialogVisible = false
+          this.$notify({
+            title: 'Success',
+            message: '提交成功，感谢您的反馈',
+            type: 'success',
+            duration: 2000
+          })
+        })
+      })
     }
   }
 }

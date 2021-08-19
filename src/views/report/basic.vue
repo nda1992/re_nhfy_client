@@ -9,14 +9,17 @@
             </el-dropdown-menu>
           </el-dropdown>
           <el-date-picker v-model="searchDate" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd" clearable @change="pickerDate"></el-date-picker>
-          <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload" style="margin-left: 0">导出表格</el-button>
+          <el-button v-waves :loading="downloadLoading" class="filter-item" type="success" icon="el-icon-download" @click="handleDownload" style="margin-left: 0">导出表格</el-button>
           <div style="color:#FF6600;font-size: 12px">注意：所选月份在数据库中没有数据时，表格中将不显示！</div>
         </div>
       <el-divider></el-divider>
+      <div style="font-size: 18px;margin-bottom: 10px;font-weight: bold" v-if="searchDate!==''">南华大学附属第一医院医疗{{searchDate[0].slice(0,7)}}~{{searchDate[1].slice(0,7)}}收入情况表</div>
       <el-table
         :key="tableKey"
         v-loading="listLoading"
         :data="items"
+        :height="items.length===0?'auto':'750'"
+        stripe
         border
         fit
         highlight-current-row
@@ -238,7 +241,7 @@ export default {
   data() {
     return {
       downloadLoading: false,
-      menuList: [{ id: 1, content: '医疗收入情况' }, { id: 2, content: '医疗运营情况' }, { id: 3, content: '其他操作' }],
+      menuList: [{ id: 1, content: '医疗收入情况' }, { id: 2, content: '医疗运营情况' }, { id: 3, content: '可视化' }],
       // 查询的日期
       searchDate: '',
       tableKey: 0,
@@ -246,12 +249,16 @@ export default {
       items: []
     }
   },
+  created() {
+    if (localStorage.getItem('role') !== 'admin') {
+      this.$router.push({ name: 'Page401' })
+    }
+  },
   computed: {
 
   },
   methods: {
     pickerDate() {
-      // console.log(this.searchDate)
       const start_date = this.searchDate[0].trim().slice(0, 7)
       const end_date = this.searchDate[1].trim().slice(0, 7)
       const obj = { role: localStorage.getItem('role'), start_date: start_date, end_date: end_date }

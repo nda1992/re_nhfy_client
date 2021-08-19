@@ -8,3 +8,11 @@ export function medicalRevenue(obj) {
     params: obj
   })
 }
+
+export function createAdvice(obj) {
+  return request({
+    url: '/report/usersAdvice',
+    method: 'post',
+    params: { obj }
+  })
+}
