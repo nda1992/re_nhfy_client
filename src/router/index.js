@@ -264,13 +264,30 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/reportmake/home',
     name: 'reportMake',
+    meta: { title: '报表定制', icon: 'el-icon-document-checked' },
     children: [
       {
         // 首页
         path: 'home',
         name: 'Home',
         component: () => import('@/views/reportmake/index'),
-        meta: { title: '报表定制', icon: 'el-icon-document-checked' }
+        meta: { title: '首页', icon: 'el-icon-box' }
+      },
+      {
+        // 特殊查询
+        path: 'specialQuery',
+        name: 'SpecialQuery',
+        component: () => import('@/views/reportmake/specialQuery'),
+        meta: { title: '特殊查询', icon: 'el-icon-aim' },
+        children: [
+          {
+            // 科室运营情况
+            path: 'deptOperate',
+            name: 'DeptOperate',
+            component: () => import('@/views/reportmake/children/deptOperate'),
+            hidden: true
+          }
+        ]
       }
     ]
   },

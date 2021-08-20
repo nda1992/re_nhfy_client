@@ -11,6 +11,7 @@
         :key="tableKey"
         v-loading="listLoading"
         :data="tableTitleList"
+        stripe
         border
         fit
         highlight-current-row
@@ -23,7 +24,7 @@
           </template>
         </el-table-column>
         <!--表格标题-->
-        <el-table-column label="表格标题" prop="title" sortable="custom" align="center" min-width="50px">
+        <el-table-column label="表格标题" prop="title" align="center" min-width="50px">
           <template slot-scope="{row}">
             <span>{{ row.title }}</span>
           </template>
@@ -31,17 +32,18 @@
         <!--创建时间-->
         <el-table-column label="创建时间" prop="createdDate" min-width="10px" align="center">
           <template slot-scope="{row}">
+            <i class="el-icon-time" style="margin-right: 4px"></i>
             <span>{{ row.createdDate }}</span>
           </template>
         </el-table-column>
         <!--备注-->
-        <el-table-column label="备注" prop="createdDate" min-width="20px" align="center">
+        <el-table-column label="备注" prop="createdDate" min-width="60px" align="center">
           <template slot-scope="{row}">
             <span>{{ row.desc }}</span>
           </template>
         </el-table-column>
         <!--操作按钮-->
-        <el-table-column label="操作" align="center" min-width="24px" class-name="small-padding fixed-width">
+        <el-table-column label="操作" align="center" min-width="20px" class-name="small-padding fixed-width">
           <template slot-scope="{row,$index}">
             <el-button type="primary" size="mini" @click="handleUpdate(row)" icon="el-icon-edit">编辑</el-button>
             <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="handleDelete(row,$index)" icon="el-icon-delete">删除</el-button>
@@ -51,9 +53,9 @@
     </div>
 <!--    添加表格对话框-->
     <el-dialog :visible.sync="dialogCreateVisible" title="定制表格名称">
-      <el-form ref="dataForm" :model="tableTitle" label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
-        <el-input v-model="temp.title" type="text" placeholder="请输入表格名称"></el-input>
-        <el-input v-model="temp.desc" type="textarea" placeholder="请输入备注"></el-input>
+      <el-form ref="dataForm" :model="tableTitle" label-position="left" label-width="100px" style="width: 500px; margin-left:50px;">
+        <el-input v-model="tableTitle.title" clearable type="text" placeholder="请输入表格名称" style="margin-bottom: 20px;"></el-input>
+        <el-input v-model="tableTitle.desc" type="textarea" placeholder="请输入备注"></el-input>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogCreateVisible = false">取消</el-button>
@@ -71,7 +73,7 @@ export default {
       listLoading: false,
       tableKey: 0,
       dialogCreateVisible: false,
-      tableTitle: { title: '', desc: '' },
+      tableTitle: { id: '', title: '', desc: '' },
       tableTitleList: []
     }
   },
@@ -82,15 +84,15 @@ export default {
     // 获取表格标题列表
     getTableTitleList() {
       getTableTitleList(localStorage.getItem('role')).then((res) => {
-        const { items, msg } = res
+        const { items } = res
+        // this.$message.success(msg)
         this.tableTitleList = items
-        this.$message.success(msg)
       })
     },
     // 重置表单
     resetTableTitle() {
       this.tableTitle = {
-        title: '', desc: ''
+        id: undefined, title: '', desc: ''
       }
     },
     handlerCreate() {
@@ -111,6 +113,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning' }).then(() => {
         createTableTitle(this.tableTitle).then(() => {
+          this.getTableTitleList()
           this.dialogCreateVisible = false
           this.$notify({
             title: 'Success',
@@ -138,8 +141,9 @@ export default {
             type: 'warning'
           }).then(() => {
             const tempData = Object.assign({}, this.tableTitle)
+            tempData.role = localStorage.getItem('role')
             updateTableTitle(tempData).then(() => {
-              this.getdeptList()
+              this.getTableTitleList()
               this.dialogCreateVisible = false
               this.$notify({
                 title: 'Success',
@@ -158,7 +162,8 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteTableTitle(row.id).then(() => {
+        const temp = { id: row.id, role: localStorage.getItem('role') }
+        deleteTableTitle(temp).then(() => {
           this.getTableTitleList()
           this.$notify({
             title: 'Success',
