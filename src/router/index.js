@@ -107,7 +107,14 @@ export const constantRoutes = [
       name: 'Analysis',
       component: () => import('@/views/news/analysis'),
       meta: { title: '发文可视化分析', icon: 'el-icon-magic-stick' }
-    }
+    },
+    {
+      // 模块管理
+      path: 'manager',
+      name: 'Manager',
+      component: () => import('@/views/news/manager'),
+      meta: { title: '模块管理', icon: 'el-icon-s-tools' }
+    },
     ]
   },
 

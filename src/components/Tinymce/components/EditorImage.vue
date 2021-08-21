@@ -1,7 +1,8 @@
 <template>
+  <!--action="https://httpbin.org/post"-->
   <div class="upload-container">
     <el-button :style="{background:color,borderColor:color}" icon="el-icon-upload" size="mini" type="primary" @click=" dialogVisible=true">
-      upload
+      上传图片
     </el-button>
     <el-dialog :visible.sync="dialogVisible">
       <el-upload
@@ -12,19 +13,13 @@
         :on-success="handleSuccess"
         :before-upload="beforeUpload"
         class="editor-slide-upload"
-        action="https://httpbin.org/post"
+        action="http://localhost:3000/news/upload"
         list-type="picture-card"
       >
-        <el-button size="small" type="primary">
-          Click upload
-        </el-button>
+        <el-button size="small" type="primary">上传图片</el-button>
       </el-upload>
-      <el-button @click="dialogVisible = false">
-        Cancel
-      </el-button>
-      <el-button type="primary" @click="handleSubmit">
-        Confirm
-      </el-button>
+      <el-button @click="dialogVisible = false">取消</el-button>
+      <el-button type="primary" @click="handleSubmit">确定</el-button>
     </el-dialog>
   </div>
 </template>
@@ -63,12 +58,15 @@ export default {
       this.dialogVisible = false
     },
     handleSuccess(response, file) {
+      console.log(response)
+      const { files } = response
       const uid = file.uid
       const objKeyArr = Object.keys(this.listObj)
       for (let i = 0, len = objKeyArr.length; i < len; i++) {
         if (this.listObj[objKeyArr[i]].uid === uid) {
-          this.listObj[objKeyArr[i]].url = response.files.file
+          this.listObj[objKeyArr[i]].url = files[0].file
           this.listObj[objKeyArr[i]].hasSuccess = true
+          console.log(this.listObj)
           return
         }
       }

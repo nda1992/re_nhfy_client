@@ -3,26 +3,26 @@
     <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
 
     <breadcrumb class="breadcrumb-container" />
-    <div class="title"><span>信息系统集成平台</span></div>
-
-<!--    <div class="welcome">-->
-<!--      <h2>欢迎{{name}}访问系统</h2>-->
-<!--    </div>-->
 
     <div class="right-menu">
+      <template v-if="device!=='mobile'">
+        <!--<search id="header-search" class="right-menu-item" />-->
+        <el-tooltip effect="dark" content="全屏显示" placement="bottom">
+          <screenfull id="screenfull" class="right-menu-item hover-effect" />
+        </el-tooltip>
+      </template>
       <!-- 用户头像 -->
-      <div class="avatar">
-        <div class="block">
-          <el-upload
-          class="avatar-uploader"
-          :show-file-list="false"
-          action="aaa"
-          :before-upload="beforeUploadFile">
-          <el-tooltip effect="dark" content="点击更换头像" placement="bottom-end">
-            <el-avatar shape="square" :size="40" :src="avatar" v-if="avatar"></el-avatar>
-          </el-tooltip>
-          </el-upload>
-        </div>
+      <div class="avatar-container right-menu-item hover-effect">
+          <div class="avatar-wrapper">
+            <el-upload
+              :show-file-list="false"
+              action="aaa"
+              :before-upload="beforeUploadFile">
+              <el-tooltip effect="dark" content="点击更换头像" placement="bottom-end">
+                <el-avatar shape="square" :size="40" :src="avatar" v-if="avatar" class="user-avatar"></el-avatar>
+              </el-tooltip>
+            </el-upload>
+          </div>
       </div>
       <!-- 更多操作按钮 -->
       <div class="userinfo">
@@ -35,23 +35,28 @@
           <el-dropdown-item icon="el-icon-warning-outline" @click.native="deleteUser">注销个人账号</el-dropdown-item>
           <el-dropdown-item icon="el-icon-circle-close" @click.native="logout">退出</el-dropdown-item>
         </el-dropdown-menu>
-      </el-dropdown>
-      </div>
+        </el-dropdown>
+        </div>
     </div>
   </div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-// import { beforeUploadFile } from '@/api/user'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
+import Screenfull from '@/components/Screenfull'
+import SizeSelect from '@/components/SizeSelect'
+import Search from '@/components/HeaderSearch'
 import { uuid } from '@/utils/uuid'
 import axios from 'axios'
 export default {
   components: {
     Breadcrumb,
-    Hamburger
+    Hamburger,
+    Screenfull,
+    SizeSelect,
+    Search
   },
   data() {
     return {
@@ -112,16 +117,13 @@ export default {
   height: 50px;
   overflow: hidden;
   position: relative;
-  display: flex;
-  // justify-content: space-between;
-  align-items: center;
   background: #ebf6f7;
   box-shadow: 0 1px 4px rgba(0,21,41,.08);
 
   .hamburger-container {
     line-height: 46px;
     height: 100%;
-    // float: left;
+    float: left;
     cursor: pointer;
     transition: background .3s;
     -webkit-tap-highlight-color:transparent;
@@ -132,43 +134,63 @@ export default {
   }
 
   .breadcrumb-container {
-    // float: left;
-  }
-  .title{
-    color: #393f4c;
-    font-size: 23px;
-    font-weight: bold;
-    line-height: 50px;
-    position:absolute;
-    left: 600px;
-    letter-spacing: 2px;
+    float: left;
   }
 
   .right-menu {
-    width: 150px;
-    position: absolute;
-    left: 1140px;
-    display: flex;
-    align-items: center;
-    justify-content:space-between;
-    .avatar{
-        .block{
-          .el-tooltip{
-            display:flex;
-            align-items:center;
-            justify-content: center;
-            .el-avatar{
-            background-color: #E4E7ED;
-            box-shadow: 0 0 1px 1px rgba(203, 220, 224, 0.333);
-            img{padding: 2px;}
-          }
-          }
+    float: right;
+    height: 100%;
+    line-height: 50px;
+    &:focus{
+      outline: none;
+    }
+    .right-menu-item{
+      display: inline-block;
+      padding: 0 8px;
+      height: 100%;
+      font-size: 18px;
+      color: #3A71A8;
+      vertical-align: text-bottom;
+      &.hover-effect {
+        cursor: pointer;
+        transition: background .3s;
+
+        &:hover {
+          background: rgba(0, 0, 0, .025)
         }
       }
+    }
+    .avatar-container{
+      margin-right: 15px;
+      .avatar-wrapper{
+        margin-top: 5px;
+        position: relative;
+        .el-upload{
+          .user-avatar {
+            cursor: pointer;
+            border-radius: 7px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /*background: #EBEEF5 !important;*/
+            img{
+              width: 40px;
+              height: 40px;
+            }
+          }
+        }
+        .el-icon-caret-bottom {
+          cursor: pointer;
+          position: absolute;
+          right: -20px;
+          top: 25px;
+          font-size: 12px;
+        }
+      }
+    }
     .userinfo{
-        display:flex;
-        align-items: center;
-        // justify-content: space-around;
+        float: right;
+        margin-right: 20px;
         .el-dropdown-link {
           cursor: pointer;
           color: #409EFF;

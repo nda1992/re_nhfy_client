@@ -249,7 +249,7 @@ export default {
                             if(code===200){
                                 this.$router.push({ path: this.redirect || '/login' })
                                 this.loading = false
-                                this.$message.success('用户注册成功,可进行登录')
+                                this.$message.success('用户注册成功,审核完成后即可登录')
                                 // this.$router.go(-1)
                             }else if(code===201){
                                 this.$message.error(msg)
