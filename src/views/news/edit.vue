@@ -1,18 +1,13 @@
 <!--新闻更新页面-->
 <template>
-  <div></div>
+  <article-detail :is-edit="true" />
 </template>
 
 <script>
-  export default {
-    data(){
-      return {}
-    },
-    methods:{
+  import ArticleDetail from './components/ArticleDetail'
 
-    }
+  export default {
+    name: 'EditForm',
+    components: { ArticleDetail }
   }
 </script>
-<style lang="scss" scoped>
-
-</style>

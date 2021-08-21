@@ -41,6 +41,24 @@ export function searchUser(data) {
   })
 }
 
+// 获取草稿内容
+export function getDraftList(data) {
+  return request({
+    url: '/news/getDraftList',
+    method: 'get',
+    params: data
+  })
+}
+
+// 根据新闻id获取草稿内容
+export function getDraftByTitle(data) {
+  return request({
+    url: '/news/getDraftByTitle',
+    method: 'get',
+    params: data
+  })
+}
+
 export function createCategory(data) {
   return request({
     url: '/news/createCategory',

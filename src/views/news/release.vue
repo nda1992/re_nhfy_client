@@ -8,8 +8,10 @@
             <el-button v-loading="loading" style="margin-left: 10px" type="success" @click="submitForm" icon="el-icon-s-promotion" plain>发布</el-button>
             <el-button v-loading="loading" type="warning" @click="draftForm" icon="el-icon-document-checked" plain>存为草稿</el-button>
             <el-autocomplete
+              clearable
+              prefix-icon="el-icon-folder-opened"
               v-model="state"
-              style="margin-left:10px;width: 120px"
+              style="margin-left:10px;width: 150px"
               :fetch-suggestions="querySearchAsync"
               :placeholder="'草稿箱'+'('+draftNums+')'"
               @select="handleSelect"
@@ -63,7 +65,7 @@
     </div>
 </template>
 <script>
-import { searchUser, searchCategory, searchDept, releaseNews, saveDraft, getDraftList } from '@/api/news/news'
+import { searchUser, searchCategory, searchDept, releaseNews, saveDraft, getDraftList, getDraftByTitle } from '@/api/news/news'
 import Tinymce from '@/components/Tinymce'
 import Upload from '@/components/Upload/SingleImage3'
 import MDinput from '@/components/MDinput'
@@ -71,19 +73,20 @@ import Sticky from '@/components/Sticky' // 粘性header组件
 import Warning from './components/Warning'
 import { PlatformDropdown } from './components/Dropdown'
 const defaultForm = {
+  loginuserCode :'',
   author: '',
   status: 'draft', //导航条的状态
   title: '', // 文章题目
   content: '', // 文章内容
   image_uri: '', // 文章图片
   display_time: undefined, // 前台展示时间
-  id: undefined,
+  id: 0,
   platforms: ['院内网站'],  // 1=院内网站，2=院外网站，3=院内网站和院外网站
   category: '',
   deptName: '',
   type: '', // 1=发布，2=草稿
   role: '',
-  newsStatus: ''
+  newsStatus: undefined
 }
 export default {
   components: { Tinymce, Sticky, Upload, MDinput, Warning, PlatformDropdown },
@@ -101,7 +104,7 @@ export default {
     }
     return{
       draftTitleList: [],
-      draftNums: 2,
+      draftNums: 0,
       state: '',
       timeout: null,
       postForm: Object.assign({}, defaultForm),
@@ -123,6 +126,28 @@ export default {
     this.getdraftTitleList()
   },
   methods:{
+    // 重置postForm
+    resetPostForm() {
+      this.postForm = {
+        loginuserCode :'',
+        author: '',
+        status: 'draft', //导航条的状态
+        title: '', // 文章题目
+        content: '', // 文章内容
+        image_uri: '', // 文章图片
+        display_time: undefined, // 前台展示时间
+        id: undefined,
+        platforms: ['院内网站'],  // 1=院内网站，2=院外网站，3=院内网站和院外网站
+        category: '',
+        deptName: '',
+        type: '', // 1=发布，2=草稿
+        role: '',
+        newsStatus: undefined
+      }
+      this.$nextTick(() => {
+        this.$refs['postForm'].clearValidate()
+      })
+    },
     // 点击发布按钮触发
     submitForm() {
       // console.log(this.postForm)
@@ -146,7 +171,9 @@ export default {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning' }).then(() => {
+            this.postForm.status = 'published'
             this.loading = true
+            this.postForm.loginuserCode = localStorage.getItem('userCode')
             this.postForm.type = 1  // 表示已经提交，申请发布
             this.postForm.newsStatus = 2  // 表示已经提交，但需要管理员审核
             this.postForm.role = localStorage.getItem('role')
@@ -157,6 +184,7 @@ export default {
                 type: 'success',
                 duration: 2000
               })
+              this.getdraftTitleList()
               this.postForm.status = 'published'
               this.loading = false
             })
@@ -170,23 +198,40 @@ export default {
     /*文章草稿相关方法*/
     // 获取该用户下所有的文章草稿标题
     getdraftTitleList() {
-      getDraftList().then(res => {
-        this.draftTitleList = res.data.items
+      const temp = { role: localStorage.getItem('role'), loginuserCode: localStorage.getItem('userCode') }
+      getDraftList(temp).then(res => {
+        const { items } = res
+        this.draftTitleList = items.map(e => {
+          return { value: e.title, id: e.id }
+        })
+        this.draftNums = items.length
       })
     },
-    // 保存草稿
+    // 保存为草稿
     draftForm() {
+      this.postForm.loginuserCode = localStorage.getItem('userCode')
+      this.postForm.role = localStorage.getItem('role')
       this.postForm.type = 2  //草稿
-      saveDraft(this.postForm).then(() => {
-        this.$message({
-          message: '已经保存为草稿',
-          type: 'success',
-          showClose: true,
-          duration: 2000
+      this.$confirm('是否存为草稿?', '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning'}).then(() => {
+        this.loading = true
+        saveDraft(this.postForm).then((res) => {
+          // console.log(res)
+          this.getdraftTitleList()
+          this.$notify({
+            message: '已经保存为草稿',
+            type: 'success',
+            showClose: true,
+            duration: 2000
+          })
+          this.postForm.status = 'draft'
+          this.loading = false
+          this.resetPostForm()
+          console.log(this.postForm)
         })
-        this.postForm.status = 'draft'
       })
-
     },
 
     // 获取草稿列表
@@ -194,7 +239,7 @@ export default {
       let draftList = this.draftTitleList
       this.draftNums = this.draftTitleList.length
       let results = queryString?draftList.filter(this.createStateFilter(queryString)):draftList
-      clearTime(this.timeout)
+      clearTimeout(this.timeout)
       this.timeout = setTimeout(() => {
         cb(results)
       },2000)
@@ -207,7 +252,17 @@ export default {
     },
     // 选择草稿标题后触发
     handleSelect(item) {
-      console.log(item)
+      const value = { id: item.id }
+      getDraftByTitle(value).then(res => {
+        const { result } = res
+        this.postForm.id = result.id
+        this.postForm.title = result.title
+        this.postForm.content = result.content
+        this.postForm.display_time = result.createTime
+        this.postForm.category = result.category
+        this.postForm.author = result.userName
+        this.postForm.deptName = result.deptName
+      })
     },
 
     // 查询发布新闻的作者
