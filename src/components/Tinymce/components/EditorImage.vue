@@ -61,6 +61,7 @@ export default {
       console.log(response)
       const { files } = response
       const uid = file.uid
+      console.log(this.listObj)
       const objKeyArr = Object.keys(this.listObj)
       for (let i = 0, len = objKeyArr.length; i < len; i++) {
         if (this.listObj[objKeyArr[i]].uid === uid) {

@@ -60,6 +60,21 @@
           <el-form-item prop="content" style="margin-bottom: 30px;">
             <Tinymce ref="editor" v-model="postForm.content" :height="400" />
           </el-form-item>
+          <el-form-item>
+            <el-upload
+              accept=".xls,.xlsx,.doc,.docx"
+              class="upload-demo"
+              ref="upload"
+              action="https://jsonplaceholder.typicode.com/posts/"
+              :on-preview="handlePreview"
+              :on-remove="handleRemove"
+              :file-list="fileList"
+              :auto-upload="false">
+              <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+              <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
+              <div slot="tip" class="el-upload__tip">只能上传xls、xlsx、doc、docx文件，且不超过10MB</div>
+            </el-upload>
+          </el-form-item>
         </div>
       </el-form>
     </div>
@@ -119,7 +134,9 @@ export default {
       tempRoute: {},
       userListOptions: [],
       categoryListOptions :[],
-      deptListOptions: []
+      deptListOptions: [],
+      // 待上传的文件列表
+      fileList: []
     }
   },
   mounted(){
@@ -174,7 +191,7 @@ export default {
             this.postForm.status = 'published'
             this.loading = true
             this.postForm.loginuserCode = localStorage.getItem('userCode')
-            this.postForm.type = 1  // 表示已经提交，申请发布
+            this.postForm.type = 2  // 表示已经提交，申请发布
             this.postForm.newsStatus = 2  // 表示已经提交，但需要管理员审核
             this.postForm.role = localStorage.getItem('role')
             releaseNews(this.postForm).then(() => {
@@ -212,7 +229,7 @@ export default {
       this.postForm.loginuserCode = localStorage.getItem('userCode')
       this.postForm.role = localStorage.getItem('role')
       this.postForm.newsStatus = 4  //草稿
-      this.postForm.type = 2  //草稿
+      this.postForm.type = 1  //草稿
       this.$confirm('是否存为草稿?', '提示', {
       confirmButtonText: '确定',
       cancelButtonText: '取消',
@@ -276,7 +293,6 @@ export default {
       })
     },
 
-
     // 获取新闻类别
     getRemoteCategoryList(query) {
       searchCategory(query).then(response => {
@@ -292,7 +308,21 @@ export default {
         if (!items) return
         this.deptListOptions = items.map(v => v.name)
       })
+    },
+    //上传xls、xlsx、doc、docx
+    // 上传触发的函数
+    submitUpload() {
+      this.$refs.upload.submit();
+    },
+    // 点击文件列表中已上传的钩子
+    handlePreview(event) {
+      console.log(event)
+    },
+    // 删除文件列表时的钩子
+    handleRemove(file, filelist) {
+      console.log(file)
     }
+
   }
 }
 </script>
@@ -331,5 +361,8 @@ export default {
     border-radius: 0px;
     border-bottom: 1px solid #bfcbd9;
   }
+}
+.upload-demo{
+  width: 500px;
 }
 </style>
