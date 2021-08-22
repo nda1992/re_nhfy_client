@@ -263,6 +263,7 @@ export default {
         this.postForm.category = result.category
         this.postForm.author = result.userName
         this.postForm.deptName = result.deptName
+        this.postForm.status = result.status
       })
     },
 

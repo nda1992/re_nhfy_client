@@ -11,7 +11,7 @@
     </div>
     <el-table v-loading="listLoading" :data="searchList" border fit highlight-current-row style="width: 100%" stripe>
       <!--新闻标题-->
-      <el-table-column label="新闻标题" prop="title" align="center" min-width="15px" :show-overflow-tooltip="true">
+      <el-table-column label="新闻标题" prop="title" align="center" min-width="20px" :show-overflow-tooltip="true">
         <template slot-scope="{row}">
           <span>{{ row.title }}</span>
         </template>
@@ -48,7 +48,7 @@
         </template>
       </el-table-column>
       <!--状态：发布未未审核，审核通过，审核未通过-->
-      <el-table-column label="审核状态" prop="newsStatus" align="center" min-width="15px">
+      <el-table-column label="审核状态" prop="newsStatus" align="center" min-width="10px">
         <template slot-scope="{row}">
           <el-tag :type="row.newsStatus | newsStatusFilter" v-if="row.newsStatus !== '草稿'">
             {{ row.newsStatus }}
@@ -234,11 +234,12 @@ export default {
       temp.status = 'published' // 表示已提交
       // console.log(temp)
       releaseNews(temp).then(res => {
+        const { msg } = res
         this.$notify({
           title: 'Success',
-          message: '删除成功',
+          message: msg,
           type: 'success',
-          duration: 2000
+          duration: 3000
         })
         this.getNewsList()
       })
@@ -264,8 +265,8 @@ export default {
     handleDownload() {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['ID', '发布时间', '作者', '新闻标题', '所属部门', '所属类别', '浏览次数']
-        const filterVal = ['ID', '发布时间', '作者', '新闻标题', '所属部门', '所属类别', '浏览次数']
+        const tHeader = ['新闻标题', '新闻内容', '发布时间', '作者', '所属部门', '所属类别', '浏览次数','审核状态','发布状态']
+        const filterVal = ['新闻标题', '新闻内容', '发布时间', '作者', '所属部门', '所属类别', '浏览次数','审核状态','发布状态']
         const data = this.formatJson(filterVal)
         excel.export_json_to_excel({
           header: tHeader,
@@ -279,7 +280,7 @@ export default {
       let data = []
       this.searchList.forEach(item => {
         let temp = []
-        temp.push(item.deptCode, item.deptName, item.deptLeader, item.level, item.deptAddr, item.desc)
+        temp.push(item.title, item.content, item.createTime, item.userName, item.deptName, item.category,item.clickNum, item.newsStatus,item.status)
         data.push(temp)
       })
       return data
