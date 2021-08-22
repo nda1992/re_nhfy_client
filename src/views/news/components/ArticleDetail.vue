@@ -1,74 +1,64 @@
 <template>
+  <!-- 新闻更新页面 -->
   <div class="createPost-container">
     <el-form ref="postForm" :model="postForm" :rules="rules" class="form-container">
-
       <sticky :z-index="10" :class-name="'sub-navbar '+postForm.status">
-        <CommentDropdown v-model="postForm.comment_disabled" />
-        <PlatformDropdown v-model="postForm.platforms" />
-        <SourceUrlDropdown v-model="postForm.source_uri" />
-        <el-button v-loading="loading" style="margin-left: 10px;" type="success" @click="submitForm">
-          Publish
-        </el-button>
-        <el-button v-loading="loading" type="warning" @click="draftForm">
-          Draft
-        </el-button>
+        <div class="stick">
+          <PlatformDropdown v-model="postForm.platforms"/>
+          <el-button v-loading="loading" style="margin-left: 10px" type="success" @click="submitForm" icon="el-icon-s-promotion" plain>发布</el-button>
+          <el-button v-loading="loading" type="warning" @click="draftForm" icon="el-icon-document-checked" plain>存为草稿</el-button>
+          <el-autocomplete
+            clearable
+            prefix-icon="el-icon-folder-opened"
+            v-model="state"
+            style="margin-left:10px;width: 150px"
+            :fetch-suggestions="querySearchAsync"
+            :placeholder="'草稿箱'+'('+draftNums+')'"
+            @select="handleSelect"
+          ></el-autocomplete>
+        </div>
       </sticky>
-
       <div class="createPost-main-container">
         <el-row>
-          <Warning />
-
+          <Warning/>
           <el-col :span="24">
-            <el-form-item style="margin-bottom: 40px;" prop="title">
-              <MDinput v-model="postForm.title" :maxlength="100" name="name" required>
-                Title
-              </MDinput>
+            <el-form-item style="margin-bottom: 40px;" prop="title" name="name" required>
+              <MDinput v-model="postForm.title" :maxlength="100">新闻标题</MDinput>
             </el-form-item>
-
             <div class="postInfo-container">
               <el-row>
-                <el-col :span="8">
-                  <el-form-item label-width="60px" label="Author:" class="postInfo-container-item">
-                    <el-select v-model="postForm.author" :remote-method="getRemoteUserList" filterable default-first-option remote placeholder="Search user">
+                <el-col :span="6">
+                  <el-form-item label-width="40px" label="作者" class="postInfo-container-item">
+                    <el-select :loading="select_loading" v-model="postForm.author" :remote-method="getRemoteUserList" filterable default-first-option remote placeholder="搜索作者">
                       <el-option v-for="(item,index) in userListOptions" :key="item+index" :label="item" :value="item" />
                     </el-select>
                   </el-form-item>
                 </el-col>
-
-                <el-col :span="10">
-                  <el-form-item label-width="120px" label="Publish Time:" class="postInfo-container-item">
-                    <el-date-picker v-model="displayTime" type="datetime" format="yyyy-MM-dd HH:mm:ss" placeholder="Select date and time" />
+                <el-col :span="6">
+                  <el-form-item label-width="90px" label="发布时间" class="postInfo-container-item">
+                    <el-date-picker v-model="postForm.display_time" type="datetime" format="yyyy-MM-dd HH:mm:ss" placeholder="请选择时间" />
                   </el-form-item>
                 </el-col>
-
                 <el-col :span="6">
-                  <el-form-item label-width="90px" label="Importance:" class="postInfo-container-item">
-                    <el-rate
-                      v-model="postForm.importance"
-                      :max="3"
-                      :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
-                      :low-threshold="1"
-                      :high-threshold="3"
-                      style="display:inline-block"
-                    />
+                  <el-form-item label-width="90px" label="新闻类别" class="postInfo-container-item">
+                    <el-select :loading="select_loading" v-model="postForm.category" :remote-method="getRemoteCategoryList" filterable default-first-option remote placeholder="搜索新闻类别">
+                      <el-option v-for="(item,index) in categoryListOptions" :key="item+index" :label="item" :value="item"></el-option>
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="6">
+                  <el-form-item label-width="90px" label="所属部门" class="postInfo-container-item">
+                    <el-select :loading="select_loading" v-model="postForm.deptName" :remote-method="getRemoteDeptList" filterable default-first-option remote placeholder="搜索部门">
+                      <el-option v-for="(item,index) in deptListOptions" :key="item+index" :label="item" :value="item"></el-option>
+                    </el-select>
                   </el-form-item>
                 </el-col>
               </el-row>
             </div>
           </el-col>
         </el-row>
-
-        <el-form-item style="margin-bottom: 40px;" label-width="70px" label="Summary:">
-          <el-input v-model="postForm.content_short" :rows="1" type="textarea" class="article-textarea" autosize placeholder="Please enter the content" />
-          <span v-show="contentShortLength" class="word-counter">{{ contentShortLength }}words</span>
-        </el-form-item>
-
         <el-form-item prop="content" style="margin-bottom: 30px;">
           <Tinymce ref="editor" v-model="postForm.content" :height="400" />
-        </el-form-item>
-
-        <el-form-item prop="image_uri" style="margin-bottom: 30px;">
-          <Upload v-model="postForm.image_uri" />
         </el-form-item>
       </div>
     </el-form>
@@ -80,24 +70,25 @@ import Tinymce from '@/components/Tinymce'
 import Upload from '@/components/Upload/SingleImage3'
 import MDinput from '@/components/MDinput'
 import Sticky from '@/components/Sticky' // 粘性header组件
-import { validURL } from '@/utils/validate'
-// import { fetchArticle } from '@/api/article'
-// import { searchUser } from '@/api/remote-search'
+import { searchUser, getDraftById, searchCategory, searchDept, getDraftList, saveDraft, releaseNews } from '@/api/news/news'
 import Warning from './Warning'
 import { CommentDropdown, PlatformDropdown, SourceUrlDropdown } from './Dropdown'
 
 const defaultForm = {
-  status: 'draft',
+  loginuserCode :'',
+  author: '',
+  status: 'draft', //导航条的状态
   title: '', // 文章题目
   content: '', // 文章内容
-  content_short: '', // 文章摘要
-  source_uri: '', // 文章外链
   image_uri: '', // 文章图片
   display_time: undefined, // 前台展示时间
-  id: undefined,
-  platforms: ['a-platform'],
-  comment_disabled: false,
-  importance: 0
+  id: 0,
+  platforms: ['院内网站'],  // 1=院内网站，2=院外网站，3=院内网站和院外网站
+  category: '',
+  deptName: '',
+  type: '', // 1=发布，2=草稿
+  role: '',
+  newsStatus: undefined
 }
 
 export default {
@@ -121,38 +112,26 @@ export default {
         callback()
       }
     }
-    const validateSourceUri = (rule, value, callback) => {
-      if (value) {
-        if (validURL(value)) {
-          callback()
-        } else {
-          this.$message({
-            message: '外链url填写不正确',
-            type: 'error'
-          })
-          callback(new Error('外链url填写不正确'))
-        }
-      } else {
-        callback()
-      }
-    }
     return {
+      draftTitleList: [],
+      draftNums: 0,
+      state: '',
+      timeout: null,
+      select_loading: false,
       postForm: Object.assign({}, defaultForm),
       loading: false,
       userListOptions: [],
+      categoryListOptions :[],
+      deptListOptions: [],
       rules: {
         image_uri: [{ validator: validateRequire }],
         title: [{ validator: validateRequire }],
         content: [{ validator: validateRequire }],
-        source_uri: [{ validator: validateSourceUri, trigger: 'blur' }]
       },
       tempRoute: {}
     }
   },
   computed: {
-    contentShortLength() {
-      return this.postForm.content_short.length
-    },
     displayTime: {
       // set and get is useful when the data
       // returned by the back end api is different from the front end
@@ -167,6 +146,7 @@ export default {
     }
   },
   created() {
+    this.getdraftTitleList()
     if (this.isEdit) {
       const id = this.$route.params && this.$route.params.id
       this.fetchData(id)
@@ -179,12 +159,16 @@ export default {
   },
   methods: {
     fetchData(id) {
-      fetchArticle(id).then(response => {
-        this.postForm = response.data
-
-        // just for test
-        this.postForm.title += `   Article Id:${this.postForm.id}`
-        this.postForm.content_short += `   Article Id:${this.postForm.id}`
+      const value = { id: id }
+      getDraftById(value).then(res => {
+        const { result } = res
+        this.postForm.id = result.id
+        this.postForm.title = result.title
+        this.postForm.content = result.content
+        this.postForm.display_time = result.createTime
+        this.postForm.category = result.category
+        this.postForm.author = result.userName
+        this.postForm.deptName = result.deptName
 
         // set tagsview title
         this.setTagsViewTitle()
@@ -205,25 +189,6 @@ export default {
       document.title = `${title} - ${this.postForm.id}`
     },
     submitForm() {
-      // console.log(this.postForm)
-      this.$refs.postForm.validate(valid => {
-        if (valid) {
-          this.loading = true
-          this.$notify({
-            title: '成功',
-            message: '发布文章成功',
-            type: 'success',
-            duration: 2000
-          })
-          this.postForm.status = 'published'
-          this.loading = false
-        } else {
-          console.log('error submit!!')
-          return false
-        }
-      })
-    },
-    draftForm() {
       if (this.postForm.content.length === 0 || this.postForm.title.length === 0) {
         this.$message({
           message: '请填写必要的标题和内容',
@@ -231,18 +196,134 @@ export default {
         })
         return
       }
-      this.$message({
-        message: '保存成功',
-        type: 'success',
-        showClose: true,
-        duration: 1000
+      if(this.postForm.author === '' || this.postForm.deptName === ''|| this.postForm.category === '') {
+        this.$message({
+          message: '请填写作者相关信息',
+          type: 'warning'
+        })
+        return
+      }
+      this.$refs.postForm.validate(valid => {
+        if (valid) {
+          this.$confirm('是否发布文章?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning' }).then(() => {
+            this.postForm.status = 'published'
+            this.loading = true
+            this.postForm.loginuserCode = localStorage.getItem('userCode')
+            this.postForm.type = 2  // 表示已经提交，申请发布
+            this.postForm.newsStatus = 2  // 表示已经提交，但需要管理员审核
+            this.postForm.role = localStorage.getItem('role')
+            releaseNews(this.postForm).then(() => {
+              this.$notify({
+                title: '成功',
+                message: '发布成功',
+                type: 'success',
+                duration: 2000
+              })
+              this.getdraftTitleList()
+              // this.postForm.status = 'published'
+              this.loading = false
+            })
+          })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
       })
-      this.postForm.status = 'draft'
     },
+    /*文章草稿相关方法*/
+    // 获取该用户下所有的文章草稿标题
+    getdraftTitleList() {
+      const temp = { role: localStorage.getItem('role'), loginuserCode: localStorage.getItem('userCode') }
+      getDraftList(temp).then(res => {
+        const { items } = res
+        this.draftTitleList = items.map(e => {
+          return { value: e.title, id: e.id }
+        })
+        this.draftNums = items.length
+      })
+    },
+    // 选择草稿标题后触发
+    handleSelect(item) {
+      const value = { id: item.id }
+      getDraftById(value).then(res => {
+        const { result } = res
+        this.postForm.id = result.id
+        this.postForm.title = result.title
+        this.postForm.content = result.content
+        this.postForm.display_time = result.createTime
+        this.postForm.category = result.category
+        this.postForm.author = result.userName
+        this.postForm.deptName = result.deptName
+      })
+    },
+    // 保存为草稿
+    draftForm() {
+      this.postForm.loginuserCode = localStorage.getItem('userCode')
+      this.postForm.role = localStorage.getItem('role')
+      this.postForm.newsStatus = 4  //草稿
+      this.postForm.type = 1  //草稿
+      this.$confirm('是否存为草稿?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'}).then(() => {
+        this.loading = true
+        saveDraft(this.postForm).then((res) => {
+          // console.log(res)
+          this.getdraftTitleList()
+          this.$notify({
+            message: '已经保存为草稿',
+            type: 'success',
+            showClose: true,
+            duration: 2000
+          })
+          this.postForm.status = 'draft'
+          this.loading = false
+          this.resetPostForm()
+          console.log(this.postForm)
+        })
+      })
+    },
+    // 获取草稿列表
+    querySearchAsync(queryString, cb) {
+      let draftList = this.draftTitleList
+      this.draftNums = this.draftTitleList.length
+      let results = queryString?draftList.filter(this.createStateFilter(queryString)):draftList
+      clearTimeout(this.timeout)
+      this.timeout = setTimeout(() => {
+        cb(results)
+      },2000)
+    },
+    // 过滤草稿标题内容
+    createStateFilter(queryString) {
+      return (state) => {
+        return (state.value.indexOf(queryString.toLowerCase()) === 0);
+      };
+    },
+    // 获取作者
     getRemoteUserList(query) {
       searchUser(query).then(response => {
-        if (!response.data.items) return
-        this.userListOptions = response.data.items.map(v => v.name)
+        const { items } = response
+        if (!items) return
+        this.userListOptions = items.map(v => v.username)
+      })
+    },
+    // 获取新闻类别
+    getRemoteCategoryList(query) {
+      searchCategory(query).then(response => {
+        const { items } = response
+        if (!items) return
+        this.categoryListOptions = items.map(v => v.name)
+      })
+    },
+    // 获取部门
+    getRemoteDeptList(query) {
+      searchDept(query).then(response => {
+        const { items } = response
+        if (!items) return
+        this.deptListOptions = items.map(v => v.name)
       })
     }
   }

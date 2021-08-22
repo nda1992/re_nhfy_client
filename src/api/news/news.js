@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+
 export function deleteNewsById(id) {
   return request({
     url: '/news/deleteNewsById',
@@ -12,6 +13,15 @@ export function getnewsList(data) {
     url: '/news/getnewsList',
     method: 'get',
     params: data
+  })
+}
+
+// 根据switch的值改变文章的发表状态
+export function updateNewsStatus(data) {
+  return request({
+    url: '/news/updateNewsStatus',
+    method: 'post',
+    data
   })
 }
 
@@ -50,10 +60,11 @@ export function getDraftList(data) {
   })
 }
 
+
 // 根据新闻id获取草稿内容
-export function getDraftByTitle(data) {
+export function getDraftById(data) {
   return request({
-    url: '/news/getDraftByTitle',
+    url: '/news/getDraftById',
     method: 'get',
     params: data
   })

@@ -11,7 +11,7 @@
     </div>
     <el-table v-loading="listLoading" :data="searchList" border fit highlight-current-row style="width: 100%" stripe>
       <!--新闻标题-->
-      <el-table-column label="新闻标题" prop="title" align="center" min-width="30px">
+      <el-table-column label="新闻标题" prop="title" align="center" min-width="15px" :show-overflow-tooltip="true">
         <template slot-scope="{row}">
           <span>{{ row.title }}</span>
         </template>
@@ -30,7 +30,7 @@
         </template>
       </el-table-column>
       <!--所属部门-->
-      <el-table-column label="所属部门" prop="deptName" align="center" min-width="8px">
+      <el-table-column label="所属部门" prop="deptName" align="center" min-width="9px">
         <template slot-scope="{row}">
           <span>{{ row.deptName }}</span>
         </template>
@@ -42,15 +42,42 @@
         </template>
       </el-table-column>
       <!--浏览次数-->
-      <el-table-column label="浏览次数" prop="clickNum" align="center" min-width="8px">
+      <el-table-column label="浏览次数" prop="clickNum" align="center" min-width="6px">
         <template slot-scope="{row}">
           <span>{{ row.clickNum }}</span>
         </template>
       </el-table-column>
       <!--状态：发布未未审核，审核通过，审核未通过-->
-      <el-table-column label="审核状态" prop="newsStatus" align="center" min-width="8px">
+      <el-table-column label="审核状态" prop="newsStatus" align="center" min-width="15px">
         <template slot-scope="{row}">
-          <span>{{ row.newsStatus }}</span>
+          <el-tag :type="row.newsStatus | newsStatusFilter" v-if="row.newsStatus !== '草稿'">
+            {{ row.newsStatus }}
+          </el-tag>
+          <el-popconfirm v-else
+            @onConfirm="handleStatus(row)"
+            confirm-button-text='确定'
+            cancel-button-text='取消'
+            icon="el-icon-info"
+            icon-color="red"
+            title="确定发布新闻吗?"
+          >
+            <el-button slot="reference" :type="row.newsStatus | newsStatusFilter" size="mini" :disabled="role!=='admin'">{{ row.newsStatus }}</el-button>
+          </el-popconfirm>
+        </template>
+      </el-table-column>
+      <!--更新状态：审核通过，审核未通过-->
+      <el-table-column label="更新状态" prop="newsStatus" align="center" min-width="15px">
+        <template slot-scope="{row}">
+          <el-switch
+            @change="handleSetStatus(row)"
+            :disabled="row.newsStatus === '草稿' || role !== 'admin'"
+            v-model="row.Switch"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+            inactive-text="不通过"
+            active-text="通过"
+            >
+          </el-switch>
         </template>
       </el-table-column>
       <!--发布状态-->
@@ -78,7 +105,7 @@
 <script>
 import waves from '@/directive/waves'
 import Pagination from '@/components/Pagination'
-import { deleteNewsById, getnewsList } from '@/api/news/news'
+import { deleteNewsById, getnewsList, updateNewsStatus, releaseNews } from '@/api/news/news'
 const defaultForm = {
   loginuserCode :'',
   author: '',
@@ -102,10 +129,22 @@ export default {
     statusFilter(status) {
       const statusMap = {
         '已发布': 'success',
-        '草稿': 'warning'
+        '草稿': 'warning',
+        '未发布': 'info',
+        '已删除': 'danger'
       }
       return  statusMap[status]
-    }
+    },
+    newsStatusFilter(status) {
+      const statusMap = {
+        '未审核': 'primary',
+        '已审核': 'success',
+        '草稿': 'warning',
+        '已删除': 'danger',
+        '不通过': 'info'
+      }
+      return  statusMap[status]
+    },
   },
   data(){
     return {
@@ -123,6 +162,11 @@ export default {
       list: null,
       searchList: [],
       temp: Object.assign({},defaultForm)
+    }
+  },
+  computed: {
+    role() {
+      return localStorage.getItem('role')
     }
   },
   mounted() {
@@ -163,16 +207,60 @@ export default {
         type: 'warning'
       }).then(() => {
         deleteNewsById(row.id).then(() => {
-          this.getNewsList()
           this.$notify({
             title: 'Success',
             message: '删除成功',
             type: 'success',
             duration: 2000
           })
+          this.getNewsList()
         })
       })
     },
+    // 从草稿发表为文章
+    handleStatus(row) {
+      const temp = row
+      if(temp.title === '' || temp.content === '') {
+        this.$message.error('请先完善标题或内容后提交')
+        return
+      }
+      if(temp.userName === '' || temp.deptName === '' || temp.category === '') {
+        this.$message.error('请先完善作者或部门信息后提交')
+        return
+      }
+      temp.role = this.role
+      temp.newsStatus = 2 // 2=已提交到数据库，但未审核
+      temp.type = 2 // 草稿变为已提交
+      temp.status = 'published' // 表示已提交
+      // console.log(temp)
+      releaseNews(temp).then(res => {
+        this.$notify({
+          title: 'Success',
+          message: '删除成功',
+          type: 'success',
+          duration: 2000
+        })
+        this.getNewsList()
+      })
+    },
+    // switch触发
+    handleSetStatus(row) {
+      let temp = row
+      temp.role = this.role
+      // const flag = temp.Switch
+      // switch=true：表示通过审核,switch=false:表示未通过审核
+      updateNewsStatus(temp).then(res=>{
+        const { msg } = res
+        this.$notify({
+          title: 'Success',
+          message: msg,
+          type: 'success',
+          duration: 2000
+        })
+        this.getNewsList()
+      })
+    },
+    // 导出表格
     handleDownload() {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {

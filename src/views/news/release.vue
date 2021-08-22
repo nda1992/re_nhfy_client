@@ -65,7 +65,7 @@
     </div>
 </template>
 <script>
-import { searchUser, searchCategory, searchDept, releaseNews, saveDraft, getDraftList, getDraftByTitle } from '@/api/news/news'
+import { searchUser, searchCategory, searchDept, releaseNews, saveDraft, getDraftList, getDraftById } from '@/api/news/news'
 import Tinymce from '@/components/Tinymce'
 import Upload from '@/components/Upload/SingleImage3'
 import MDinput from '@/components/MDinput'
@@ -185,7 +185,7 @@ export default {
                 duration: 2000
               })
               this.getdraftTitleList()
-              this.postForm.status = 'published'
+              // this.postForm.status = 'published'
               this.loading = false
             })
           })
@@ -211,6 +211,7 @@ export default {
     draftForm() {
       this.postForm.loginuserCode = localStorage.getItem('userCode')
       this.postForm.role = localStorage.getItem('role')
+      this.postForm.newsStatus = 4  //草稿
       this.postForm.type = 2  //草稿
       this.$confirm('是否存为草稿?', '提示', {
       confirmButtonText: '确定',
@@ -253,7 +254,7 @@ export default {
     // 选择草稿标题后触发
     handleSelect(item) {
       const value = { id: item.id }
-      getDraftByTitle(value).then(res => {
+      getDraftById(value).then(res => {
         const { result } = res
         this.postForm.id = result.id
         this.postForm.title = result.title
