@@ -2,7 +2,7 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="searchVal" :placeholder="'按'+searchType+'搜索'" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter(searchType)" />
+      <el-input v-model="searchVal" :placeholder="'按'+searchType+'搜索'" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter(searchType)" clearable/>
       <el-select v-model="searchType" placeholder="请选择搜索类型" style="width: 150px" class="filter-item">
         <el-option v-for="item in typeItems" :key="item" :label="item" :value="item" />
       </el-select>
@@ -107,15 +107,15 @@ import waves from '@/directive/waves'
 import Pagination from '@/components/Pagination'
 import { deleteNewsById, getnewsList, updateNewsStatus, releaseNews } from '@/api/news/news'
 const defaultForm = {
-  loginuserCode :'',
+  loginuserCode: '',
   author: '',
-  status: 'draft', //导航条的状态
+  status: 'draft', // 导航条的状态
   title: '', // 文章题目
   content: '', // 文章内容
   image_uri: '', // 文章图片
   display_time: undefined, // 前台展示时间
   id: 0,
-  platforms: ['院内网站'],  // 1=院内网站，2=院外网站，3=院内网站和院外网站
+  platforms: ['院内网站'], // 1=院内网站，2=院外网站，3=院内网站和院外网站
   category: '',
   deptName: '',
   type: '', // 1=发布，2=草稿
@@ -133,7 +133,7 @@ export default {
         '未发布': 'info',
         '已删除': 'danger'
       }
-      return  statusMap[status]
+      return statusMap[status]
     },
     newsStatusFilter(status) {
       const statusMap = {
@@ -143,10 +143,10 @@ export default {
         '已删除': 'danger',
         '不通过': 'info'
       }
-      return  statusMap[status]
-    },
+      return statusMap[status]
+    }
   },
-  data(){
+  data() {
     return {
       listQuery: {
         page: 1,
@@ -161,7 +161,7 @@ export default {
       downloadLoading: false,
       list: null,
       searchList: [],
-      temp: Object.assign({},defaultForm)
+      temp: Object.assign({}, defaultForm)
     }
   },
   computed: {
@@ -170,28 +170,28 @@ export default {
     }
   },
   mounted() {
-    if (localStorage.getItem('role') !== 'admin'){
-      this.$router.push({name: 'Page401'})
+    if (localStorage.getItem('role') !== 'admin') {
+      this.$router.push({ name: 'Page401' })
     }
     this.getNewsList()
   },
-  methods:{
-    //按关键字搜索内容
-    handleFilter(type){
-      if(type === '新闻标题'){
-        this.searchList = this.list.filter(item => {return item.title.match(this.searchVal)})
-      }else if(type === '发布作者'){
-        this.searchList = this.list.filter(item => {return item.userName.match(this.searchVal)})
-      }else if(type === '新闻类别'){
-        this.searchList = this.list.filter(item => {return item.category.match(this.searchVal)})
-      }else if(type === '发布时间'){
-        this.searchList = this.list.filter(item => {return item.createTime.match(this.searchVal)})
+  methods: {
+    // 按关键字搜索内容
+    handleFilter(type) {
+      if (type === '新闻标题') {
+        this.searchList = this.list.filter(item => { return item.title.match(this.searchVal) })
+      } else if (type === '发布作者') {
+        this.searchList = this.list.filter(item => { return item.userName.match(this.searchVal) })
+      } else if (type === '新闻类别') {
+        this.searchList = this.list.filter(item => { return item.category.match(this.searchVal) })
+      } else if (type === '发布时间') {
+        this.searchList = this.list.filter(item => { return item.createTime.match(this.searchVal) })
       }
     },
     // 获取新闻列表
     getNewsList() {
       this.listLoading = true
-      getnewsList(this.listQuery).then(res=>{
+      getnewsList(this.listQuery).then(res => {
         this.list = res.items
         this.searchList = res.items
         this.total = res.total
@@ -220,11 +220,11 @@ export default {
     // 从草稿发表为文章
     handleStatus(row) {
       const temp = row
-      if(temp.title === '' || temp.content === '') {
+      if (temp.title === '' || temp.content === '') {
         this.$message.error('请先完善标题或内容后提交')
         return
       }
-      if(temp.userName === '' || temp.deptName === '' || temp.category === '') {
+      if (temp.userName === '' || temp.deptName === '' || temp.category === '') {
         this.$message.error('请先完善作者或部门信息后提交')
         return
       }
@@ -250,7 +250,7 @@ export default {
       temp.role = this.role
       // const flag = temp.Switch
       // switch=true：表示通过审核,switch=false:表示未通过审核
-      updateNewsStatus(temp).then(res=>{
+      updateNewsStatus(temp).then(res => {
         const { msg } = res
         this.$notify({
           title: 'Success',

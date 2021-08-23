@@ -32,10 +32,10 @@ export function updateTableTitle(data) {
   })
 }
 
-// 查询科室运营情况
+// 查询科室分类收入
 export function searchDeptOperate(data) {
   return request({
-    url: '/reportmake/searchDeptOperate',
+    url: '/reportmake/specialQuery/searchDeptOperate/ksflsr',
     method: 'post',
     data
   })
