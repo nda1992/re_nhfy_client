@@ -1,0 +1,125 @@
+<template>
+    <div class="upload-container">
+      <el-button type="success" size="mini" icon="el-icon-upload" @click=" dialogVisible=true">上传文件</el-button>
+      <el-dialog :visible.sync="dialogVisible">
+        <el-upload
+          accept=".xls,.xlsx,.doc,.docx"
+          class="upload-demo"
+          ref="upload"
+          action="http://localhost:3000/news/uploadFile/"
+          :headers="tempToken"
+          :on-success="handleSuccess"
+          :on-preview="handlePreview"
+          :on-remove="handleRemove"
+          :file-list="fileList"
+          :auto-upload="false">
+          <div class="select-container">
+            <div class="btns">
+              <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+              <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
+            </div>
+            <div slot="tip" class="el-upload__tip">只能上传xls、xlsx、doc、docx文件，且不超过10MB</div>
+          </div>
+          <div class="confirm-btn">
+            <el-button type="primary" @click="handleSubmit" style="float: right;margin-left: 13px;">确定</el-button>
+            <el-button @click="dialogVisible = false" style="float: right;">取消</el-button>
+          </div>
+        </el-upload>
+      </el-dialog>
+    </div>
+</template>
+
+<script>
+  export default {
+    name: 'EditorExcel',
+    props: {
+      tempToken: {
+        type: Object,
+        default: () => { return { token: localStorage.getItem('token') } }
+      }
+    },
+    data() {
+      return {
+        dialogVisible: false,
+        listObj: {},
+        fileList: []
+      }
+    },
+    methods: {
+      checkAllSuccess() {
+        return Object.keys(this.listObj).every(item => this.listObj[item].hasSuccess)
+      },
+      // 当用户点击确定时，在编辑器中显示文件名
+      handleSubmit() {
+        const arr = Object.keys(this.listObj).map(v => this.listObj[v])
+        if (!this.checkAllSuccess()) {
+          this.$message('上传失败，程序出错了~')
+          return
+        }
+        this.$emit('successExcel', arr)
+        this.listObj = {}
+        this.fileList = []
+        this.dialogVisible = false
+      },
+      // 上传触发的函数
+      submitUpload() {
+        this.$refs.upload.submit()
+      },
+      // 点击已上传文件列表时的钩子
+      handlePreview(event) {
+        console.log(event)
+      },
+      // 删除文件列表时的钩子
+      handleRemove(file, filelist) {
+        const uid = file.uid
+        const objKeyArr = Object.keys(this.listObj)
+        for (let i = 0, len = objKeyArr.length; i < len; i++) {
+          if (this.listObj[objKeyArr[i]].uid === uid) {
+            delete this.listObj[objKeyArr[i]]
+            return
+          }
+        }
+      },
+      // 文件上传成功后的钩子
+      handleSuccess(response, file) {
+        const { files } = response
+        const uid = file.uid
+        console.log(this.listObj)
+        const objKeyArr = Object.keys(this.listObj)
+        for (let i = 0, len = objKeyArr.length; i < len; i++) {
+          if (this.listObj[objKeyArr[i]].uid === uid) {
+            this.listObj[objKeyArr[i]].url = files[0].file
+            this.listObj[objKeyArr[i]].hasSuccess = true
+            console.log(this.listObj)
+            return
+          }
+        }
+      },
+    }
+  }
+</script>
+
+<style lang="scss" scoped>
+  .upload-container{
+    position: relative;
+    .upload-demo{
+      /*width: 500px;*/
+      height: 300px;
+      .select-container{
+        .btns{
+          /*width: 500px;*/
+          margin: 0 auto;
+        }
+        .el-upload__tip{
+          margin-top: 20px;
+          display: block;
+        }
+      }
+      .confirm-btn{
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+      }
+    }
+  }
+</style>

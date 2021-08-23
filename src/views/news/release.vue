@@ -60,21 +60,6 @@
           <el-form-item prop="content" style="margin-bottom: 30px;">
             <Tinymce ref="editor" v-model="postForm.content" :height="400" />
           </el-form-item>
-          <el-form-item>
-            <el-upload
-              accept=".xls,.xlsx,.doc,.docx"
-              class="upload-demo"
-              ref="upload"
-              action="https://jsonplaceholder.typicode.com/posts/"
-              :on-preview="handlePreview"
-              :on-remove="handleRemove"
-              :file-list="fileList"
-              :auto-upload="false">
-              <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-              <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
-              <div slot="tip" class="el-upload__tip">只能上传xls、xlsx、doc、docx文件，且不超过10MB</div>
-            </el-upload>
-          </el-form-item>
         </div>
       </el-form>
     </div>
@@ -136,8 +121,6 @@ export default {
       userListOptions: [],
       categoryListOptions: [],
       deptListOptions: [],
-      // 待上传的文件列表
-      fileList: []
     }
   },
   mounted() {
@@ -315,20 +298,6 @@ export default {
         this.deptListOptions = items.map(v => v.name)
       })
     },
-    // 上传xls、xlsx、doc、docx
-    // 上传触发的函数
-    submitUpload() {
-      this.$refs.upload.submit()
-    },
-    // 点击文件列表中已上传的钩子
-    handlePreview(event) {
-      console.log(event)
-    },
-    // 删除文件列表时的钩子
-    handleRemove(file, filelist) {
-      console.log(file)
-    }
-
   }
 }
 </script>

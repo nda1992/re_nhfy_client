@@ -2,6 +2,7 @@
   <div :class="{fullscreen:fullscreen}" class="tinymce-container" :style="{width:containerWidth}">
     <textarea :id="tinymceId" class="tinymce-textarea" />
     <div class="editor-custom-btn-container">
+      <editorExcel @successExcel="ExcelSuccessCBK" class="excel-upload-btn" />
       <editorImage color="#1890ff" class="editor-upload-btn" @successCBK="imageSuccessCBK" />
     </div>
   </div>
@@ -16,13 +17,13 @@ import editorImage from './components/EditorImage'
 import plugins from './plugins'
 import toolbar from './toolbar'
 import load from './dynamicLoadScript'
-
+import editorExcel from './components/EditorExcel'
 // why use this cdn, detail see https://github.com/PanJiaChen/tinymce-all-in-one
 const tinymceCDN = 'https://cdn.jsdelivr.net/npm/tinymce-all-in-one@4.9.3/tinymce.min.js'
 
 export default {
   name: 'Tinymce',
-  components: { editorImage },
+  components: { editorImage, editorExcel },
   props: {
     id: {
       type: String,
@@ -205,6 +206,9 @@ export default {
     },
     imageSuccessCBK(arr) {
       arr.forEach(v => window.tinymce.get(this.tinymceId).insertContent(`<img class="wscnph" src="${v.url}" >`))
+    },
+    ExcelSuccessCBK(arr) {
+      arr.forEach(v => window.tinymce.get(this.tinymceId).insertContent(`<a class="wscnph" href="${v.url}"></a>`))
     }
   }
 }
@@ -240,8 +244,13 @@ export default {
   z-index: 10000;
   position: fixed;
 }
-
+.excel-upload-btn{
+  float: right;
+  margin-left: 10px;
+  display: inline-block;
+}
 .editor-upload-btn {
+  float: right;
   display: inline-block;
 }
 </style>

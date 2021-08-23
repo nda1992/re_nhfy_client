@@ -58,7 +58,6 @@ export default {
       this.dialogVisible = false
     },
     handleSuccess(response, file) {
-      console.log(response)
       const { files } = response
       const uid = file.uid
       console.log(this.listObj)
