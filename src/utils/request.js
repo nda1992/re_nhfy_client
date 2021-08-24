@@ -15,15 +15,12 @@ const service = axios.create({
 service.interceptors.request.use(
   config => {
     // do something before request is sent
-    // console.log(getToken())
     if (getToken()) {
       // let each request carry token
       // ['X-Token'] is a custom headers key
       // please modify it according to the actual situation
       config.headers.token = getToken()
       config.headers.uuid = uuid()
-      // console.log(getToken())
-      // console.log(config)
       // config.headers['token'] = getToken()
     }
     return config
@@ -56,7 +53,7 @@ service.interceptors.response.use(
         type: 'error',
         duration: 5 * 1000
       })
-      if (res.code===201) {
+      if (res.code === 201 || res.code === 202 || res.code === 203) {
         Message({
           message: res.msg || 'Error',
           type: 'error',

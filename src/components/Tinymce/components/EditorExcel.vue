@@ -1,6 +1,6 @@
 <template>
     <div class="upload-container">
-      <el-button type="success" size="mini" icon="el-icon-upload" @click=" dialogVisible=true">上传文件</el-button>
+      <el-button type="success" size="mini" icon="el-icon-upload" @click="dialogVisible=true">上传文件</el-button>
       <el-dialog :visible.sync="dialogVisible">
         <el-upload
           accept=".xls,.xlsx,.doc,.docx"
@@ -34,6 +34,7 @@
 export default {
   name: 'EditorExcel',
   props: {
+    // 请求头带上token
     tempToken: {
       type: Object,
       default: () => { return { token: localStorage.getItem('token') } }
@@ -95,7 +96,6 @@ export default {
         Atag.href = _URL.createObjectURL(file)
         // filename是文件名（用户上传时的文件名）
         _self.listObj[fileName] = { hasSuccess: false, uid: file.uid, filename: file.name }
-        // console.log(Atag)
         resolve(true)
       })
     },

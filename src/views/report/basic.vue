@@ -262,7 +262,6 @@ export default {
       const start_date = this.searchDate[0].trim().slice(0, 7)
       const end_date = this.searchDate[1].trim().slice(0, 7)
       const obj = { role: localStorage.getItem('role'), start_date: start_date, end_date: end_date }
-      // console.log(obj)
       this.listLoading = true
       medicalRevenue(obj).then(res => {
         const { items } = res

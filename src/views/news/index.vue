@@ -9,7 +9,15 @@
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter(searchType)">搜索</el-button>
       <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload" style="margin-left: 0">导出表格</el-button>
     </div>
-    <el-table v-loading="listLoading" :data="searchList" border fit highlight-current-row style="width: 100%" stripe>
+    <el-table
+      v-loading="listLoading"
+      :data="searchList"
+      :default-sort = "{prop: ['createTime','clickNum'], order: 'descending'}"
+      border
+      fit
+      highlight-current-row
+      style="width: 100%"
+      stripe>
       <el-table-column label="ID" prop="id" align="center" min-width="3px">
         <template slot-scope="{row}">
           <el-tooltip effect="dark" content="点击查看文章" placement="bottom">
@@ -18,13 +26,13 @@
         </template>
       </el-table-column>
       <!--新闻标题-->
-      <el-table-column label="新闻标题" prop="title" align="center" min-width="20px" :show-overflow-tooltip="true">
+      <el-table-column label="新闻标题" prop="title" align="center" min-width="15px" :show-overflow-tooltip="true">
         <template slot-scope="{row}">
           <span>{{ row.title }}</span>
         </template>
       </el-table-column>
       <!--发布时间-->
-      <el-table-column label="发布时间" prop="createTime" align="center" min-width="13px">
+      <el-table-column label="发布时间" sortable prop="createTime" align="center" min-width="13px">
         <template slot-scope="{row}">
           <i class="el-icon-time" style="margin-right: 3px;"></i>
           <span>{{ row.createTime }}</span>
@@ -49,13 +57,13 @@
         </template>
       </el-table-column>
       <!--浏览次数-->
-      <el-table-column label="浏览次数" prop="clickNum" align="center" min-width="6px">
+      <el-table-column label="浏览次数" sortable prop="clickNum" align="center" min-width="9px">
         <template slot-scope="{row}">
           <span>{{ row.clickNum }}</span>
         </template>
       </el-table-column>
       <!--状态：发布未未审核，审核通过，审核未通过-->
-      <el-table-column label="审核状态" prop="newsStatus" align="center" min-width="10px">
+      <el-table-column label="审核状态" prop="newsStatus" align="center" min-width="9px">
         <template slot-scope="{row}">
           <el-tag :type="row.newsStatus | newsStatusFilter" v-if="row.newsStatus !== '草稿'">
             {{ row.newsStatus }}
@@ -243,7 +251,6 @@ export default {
       temp.newsStatus = 2 // 2=已提交到数据库，但未审核
       temp.type = 2 // 草稿变为已提交
       temp.status = 'published' // 表示已提交
-      // console.log(temp)
       releaseNews(temp).then(res => {
         const { msg } = res
         this.$notify({

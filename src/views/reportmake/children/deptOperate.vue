@@ -114,7 +114,6 @@ export default {
     }
   },
   mounted() {
-    console.log(this.searchForm.type)
     // 默认的日期为前一天
     this.searchDate = [moment(new Date() - 24 * 60 * 60 * 1000).format('YYYY-MM-DD'), moment(new Date() - 24 * 60 * 60 * 1000).format('YYYY-MM-DD')]
     this.searchForm.startDate = moment(new Date() - 24 * 60 * 60 * 1000).format('YYYY-MM-DD')

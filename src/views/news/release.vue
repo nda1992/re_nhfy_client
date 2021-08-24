@@ -186,7 +186,6 @@ export default {
                 duration: 2000
               })
               this.getdraftTitleList()
-              // this.postForm.status = 'published'
               this.loading = false
             })
           })

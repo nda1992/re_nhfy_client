@@ -114,7 +114,7 @@ export const constantRoutes = [
       path: 'analysis',
       name: 'Analysis',
       component: () => import('@/views/news/analysis'),
-      meta: { title: '发文可视化分析', icon: 'el-icon-magic-stick' }
+      meta: { title: '图表分析', icon: 'el-icon-magic-stick' }
     },
     {
       // 模块管理
