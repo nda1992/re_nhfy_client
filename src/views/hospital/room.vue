@@ -58,7 +58,7 @@
             </template>
           </el-table-column>
           <!--科室简介-->
-          <el-table-column label="科室简介" prop="desc" min-width="70px" align="left">
+          <el-table-column label="科室简介" prop="desc" min-width="70px" align="left" :show-overflow-tooltip="true">
             <template slot-scope="{row}">
               <span>{{ row.desc }}</span>
             </template>
@@ -75,24 +75,24 @@
         <!--编辑科室对话框-->
         <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
           <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
-            <el-form-item label="科室编号" prop="title">
+            <el-form-item label="科室编号" prop="deptCode">
               <el-input v-model="temp.deptCode" />
             </el-form-item>
-            <el-form-item label="科室名称" prop="title">
+            <el-form-item label="科室名称" prop="deptName">
               <el-input v-model="temp.deptName" />
             </el-form-item>
-            <el-form-item label="科室负责人" prop="title">
+            <el-form-item label="科室负责人" prop="deptLeader">
               <el-input v-model="temp.deptLeader" />
             </el-form-item>
-            <el-form-item label="科室地址" prop="title">
+            <el-form-item label="科室地址" prop="deptAddr">
               <el-input v-model="temp.deptAddr" />
             </el-form-item>
-            <el-form-item label="科室级别" prop="type">
+            <el-form-item label="科室级别" prop="level">
               <el-select v-model="temp.level" class="filter-item" placeholder="请选择">
                 <el-option v-for="(item,index) in calendarTypeOptions" :key="index" :label="item" :value="item" />
               </el-select>
             </el-form-item>
-            <el-form-item label="部门简介">
+            <el-form-item label="部门简介" prop="desc">
               <el-input v-model="temp.desc" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="部门简介" />
             </el-form-item>
           </el-form>
@@ -116,7 +116,7 @@ export default {
     return {
       listQuery: {
         page: 1,
-        limit: 7,
+        limit: 10,
         role: localStorage.getItem('role')
       },
       inputVal: '',
@@ -135,14 +135,6 @@ export default {
       },
       dialogStatus: '',
       dialogFormVisible: false,
-      rules: {
-        deptCode: [{ required: true, message: '请输入科室编号', trigger: 'blulr' }],
-        deptName: [{ required: true, message: '请输入科室名称', trigger: 'blur' }],
-        deptLeader: [{ required: true, message: '请输入科室负责人', trigger: 'blur' }],
-        deptAddr: [{ required: true, message: '请输入科室地址', trigger: 'blur' }],
-        level: [{ required: true, message: '请输入科室级别', trigger: 'blur' }],
-        desc: [{ required: true, message: '请输入科室简介', trigger: 'blur' }]
-      },
       temp: {
         deptCode: '',
         deptName: '',
@@ -150,6 +142,14 @@ export default {
         deptAddr: '',
         level: '',
         desc: ''
+      },
+      rules: {
+        deptCode: [{ required: true, message: '请输入科室编号', trigger: 'blur' }],
+        deptName: [{ required: true, message: '请输入科室名称', trigger: 'blur' }],
+        deptLeader: [{ required: true, message: '请输入科室负责人', trigger: 'blur' }],
+        deptAddr: [{ required: true, message: '请输入科室地址', trigger: 'blur' }],
+        level: [{ required: true, message: '请输入科室级别', trigger: 'blur' }],
+        desc: [{ required: true, message: '请输入科室简介', trigger: 'blur' }]
       },
       // 科室级别选择
       calendarTypeOptions: [1, 2, 3],
@@ -215,12 +215,14 @@ export default {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning' }).then(() => {
-            createDept(this.temp).then(() => {
+            createDept(this.temp).then((res) => {
+
+              const { msg } = res
               this.getdeptList()
               this.dialogFormVisible = false
               this.$notify({
                 title: 'Success',
-                message: '添加成功',
+                message: msg,
                 type: 'success',
                 duration: 2000
               })

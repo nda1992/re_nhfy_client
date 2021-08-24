@@ -101,21 +101,8 @@
       <span class="svg-container">
       <svg-icon icon-class="deptname" />
       </span>
-      <el-select v-model="registerForm.deptName" placeholder="请选择部门" width="20px">
-        <el-option label="院领导" value="100"></el-option>
-        <el-option label="人力资源部" value="101"></el-option>
-        <el-option label="院务工作部" value="102"></el-option>
-        <el-option label="党务工作部" value="103"></el-option>
-        <el-option label="规划建设科" value="104"></el-option>
-        <el-option label="招投标中心" value="105"></el-option>
-        <el-option label="教育培训部" value="106"></el-option>
-        <el-option label="医务部" value="107"></el-option>
-        <el-option label="护理部" value="108"></el-option>
-        <el-option label="财务部" value="109"></el-option>
-        <el-option label="监察室" value="110"></el-option>
-        <el-option label="信息中心" value="111"></el-option>
-        <el-option label="全质办" value="112"></el-option>
-        <el-option label="保卫科" value="113"></el-option>
+      <el-select :loading="select_loading" v-model="registerForm.deptName" placeholder="请选择部门" width="20px" :remote-method="getRemoteDeptList" filterable default-first-option remote>
+        <el-option v-for="(item,index) in deptListOptions" :key="item+index" :label="item" :value="item"></el-option>
       </el-select>
       </el-form-item>
       <div class="btns">
@@ -207,7 +194,9 @@ export default {
         deptName: [
           { required: true, message: '请选择部门', trigger: 'change' }
         ]
-      }
+      },
+      deptListOptions: [],
+      select_loading: false
     }
   },
   methods: {
@@ -230,6 +219,17 @@ export default {
       this.$nextTick(() => {
         this.$refs.checkPassword1.focus()
       })
+    },
+    // 远程获取科室列表
+    getRemoteDeptList(query) {
+      const temp = { keyword: query }
+      this.select_loading = true
+      axios.post('http://localhost:3000/users/searchDept', temp).then(res => {
+        const { items } = res.data
+        if (!items) return
+        this.deptListOptions = items.map(v => v.name)
+      })
+      this.select_loading = false
     },
     // 重置按钮
     resetForm(registerForm) {

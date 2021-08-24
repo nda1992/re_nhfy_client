@@ -224,7 +224,6 @@ export default {
         type: 'warning' }).then(() => {
         this.loading = true
         saveDraft(this.postForm).then((res) => {
-          // console.log(res)
           this.getdraftTitleList()
           this.$notify({
             message: '已经保存为草稿',
@@ -235,7 +234,6 @@ export default {
           this.postForm.status = 'draft'
           this.loading = false
           this.resetPostForm()
-          console.log(this.postForm)
         })
       })
     },
@@ -274,28 +272,34 @@ export default {
 
     // 查询发布新闻的作者
     getRemoteUserList(query) {
+      this.select_loading = true
       searchUser(query).then(response => {
         const { items } = response
         if (!items) return
         this.userListOptions = items.map(v => v.username)
       })
+      this.select_loading = false
     },
 
     // 获取新闻类别
     getRemoteCategoryList(query) {
+      this.select_loading = true
       searchCategory(query).then(response => {
         const { items } = response
         if (!items) return
         this.categoryListOptions = items.map(v => v.name)
       })
+      this.select_loading = false
     },
     // 获取部门
     getRemoteDeptList(query) {
+      this.select_loading = true
       searchDept(query).then(response => {
         const { items } = response
         if (!items) return
         this.deptListOptions = items.map(v => v.name)
       })
+      this.select_loading = false
     }
   }
 }
