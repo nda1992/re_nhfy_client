@@ -57,12 +57,13 @@ export default {
         this.$message.warning('上传失败，程序出错了~')
         return
       }
+      // 触发父组件的方法
       this.$emit('successExcel', arr)
       this.listObj = {}
       this.fileList = []
       this.dialogVisible = false
     },
-    // 上传触发的函数
+    // 上传文件触发的函数
     submitUpload() {
       this.$refs.upload.submit()
     },
@@ -81,6 +82,7 @@ export default {
         }
       }
     },
+    // 上传文件前的钩子
     beforeUpload(file) {
       const _self = this
       const _URL = window.URL || window.webkitURL
@@ -89,7 +91,9 @@ export default {
       return new Promise((resolve, reject) => {
         // 创建一个a标签
         const Atag = document.createElement('a')
+        // 用户下载文件的URL地址
         Atag.href = _URL.createObjectURL(file)
+        // filename是文件名（用户上传时的文件名）
         _self.listObj[fileName] = { hasSuccess: false, uid: file.uid, filename: file.name }
         // console.log(Atag)
         resolve(true)
