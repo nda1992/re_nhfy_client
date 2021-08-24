@@ -16,6 +16,15 @@ export function getnewsList(data) {
   })
 }
 
+// 根据文章id浏览
+export function ScanById(data) {
+  return request({
+    url: '/news/ScanById',
+    method: 'get',
+    params: data
+  })
+}
+
 // 根据switch的值改变文章的发表状态
 export function updateNewsStatus(data) {
   return request({

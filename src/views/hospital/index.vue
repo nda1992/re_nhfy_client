@@ -13,13 +13,13 @@
 </template>
 <script>
 export default {
-    data(){
-        return{
-          items:[{id:1,content:'员工管理：管理全院员工的相关信息;'},{id:2,content:'科室管理：管理全院科室的相关信息;'},{id:3,content:'会议室管理：管理会议室的信息、预定等.'}]
-        }
-    },
-    complete(){},
-    methods:{}
+  data() {
+    return {
+      items: [{ id: 1, content: '员工管理：管理全院员工的相关信息;' }, { id: 2, content: '科室管理：管理全院科室的相关信息;' }, { id: 3, content: '会议室管理：管理会议室的信息、预定等.' }]
+    }
+  },
+  computed() {},
+  methods: {}
 }
 </script>
 <style lang="scss" scoped>

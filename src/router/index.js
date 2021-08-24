@@ -102,6 +102,14 @@ export const constantRoutes = [
       hidden: true
     },
     {
+      // 新闻查看页面
+      path: 'scan/:id(\\d+)',
+      name: 'Scan',
+      component: () => import('@/views/news/scan'),
+      meta: { title: '新闻浏览' },
+      hidden: true
+    },
+    {
     // 发文可视化分析
       path: 'analysis',
       name: 'Analysis',
@@ -114,7 +122,7 @@ export const constantRoutes = [
       name: 'Manager',
       component: () => import('@/views/news/manager'),
       meta: { title: '模块管理', icon: 'el-icon-s-tools' }
-    },
+    }
     ]
   },
 

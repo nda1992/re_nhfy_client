@@ -6,11 +6,11 @@
 </template>
 <script>
 export default {
-    data(){
-        return{}
-    },
-    complete(){},
-    methods:{}
+  data() {
+    return {}
+  },
+  complete() {},
+  methods: {}
 }
 </script>
 <style lang="scss" scoped>

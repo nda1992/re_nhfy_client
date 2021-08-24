@@ -169,7 +169,7 @@ export default {
     handleFilter(type) {
       if (type === '部门名称') {
         this.searchList = this.list.filter(item => { return item.deptName.match(this.searchVal) })
-      } else if (type === '部门负责人'){
+      } else if (type === '部门负责人') {
         this.searchList = this.list.filter(item => { return item.deptLeader.match(this.searchVal) })
       } else if (type === '部门地址') {
         this.searchList = this.list.filter(item => { return item.deptAddr.match(this.searchVal) })

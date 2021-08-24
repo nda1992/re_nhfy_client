@@ -120,7 +120,7 @@ export default {
       tempRoute: {},
       userListOptions: [],
       categoryListOptions: [],
-      deptListOptions: [],
+      deptListOptions: []
     }
   },
   mounted() {
@@ -152,7 +152,6 @@ export default {
     },
     // 点击发布按钮触发
     submitForm() {
-      // console.log(this.postForm)
       if (this.postForm.content.length === 0 || this.postForm.title.length === 0) {
         this.$message({
           message: '请填写必要的标题和内容',
@@ -297,7 +296,7 @@ export default {
         if (!items) return
         this.deptListOptions = items.map(v => v.name)
       })
-    },
+    }
   }
 }
 </script>
@@ -336,8 +335,5 @@ export default {
     border-radius: 0px;
     border-bottom: 1px solid #bfcbd9;
   }
-}
-.upload-demo{
-  width: 500px;
 }
 </style>

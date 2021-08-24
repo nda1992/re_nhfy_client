@@ -52,6 +52,7 @@ export default {
         this.$message('Please wait for all images to be uploaded successfully. If there is a network problem, please refresh the page and upload again!')
         return
       }
+      // console.log(arr)
       this.$emit('successCBK', arr)
       this.listObj = {}
       this.fileList = []
@@ -60,7 +61,7 @@ export default {
     handleSuccess(response, file) {
       const { files } = response
       const uid = file.uid
-      console.log(this.listObj)
+      // console.log(this.listObj)
       const objKeyArr = Object.keys(this.listObj)
       for (let i = 0, len = objKeyArr.length; i < len; i++) {
         if (this.listObj[objKeyArr[i]].uid === uid) {
@@ -82,6 +83,7 @@ export default {
       }
     },
     beforeUpload(file) {
+      console.log(file)
       const _self = this
       const _URL = window.URL || window.webkitURL
       const fileName = file.uid
@@ -92,6 +94,7 @@ export default {
         img.onload = function() {
           _self.listObj[fileName] = { hasSuccess: false, uid: file.uid, width: this.width, height: this.height }
         }
+        console.log(img)
         resolve(true)
       })
     }

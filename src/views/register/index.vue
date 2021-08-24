@@ -1,277 +1,277 @@
 <template>
 <!-- 用户注册 -->
-    <div class="register-container">
-        <el-form ref="registerForm" :model="registerForm" :rules="registerRules" class="register-form" auto-complete="on" label-position="left">
-            <div class="title-container">
-                <h3 class="title" style="letter-spacing:15px;">注册界面</h3>
-            </div>
-            <el-form-item prop="userCode">
-            <span class="svg-container">
-            <svg-icon icon-class="user" />
-            </span>
-            <el-input
-            ref="userCode"
-            v-model="registerForm.userCode"
-            placeholder="职工号"
-            name="userCode"
-            type="text"
-            tabindex="1"
-            auto-complete="on"
-            />
-            </el-form-item>
-            <el-form-item prop="username">
-            <span class="svg-container">
-            <svg-icon icon-class="username" />
-            </span>
-            <el-input
-            ref="username"
-            v-model="registerForm.username"
-            placeholder="姓名"
-            name="username"
-            type="text"
-            tabindex="1"
-            auto-complete="on"
-            />
-            </el-form-item>
-            <el-form-item prop="password">
-            <span class="svg-container">
-            <svg-icon icon-class="password" />
-            </span>
-            <el-input
-            ref="password"
-            v-model="registerForm.password"
-            placeholder="密码"
-            name="password"
-            :key="passwordType"
-            :type="passwordType"
-            tabindex="1"
-            auto-complete="on"
-            />
-            <span class="show-pwd" @click="showPwd">
-            <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
-            </span>
-            </el-form-item>
-            <el-form-item prop="checkPassword">
-            <span class="svg-container">
-            <svg-icon icon-class="password" />
-            </span>
-            <el-input
-            ref="checkPassword1"
-            v-model="registerForm.checkPassword"
-            placeholder="确认密码"
-            name="checkPassword"
-            :key="passwordType1"
-            :type="passwordType1"
-            tabindex="1"
-            auto-complete="on"
-            />
-            <span class="show-pwd" @click="showPwd1">
-            <svg-icon :icon-class="passwordType1 === 'password' ? 'eye' : 'eye-open'" />
-            </span>
-            </el-form-item>
-            <el-form-item prop="email">
-            <span class="svg-container">
-            <svg-icon icon-class="email" />
-            </span>
-            <el-input
-            ref="email"
-            v-model="registerForm.email"
-            placeholder="邮箱"
-            name="email"
-            type="text"
-            tabindex="1"
-            auto-complete="on"
-            />
-            </el-form-item>
-            <el-form-item prop="regcode">
-            <span class="svg-container">
-            <svg-icon icon-class="regcode" />
-            </span>
-            <el-input
-            ref="regcode"
-            v-model="registerForm.regcode"
-            placeholder="注册码"
-            name="regcode"
-            type="text"
-            tabindex="1"
-            auto-complete="off"
-            />
-            </el-form-item>
-            <el-form-item prop="deptName">
-            <span class="svg-container">
-            <svg-icon icon-class="deptname" />
-            </span>
-            <el-select v-model="registerForm.deptName" placeholder="请选择部门" width="20px">
-                <el-option label="院领导" value="100"></el-option>
-                <el-option label="人力资源部" value="101"></el-option>
-                <el-option label="院务工作部" value="102"></el-option>
-                <el-option label="党务工作部" value="103"></el-option>
-                <el-option label="规划建设科" value="104"></el-option>
-                <el-option label="招投标中心" value="105"></el-option>
-                <el-option label="教育培训部" value="106"></el-option>
-                <el-option label="医务部" value="107"></el-option>
-                <el-option label="护理部" value="108"></el-option>
-                <el-option label="财务部" value="109"></el-option>
-                <el-option label="监察室" value="110"></el-option>
-                <el-option label="信息中心" value="111"></el-option>
-                <el-option label="全质办" value="112"></el-option>
-                <el-option label="保卫科" value="113"></el-option>
-            </el-select>
-            </el-form-item>
-            <div class="btns">
-                <el-button :loading="loading" type="primary" style="width:50%;margin-bottom:30px;" @click.native.prevent="handleRegister">注册</el-button>
-                <el-button :loading="loading" type="primary" style="width:50%;margin-bottom:30px;" @click="resetForm('registerForm')">重置</el-button>
-            </div>
-        </el-form>
-    </div>
+  <div class="register-container">
+    <el-form ref="registerForm" :model="registerForm" :rules="registerRules" class="register-form" auto-complete="on" label-position="left">
+      <div class="title-container">
+          <h3 class="title" style="letter-spacing:15px;">注册界面</h3>
+      </div>
+      <el-form-item prop="userCode">
+      <span class="svg-container">
+      <svg-icon icon-class="user" />
+      </span>
+      <el-input
+      ref="userCode"
+      v-model="registerForm.userCode"
+      placeholder="职工号"
+      name="userCode"
+      type="text"
+      tabindex="1"
+      auto-complete="on"
+      />
+      </el-form-item>
+      <el-form-item prop="username">
+      <span class="svg-container">
+      <svg-icon icon-class="username" />
+      </span>
+      <el-input
+      ref="username"
+      v-model="registerForm.username"
+      placeholder="姓名"
+      name="username"
+      type="text"
+      tabindex="1"
+      auto-complete="on"
+      />
+      </el-form-item>
+      <el-form-item prop="password">
+      <span class="svg-container">
+      <svg-icon icon-class="password" />
+      </span>
+      <el-input
+      ref="password"
+      v-model="registerForm.password"
+      placeholder="密码"
+      name="password"
+      :key="passwordType"
+      :type="passwordType"
+      tabindex="1"
+      auto-complete="on"
+      />
+      <span class="show-pwd" @click="showPwd">
+      <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+      </span>
+      </el-form-item>
+      <el-form-item prop="checkPassword">
+      <span class="svg-container">
+      <svg-icon icon-class="password" />
+      </span>
+      <el-input
+      ref="checkPassword1"
+      v-model="registerForm.checkPassword"
+      placeholder="确认密码"
+      name="checkPassword"
+      :key="passwordType1"
+      :type="passwordType1"
+      tabindex="1"
+      auto-complete="on"
+      />
+      <span class="show-pwd" @click="showPwd1">
+      <svg-icon :icon-class="passwordType1 === 'password' ? 'eye' : 'eye-open'" />
+      </span>
+      </el-form-item>
+      <el-form-item prop="email">
+      <span class="svg-container">
+      <svg-icon icon-class="email" />
+      </span>
+      <el-input
+      ref="email"
+      v-model="registerForm.email"
+      placeholder="邮箱"
+      name="email"
+      type="text"
+      tabindex="1"
+      auto-complete="on"
+      />
+      </el-form-item>
+      <el-form-item prop="regcode">
+      <span class="svg-container">
+      <svg-icon icon-class="regcode" />
+      </span>
+      <el-input
+      ref="regcode"
+      v-model="registerForm.regcode"
+      placeholder="注册码"
+      name="regcode"
+      type="text"
+      tabindex="1"
+      auto-complete="off"
+      />
+      </el-form-item>
+      <el-form-item prop="deptName">
+      <span class="svg-container">
+      <svg-icon icon-class="deptname" />
+      </span>
+      <el-select v-model="registerForm.deptName" placeholder="请选择部门" width="20px">
+        <el-option label="院领导" value="100"></el-option>
+        <el-option label="人力资源部" value="101"></el-option>
+        <el-option label="院务工作部" value="102"></el-option>
+        <el-option label="党务工作部" value="103"></el-option>
+        <el-option label="规划建设科" value="104"></el-option>
+        <el-option label="招投标中心" value="105"></el-option>
+        <el-option label="教育培训部" value="106"></el-option>
+        <el-option label="医务部" value="107"></el-option>
+        <el-option label="护理部" value="108"></el-option>
+        <el-option label="财务部" value="109"></el-option>
+        <el-option label="监察室" value="110"></el-option>
+        <el-option label="信息中心" value="111"></el-option>
+        <el-option label="全质办" value="112"></el-option>
+        <el-option label="保卫科" value="113"></el-option>
+      </el-select>
+      </el-form-item>
+      <div class="btns">
+        <el-button :loading="loading" type="primary" style="width:50%;margin-bottom:30px;" @click.native.prevent="handleRegister">注册</el-button>
+        <el-button :loading="loading" type="primary" style="width:50%;margin-bottom:30px;" @click="resetForm('registerForm')">重置</el-button>
+      </div>
+    </el-form>
+  </div>
 </template>
 <script>
-import axios from "axios"
+import axios from 'axios'
 export default {
-    name:"Register",
-    data(){
-        //验证邮箱格式
-        const checkEmail=(rule, value, callback)=>{
-            const mailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/
-            if (!value) {
-            return callback(new Error('邮箱不能为空'))
-            }
-            setTimeout(() => {
-            if (mailReg.test(value)) {
-                callback()
-            } else {
-                callback(new Error('请输入正确的邮箱格式'))
-            }
-            }, 100)
-        };
-        //密码验证
-        const validatePass = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请输入密码'));
+  name: 'Register',
+  data() {
+    // 验证邮箱格式
+    const checkEmail = (rule, value, callback) => {
+      const mailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/
+      if (!value) {
+        return callback(new Error('邮箱不能为空'))
+      }
+      setTimeout(() => {
+        if (mailReg.test(value)) {
+          callback()
         } else {
-          if (this.registerForm.checkPassword !== '') {
-            this.$refs.registerForm.validateField('checkPassword');
-          }
-          callback();
+          callback(new Error('请输入正确的邮箱格式'))
         }
-        };
-        //确认密码
-        const validatePass2 = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请再次输入密码'));
-        } else if (value !== this.registerForm.password) {
-          callback(new Error('两次输入密码不一致!'));
-        } else {
-          callback();
-        }
-        };
-        return{
-            passwordType:'password',
-            passwordType1:'password',
-            loading:false,
-            redirect:undefined,
-            registerForm: {
-                userCode:'',
-                username:'',
-                password:'',
-                checkPassword: '',
-                email:'',
-                deptName:'',
-                regcode:''
-            },
-            registerRules:{
-                userCode:[
-                    {required: true, message: '请输入职工号', trigger: 'blur'}
-                ],
-                username:[
-                    {required: true, message: '请输入姓名', trigger: 'blur'},
-                    { min: 2, max: 4, message: '长度在2到4个字符', trigger: 'blur' },
-                ],
-                password: [
-                    { validator: validatePass, trigger: 'blur' },
-                    { min: 5, max: 10, message: '长度在5到10个字符', trigger: 'blur' },
-                    { required: true, message: '请输入密码', trigger: 'blur' },
-                ],
-                checkPassword: [
-                    { required: true, message: '请再次输入密码', trigger: 'blur' },
-                    { validator: validatePass2, trigger: 'blur' },
-                    { min: 5, max: 10, message: '长度在5到10个字符', trigger: 'blur' },
-                ],
-                email: [
-                    { required: true, message: '请输入邮箱', trigger: 'blur' },
-                    {validator: checkEmail, trigger: 'blur'}
-                ],
-                regcode: [
-                    { required: true, message: '请输入注册码', trigger: 'blur' },
-                ],
-                deptName: [
-                    { required: true, message: '请选择部门', trigger: 'change' },
-                ],
-            }
-        }
-    },
-    methods:{
-        showPwd() {
-        if (this.passwordType === 'password') {
-            this.passwordType = ''
-        } else {
-            this.passwordType = 'password'
-        }
-        this.$nextTick(() => {
-            this.$refs.password.focus()
-        })
-        },
-        showPwd1() {
-        if (this.passwordType1 === 'password') {
-            this.passwordType1 = ''
-        } else {
-            this.passwordType1 = 'password'
-        }
-        this.$nextTick(() => {
-            this.$refs.checkPassword1.focus()
-        })
-        },
-        //重置按钮
-        resetForm(registerForm){
-            this.$refs[registerForm].resetFields();
-        },
-        handleRegister(){
-            this.$refs.registerForm.validate(valid => {
-            if (valid) {
-                this.$confirm('是否注册?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                    }).then(()=>{
-                        this.loading = true
-                        axios.post("http://localhost:3000/users/register",this.registerForm).then(res=>{
-                            const {code,msg}=res.data
-                            if(code===200){
-                                this.$router.push({ path: this.redirect || '/login' })
-                                this.loading = false
-                                this.$message.success('用户注册成功,审核完成后即可登录')
-                                // this.$router.go(-1)
-                            }else if(code===201){
-                                this.$message.error(msg)
-                                this.loading = false
-                            }else if(code===202){
-                                this.$message.error(msg);
-                                this.loading = false
-                            }else{
-                                this.$message.error(msg)
-                                this.loading = false
-                            }
-                        }).catch(() => {
-                            this.loading = false
-                        })
-                    })
-                } else {
-                console.log('error submit!!')
-                return false
-            }
-        })
-        },
+      }, 100)
     }
+    // 密码验证
+    const validatePass = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请输入密码'))
+      } else {
+        if (this.registerForm.checkPassword !== '') {
+          this.$refs.registerForm.validateField('checkPassword')
+        }
+        callback()
+      }
+    }
+    // 确认密码
+    const validatePass2 = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请再次输入密码'))
+      } else if (value !== this.registerForm.password) {
+        callback(new Error('两次输入密码不一致!'))
+      } else {
+        callback()
+      }
+    }
+    return {
+      passwordType: 'password',
+      passwordType1: 'password',
+      loading: false,
+      redirect: undefined,
+      registerForm: {
+        userCode: '',
+        username: '',
+        password: '',
+        checkPassword: '',
+        email: '',
+        deptName: '',
+        regcode: ''
+      },
+      registerRules: {
+        userCode: [
+          { required: true, message: '请输入职工号', trigger: 'blur' }
+        ],
+        username: [
+          { required: true, message: '请输入姓名', trigger: 'blur' },
+          { min: 2, max: 4, message: '长度在2到4个字符', trigger: 'blur' }
+        ],
+        password: [
+          { validator: validatePass, trigger: 'blur' },
+          { min: 5, max: 10, message: '长度在5到10个字符', trigger: 'blur' },
+          { required: true, message: '请输入密码', trigger: 'blur' }
+        ],
+        checkPassword: [
+          { required: true, message: '请再次输入密码', trigger: 'blur' },
+          { validator: validatePass2, trigger: 'blur' },
+          { min: 5, max: 10, message: '长度在5到10个字符', trigger: 'blur' }
+        ],
+        email: [
+          { required: true, message: '请输入邮箱', trigger: 'blur' },
+          { validator: checkEmail, trigger: 'blur' }
+        ],
+        regcode: [
+          { required: true, message: '请输入注册码', trigger: 'blur' }
+        ],
+        deptName: [
+          { required: true, message: '请选择部门', trigger: 'change' }
+        ]
+      }
+    }
+  },
+  methods: {
+    showPwd() {
+      if (this.passwordType === 'password') {
+        this.passwordType = ''
+      } else {
+        this.passwordType = 'password'
+      }
+      this.$nextTick(() => {
+        this.$refs.password.focus()
+      })
+    },
+    showPwd1() {
+      if (this.passwordType1 === 'password') {
+        this.passwordType1 = ''
+      } else {
+        this.passwordType1 = 'password'
+      }
+      this.$nextTick(() => {
+        this.$refs.checkPassword1.focus()
+      })
+    },
+    // 重置按钮
+    resetForm(registerForm) {
+      this.$refs[registerForm].resetFields()
+    },
+    handleRegister() {
+      this.$refs.registerForm.validate(valid => {
+        if (valid) {
+          this.$confirm('是否注册?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            this.loading = true
+            axios.post('http://localhost:3000/users/register', this.registerForm).then(res => {
+              const { code, msg } = res.data
+              if (code === 200) {
+                this.$router.push({ path: this.redirect || '/login' })
+                this.loading = false
+                this.$message.success('用户注册成功,审核完成后即可登录')
+                // this.$router.go(-1)
+              } else if (code === 201) {
+                this.$message.error(msg)
+                this.loading = false
+              } else if (code === 202) {
+                this.$message.error(msg)
+                this.loading = false
+              } else {
+                this.$message.error(msg)
+                this.loading = false
+              }
+            }).catch(() => {
+              this.loading = false
+            })
+          })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+    }
+  }
 }
 </script>
 <style lang="scss">

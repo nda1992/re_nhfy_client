@@ -10,6 +10,13 @@
       <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload" style="margin-left: 0">导出表格</el-button>
     </div>
     <el-table v-loading="listLoading" :data="searchList" border fit highlight-current-row style="width: 100%" stripe>
+      <el-table-column label="ID" prop="id" align="center" min-width="3px">
+        <template slot-scope="{row}">
+          <el-tooltip effect="dark" content="点击查看文章" placement="bottom">
+            <span class="link-type" @click="handleScan(row)">{{ row.id }}</span>
+          </el-tooltip>
+        </template>
+      </el-table-column>
       <!--新闻标题-->
       <el-table-column label="新闻标题" prop="title" align="center" min-width="20px" :show-overflow-tooltip="true">
         <template slot-scope="{row}">
@@ -105,7 +112,7 @@
 <script>
 import waves from '@/directive/waves'
 import Pagination from '@/components/Pagination'
-import { deleteNewsById, getnewsList, updateNewsStatus, releaseNews } from '@/api/news/news'
+import { deleteNewsById, getnewsList, updateNewsStatus, releaseNews, ScanById } from '@/api/news/news'
 const defaultForm = {
   loginuserCode: '',
   author: '',
@@ -150,7 +157,7 @@ export default {
     return {
       listQuery: {
         page: 1,
-        limit: 7,
+        limit: 10,
         role: localStorage.getItem('role')
       },
       total: 0,
@@ -187,6 +194,10 @@ export default {
       } else if (type === '发布时间') {
         this.searchList = this.list.filter(item => { return item.createTime.match(this.searchVal) })
       }
+    },
+    // 根据文章id浏览
+    handleScan(row) {
+      this.$router.push({ path: `/news/scan/${row.id}` })
     },
     // 获取新闻列表
     getNewsList() {
