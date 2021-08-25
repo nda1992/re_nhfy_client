@@ -13,7 +13,7 @@
           <div style="color:#FF6600;font-size: 12px">注意：所选月份在数据库中没有数据时，表格中将不显示！</div>
         </div>
       <el-divider></el-divider>
-      <div style="font-size: 18px;margin-bottom: 10px;font-weight: bold" v-if="searchDate!==''">南华大学附属第一医院医疗{{searchDate[0].slice(0,7)}}~{{searchDate[1].slice(0,7)}}收入情况表</div>
+      <div style="font-size: 18px;margin-bottom: 10px;font-weight: bold" v-if="searchDate!==''">南华大学附属第一医院{{searchDate[0].slice(0,7)}}~{{searchDate[1].slice(0,7)}}医疗收入情况表</div>
       <el-table
         :key="tableKey"
         v-loading="listLoading"
@@ -227,7 +227,7 @@
         </el-table-column>
         <el-table-column label="平均住院日" prop="平均住院日"  align="center" width="100px">
           <template slot-scope="{row}">
-            <span>{{ row.平均住院日 }}</span>
+            <span>{{ Math.floor((row.平均住院日)*100)/100 }}</span>
           </template>
         </el-table-column>
       </el-table>

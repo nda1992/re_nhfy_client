@@ -53,7 +53,7 @@
     </div>
 <!--    添加表格对话框-->
     <el-dialog :visible.sync="dialogCreateVisible" title="定制表格名称">
-      <el-form ref="dataForm" :model="tableTitle" label-position="left" label-width="100px" style="width: 500px; margin-left:50px;">
+      <el-form ref="dataForm" :rules="rules" :model="tableTitle" label-position="left" label-width="100px" style="width: 500px; margin-left:50px;">
         <el-input v-model="tableTitle.title" clearable type="text" placeholder="请输入表格名称" style="margin-bottom: 20px;"></el-input>
         <el-input v-model="tableTitle.desc" type="textarea" placeholder="请输入备注"></el-input>
       </el-form>
@@ -74,7 +74,11 @@ export default {
       tableKey: 0,
       dialogCreateVisible: false,
       tableTitle: { id: '', title: '', desc: '' },
-      tableTitleList: []
+      tableTitleList: [],
+      rules: {
+        title: [{ require: true, message: '请输入表格标题', trigger: 'blur' }],
+        desc: [{ require: true, message: '请输入备注', trigger: 'blur' }]
+      }
     }
   },
   mounted() {

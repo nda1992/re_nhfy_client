@@ -301,6 +301,20 @@ export const constantRoutes = [
             name: 'DeptOperate',
             component: () => import('@/views/reportmake/children/deptOperate'),
             hidden: true
+          },
+          {
+            // 科室药耗占比
+            path: 'deptMaterialMedicineProp',
+            name: 'DeptMaterialMedicineProp',
+            component: () => import('@/views/reportmake/children/deptMaterialMedicineProp'),
+            hidden: true
+          },
+          {
+            // 门诊住院药品和耗材明细
+            path: 'deptMaterialMedicineDetail',
+            name: 'DeptMaterialMedicineDetail',
+            component: () => import('@/views/reportmake/children/deptMaterialMedicineDetail'),
+            hidden: true
           }
         ]
       }

@@ -34,7 +34,7 @@
             </template>
           </el-table-column>
           <!--科室名称-->
-          <el-table-column label="科室名称" prop="deptName" min-width="15px" align="center">
+          <el-table-column label="科室名称" prop="deptName" min-width="20px" align="center">
             <template slot-scope="{row}">
               <span class="link-type" @click="handleUpdate(row)">{{ row.deptName }}</span>
             </template>
@@ -52,7 +52,7 @@
             </template>
           </el-table-column>
           <!--科室地址-->
-          <el-table-column label="科室地址" prop="deptAddr" min-width="12px" align="center">
+          <el-table-column label="科室地址" prop="deptAddr" min-width="18px" align="center">
             <template slot-scope="{row}">
               <span>{{ row.deptAddr }}</span>
             </template>
@@ -216,7 +216,6 @@ export default {
             cancelButtonText: '取消',
             type: 'warning' }).then(() => {
             createDept(this.temp).then((res) => {
-
               const { msg } = res
               this.getdeptList()
               this.dialogFormVisible = false
@@ -297,9 +296,9 @@ export default {
       })
     },
     formatJson(filterVal) {
-      let data = []
+      const data = []
       this.searchList.forEach(item => {
-        let temp = []
+        const temp = []
         temp.push(item.deptCode, item.deptName, item.deptLeader, item.level, item.deptAddr, item.desc)
         data.push(temp)
       })

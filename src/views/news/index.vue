@@ -12,7 +12,7 @@
     <el-table
       v-loading="listLoading"
       :data="searchList"
-      :default-sort = "{prop: ['createTime','clickNum'], order: 'descending'}"
+      :default-sort="{prop: ['createTime','clickNum'], order: 'descending'}"
       border
       fit
       highlight-current-row
@@ -120,7 +120,7 @@
 <script>
 import waves from '@/directive/waves'
 import Pagination from '@/components/Pagination'
-import { deleteNewsById, getnewsList, updateNewsStatus, releaseNews, ScanById } from '@/api/news/news'
+import { deleteNewsById, getnewsList, updateNewsStatus, releaseNews } from '@/api/news/news'
 const defaultForm = {
   loginuserCode: '',
   author: '',
