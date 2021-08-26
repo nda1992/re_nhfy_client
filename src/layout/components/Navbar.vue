@@ -31,9 +31,9 @@
           更多操作<i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item icon="el-icon-s-custom" @click.native="updateUserinfo">更新个人信息</el-dropdown-item>
-          <el-dropdown-item icon="el-icon-warning-outline" @click.native="deleteUser">注销个人账号</el-dropdown-item>
-          <el-dropdown-item icon="el-icon-circle-close" @click.native="logout">退出</el-dropdown-item>
+          <el-dropdown-item icon="el-icon-s-custom" @click.native="updateUserinfo">个人主页</el-dropdown-item>
+          <el-dropdown-item icon="el-icon-warning-outline" @click.native="deleteUser">注销账号</el-dropdown-item>
+          <el-dropdown-item icon="el-icon-circle-close" @click.native="logout">退出系统</el-dropdown-item>
         </el-dropdown-menu>
         </el-dropdown>
         </div>
@@ -80,9 +80,16 @@ export default {
       this.$store.dispatch('app/toggleSideBar')
     },
     async logout() {
-      await this.$store.dispatch('user/logout')
+      this.$confirm('是否退出?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async () => {
+        await this.$store.dispatch('user/logout')
+        this.$router.push(`/login`)
+      })
       // this.$router.push(`/login?redirect=${this.$route.fullPath}`)
-      this.$router.push(`/login`)
+
     },
     deleteUser() {
       alert('该功能暂未开放，请联系管理员')

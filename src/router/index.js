@@ -68,7 +68,7 @@ export const constantRoutes = [
       path: 'dashboard',
       name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
+      meta: { title: 'Dashboard', icon: 'dashboard', affix: true }
     }]
   },
 
@@ -320,6 +320,30 @@ export const constantRoutes = [
       }
     ]
   },
+  // 业务办理
+  {
+    path: '/bussinessManager',
+    component: Layout,
+    redirect: '/bussinessManager/home',
+    name: 'BussinessManager',
+    meta: { title: '业务办理', icon: 'el-icon-thumb' },
+    children: [
+      {
+        // 个人业务办理
+        path: 'personal',
+        name: 'Personal',
+        component: () => import('@/views/bussinessManager/index'),
+        meta: { title: '个人业务办理',icon: 'el-icon-user-solid' }
+      },
+      {
+        // 科室业务办理
+        path: 'department',
+        name: 'Department',
+        component: () => import('@/views/bussinessManager/department'),
+        meta: { title: '部门业务办理',icon: 'el-icon-postcard' }
+      },
+    ]
+  },
   // 辅助系统
   {
     path: '/assistSys',
@@ -358,46 +382,12 @@ export const constantRoutes = [
       }
     ]
   },
-
-  // 第三方工具
-  {
-    path: '/others',
-    component: Layout,
-    redirect: '/others/home',
-    name: 'Others',
-    children: [
-      {
-        // 首页
-        path: 'home',
-        name: 'Home',
-        component: () => import('@/views/others/index'),
-        meta: { title: '第三方工具', icon: 'el-icon-connection' }
-      }
-    ]
-  },
-
-  // 系统设置
-  {
-    path: '/settings',
-    component: Layout,
-    redirect: '/settings/home',
-    name: 'settings',
-    children: [
-      {
-        // 首页
-        path: 'home',
-        name: 'Home',
-        component: () => import('@/views/settings/index'),
-        meta: { title: '系统设置', icon: 'el-icon-setting' }
-      }
-    ]
-  },
   // 文档下载
   {
     path: '/document',
     component: Layout,
     redirect: '/document/home',
-    name: 'document',
+    name: 'Document',
     children: [
       {
         // 首页
@@ -408,6 +398,24 @@ export const constantRoutes = [
       }
     ]
   },
+
+  // 系统设置
+  {
+    path: '/settings',
+    component: Layout,
+    redirect: '/settings/home',
+    name: 'Settings',
+    children: [
+      {
+        // 首页
+        path: 'home',
+        name: 'Home',
+        component: () => import('@/views/settings/index'),
+        meta: { title: '系统设置', icon: 'el-icon-setting' }
+      }
+    ]
+  },
+
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }

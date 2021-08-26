@@ -1,33 +1,33 @@
 <template>
-    <div class="upload-container">
-      <el-button type="success" size="mini" icon="el-icon-upload" @click="dialogVisible=true">上传文件</el-button>
-      <el-dialog :visible.sync="dialogVisible">
-        <el-upload
-          accept=".xls,.xlsx,.doc,.docx"
-          class="upload-demo"
-          ref="upload"
-          action="http://localhost:3000/news/uploadFile/"
-          :headers="tempToken"
-          :on-success="handleSuccess"
-          :on-preview="handlePreview"
-          :on-remove="handleRemove"
-          :file-list="fileList"
-          :before-upload="beforeUpload"
-          :auto-upload="false">
-          <div class="select-container">
-            <div class="btns">
-              <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-              <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
-            </div>
-            <div slot="tip" class="el-upload__tip">只能上传xls、xlsx、doc、docx文件，且不超过10MB</div>
+  <div class="upload-container">
+    <el-button type="success" size="mini" icon="el-icon-document" @click="dialogVisible=true">上传文件</el-button>
+    <el-dialog :visible.sync="dialogVisible">
+      <el-upload
+        accept=".xls,.xlsx,.doc,.docx"
+        class="upload-demo"
+        ref="upload"
+        action="http://localhost:3000/news/uploadFile/"
+        :headers="tempToken"
+        :on-success="handleSuccess"
+        :on-preview="handlePreview"
+        :on-remove="handleRemove"
+        :file-list="fileList"
+        :before-upload="beforeUpload"
+        :auto-upload="false">
+        <div class="select-container">
+          <div class="btns">
+            <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+            <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
           </div>
-        </el-upload>
-        <div class="confirm-btn">
-          <el-button type="primary" @click="handleSubmit" style="float: right;margin-left: 13px;">确定</el-button>
-          <el-button @click="dialogVisible = false" style="float: right;">取消</el-button>
+          <div slot="tip" class="el-upload__tip">只能上传xls、xlsx、doc、docx文件，且不超过10MB</div>
         </div>
-      </el-dialog>
-    </div>
+      </el-upload>
+      <div class="confirm-btn">
+        <el-button type="primary" @click="handleSubmit" style="float: right;margin-left: 13px;">确定</el-button>
+        <el-button @click="dialogVisible = false" style="float: right;">取消</el-button>
+      </div>
+    </el-dialog>
+  </div>
 </template>
 
 <script>

@@ -308,6 +308,7 @@ export default {
 </script>
 <style lang="scss" scoped>
   .app-container{
+    margin-top: 30px;
     .filter-container{
       width: 600px;
       display: flex;

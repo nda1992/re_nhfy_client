@@ -1,7 +1,7 @@
 <template>
   <!--action="https://httpbin.org/post"-->
   <div class="upload-container">
-    <el-button :style="{background:color,borderColor:color}" icon="el-icon-upload" size="mini" type="primary" @click=" dialogVisible=true">
+    <el-button :style="{background:color,borderColor:color}" icon="el-icon-picture" size="mini" type="primary" @click=" dialogVisible=true">
       上传图片
     </el-button>
     <el-dialog :visible.sync="dialogVisible">
