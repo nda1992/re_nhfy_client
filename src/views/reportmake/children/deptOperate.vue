@@ -10,12 +10,13 @@
       </el-radio-group>
       <el-button @click="search" icon="el-icon-search" type="primary">查询</el-button>
       <el-button @click="handleDownload" icon="el-icon-download" type="success">导出表格</el-button>
+      <div><span style="color: #ff6666;font-size: 12px;">表格中的住院手术费和护理费的显示有点问题，还在修复中!</span></div>
     </div>
     <div class="table-container">
       <div class="header">
         <span style="margin-bottom: 10px;font-size: 22px;font-weight: bold" v-if="searchForm.type==='1'">门诊科室收入情况</span>
         <span style="margin-bottom: 10px;font-size: 22px;font-weight: bold" v-else>住院科室收入情况</span>
-        <div class="sum" v-if="searchForm.type==='1'">门诊总收入:{{mzsum}}</div>
+        <div class="sum" v-if="searchForm.type==='1'">门急诊总收入:{{mzsum}}</div>
         <div class="sum" v-else>住院总收入:{{zysum}}</div>
       </div>
       <el-table :key="tableKey"
@@ -25,7 +26,6 @@
                 stripe
                 fit
                 highlight-current-row
-                :row-class-name="rowClassName"
                 style="width: 100%;"
                 :height="(MZitemList.length===0)&&(ZYitemList.length===0)?'auto':'600'">
         <!--序号-->
@@ -71,13 +71,13 @@
           </template>
         </el-table-column>
         <!--手术费-->
-        <el-table-column label="手术费" prop="手术费" sortable :sort-method="sortBySSF" align="center" min-width="7px">
+        <el-table-column label="手术费" prop="手术费" sortable :sort-method="sortBySSF" align="center" min-width="6px">
           <template slot-scope="{row}">
             <span>{{ row.手术费.toFixed(2) }}</span>
           </template>
         </el-table-column>
         <!--护理费-->
-        <el-table-column label="护理费" prop="护理费" sortable :sort-method="sortByHLF" align="center" min-width="7px">
+        <el-table-column label="护理费" prop="护理费" sortable :sort-method="sortByHLF" align="center" min-width="6px">
           <template slot-scope="{row}">
             <span>{{ row.护理费.toFixed(2) }}</span>
           </template>
@@ -95,7 +95,7 @@
           </template>
         </el-table-column>
         <!--西药费-->
-        <el-table-column label="西药费" prop="西药费" sortable :sort-method="sortByXYF" align="center" min-width="7px">
+        <el-table-column label="西药费" prop="西药费" sortable :sort-method="sortByXYF" align="center" min-width="6px">
           <template slot-scope="{row}">
             <span>{{ row.西药费.toFixed(2) }}</span>
           </template>
@@ -183,7 +183,8 @@ export default {
       this.listLoading = true
       const temp = Object.assign({}, this.searchForm)
       searchDeptOperate(temp).then((res) => {
-        const { items } = res
+        const { items, msg } = res
+        this.$message.success(msg)
         if (this.searchForm.type === '1') {
           this.MZitemList = items
           this.MZList = items
@@ -295,8 +296,9 @@ export default {
 </script>
 <style lang="scss" scoped>
   .app-container{
+    padding-top: 0;
     .title{
-      width: 1000px;
+      width: 1300px;
       display: flex;
       justify-content: space-between;
       align-items: center;

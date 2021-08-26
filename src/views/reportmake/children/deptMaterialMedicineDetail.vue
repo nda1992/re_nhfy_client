@@ -1,13 +1,243 @@
 <template>
-  <div class="app-container"></div>
+  <div class="app-container">
+    <div class="title">
+      <el-date-picker v-model="searchDate" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd" clearable @change="pickerDate"></el-date-picker>
+      <el-select v-model="searchForm.Depttype" clearable placeholder="请选择">
+        <el-option v-for="(item, index) in MZorZYOptions" :key="item.id" :label="item.item" :value="item.item"></el-option>
+      </el-select>
+      <el-radio-group v-model="searchForm.Catetype" @change="handleChange" style="display: flex;justify-content:space-around;width: 180px;">
+        <el-radio label="1" border size="medium">药品</el-radio>
+        <el-radio label="2" border size="medium">耗材</el-radio>
+      </el-radio-group>
+      <el-button @click="search" type="warning">查询</el-button>
+      <span style="color: #ff6666;font-size: 12px;">查询时间约为120秒!</span>
+    </div>
+    <div class="table-container">
+      <div class="header">
+        <span style="margin-bottom: 10px;font-size: 22px;font-weight: bold">{{ tableTitle }}</span>
+        <span class="sum">总收入: {{ sum }}</span>
+      </div>
+      <el-table
+        :data="showItems"
+        v-loading="listLoading"
+        border
+        stripe
+        fit
+        height="500"
+        highlight-current-row
+        style="width: 100%;">
+        <el-table-column label="序号" prop="xh" align="center" width="70px">
+          <template slot-scope="{row}">
+            <span>{{ row.XH }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="开单科室" prop="开单科室" align="center" width="150px">
+          <template slot-scope="{row}">
+            <span>{{ row.开单科室 }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="项目名称" prop="项目名称" align="center" width="100px" :show-overflow-tooltip="true">
+          <template slot-scope="{row}">
+            <span>{{ row.项目名称 }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="大项目名称" prop="大项目名称" align="center" width="100px">
+          <template slot-scope="{row}">
+            <span>{{ row.大项目名称 }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="项目编码" prop="项目编码" align="center" width="100px" :show-overflow-tooltip="true">
+          <template slot-scope="{row}">
+            <span>{{ row.项目编码 }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="大项目编码" prop="大项目编码" align="center" width="100px">
+          <template slot-scope="{row}">
+            <span>{{ row.大项目编码 }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="单价" prop="单价" align="center" width="100px">
+          <template slot-scope="{row}">
+            <span>{{ Math.floor((row.单价)*100)/100 }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="单位" prop="单位" align="center" width="80px">
+          <template slot-scope="{row}">
+            <span>{{ row.单位 }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="数量" prop="数量" align="center" width="50px">
+          <template slot-scope="{row}">
+            <span>{{ row.数量 }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="总金额" prop="总金额" align="center" width="100px">
+          <template slot-scope="{row}">
+            <span>{{ Math.floor((row.总金额)*100)/100 }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="是否中草药" prop="是否中草药" align="center" width="100px">
+          <template slot-scope="{row}">
+            <span>{{ row.是否中草药 }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="是否国家谈判品种" prop="是否国家谈判品种" align="center" width="150px">
+          <template slot-scope="{row}">
+            <span>{{ row.是否国家谈判品种 }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="是否重点监管药品" prop="是否重点监管药品" align="center" width="150px">
+          <template slot-scope="{row}">
+            <span>{{ row.是否重点监管药品 }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="是否国家辅助用药" prop="是否国家辅助用药" align="center" width="150px">
+          <template slot-scope="{row}">
+            <span>{{ row.是否国家辅助用药 }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="是否PPI" prop="是否PPI" align="center" width="80px">
+          <template slot-scope="{row}">
+            <span>{{ row.是否PPI }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="是否抗菌药品" prop="是否抗菌药品" align="center" width="110px">
+          <template slot-scope="{row}">
+            <span>{{ row.是否抗菌药品 }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="是否中枢止吐" prop="是否中枢止吐" align="center" width="110px">
+          <template slot-scope="{row}">
+            <span>{{ row.是否中枢止吐 }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="是否口服中成药" prop="是否口服中成药" align="center" width="120px">
+          <template slot-scope="{row}">
+            <span>{{ row.是否口服中成药 }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="是否中药注射剂" prop="是否中药注射剂" align="center" width="120px">
+          <template slot-scope="{row}">
+            <span>{{ row.是否中药注射剂 }}</span>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
+  </div>
 </template>
 
 <script>
+import { deptMaterialMedicineDetail } from '@/api/reportmake/reportmake'
+import moment from 'moment'
 export default {
-  name: 'deptMaterialMedicineDetail'
+  name: 'deptMaterialMedicineDetail',
+  data() {
+    return {
+      listLoading: false,
+      // 门诊药品
+      MZmedicineList: [],
+      // 住院药品
+      ZYmedicineList: [],
+      // 门诊耗材
+      MZmaterialList: [],
+      // 住院耗材
+      ZYmaterialList: [],
+      // 最终显示到表格的数据
+      showItems: [],
+      searchDate: '',
+      searchForm: { startDate: '', endDate: '', Depttype: '门诊', Catetype: '1' },
+      // 选择住院还是门诊？
+      MZorZYOptions: [{ id: 1, item: '门诊' }, { id: 2, item: '住院' }],
+      // 显示的表格标题，由后端返回
+      tableTitle: '门诊药品明细',
+      // 查询回来某一项的总收入
+      sum: 0
+    }
+  },
+  mounted() {
+    // 默认的日期为前一天
+    this.searchDate = [moment(new Date() - 24 * 60 * 60 * 1000).format('YYYY-MM-DD'), moment(new Date() - 24 * 60 * 60 * 1000).format('YYYY-MM-DD')]
+    this.searchForm.startDate = moment(new Date() - 24 * 60 * 60 * 1000).format('YYYY-MM-DD')
+    this.searchForm.endDate = moment(new Date() - 24 * 60 * 60 * 1000).format('YYYY-MM-DD')
+  },
+  methods: {
+    // 日期选择器触发
+    pickerDate() {
+      this.searchForm.startDate = this.searchDate[0]
+      this.searchForm.endDate = this.searchDate[1]
+    },
+    handleChange(id) {
+      console.log(id)
+    },
+    search() {
+      this.listLoading = true
+      const temp = Object.assign({}, this.searchForm)
+      if (this.searchForm.Depttype === '门诊') {
+        temp.Depttype = '1'
+      } else if (this.searchForm.Catetype === '住院') {
+        temp.Depttype = '2'
+      }
+      deptMaterialMedicineDetail(temp).then(res => {
+        const { items, flag, msg, title } = res
+        console.log(res)
+        this.$message.success(msg)
+        this.tableTitle = title
+        switch (flag) {
+          // 门诊药品
+          case '1':
+            this.MZmedicineList = items
+            this.showItems = this.MZmedicineList
+            break
+          // 住院药品
+          case '2':
+            this.ZYmedicineList = items
+            this.showItems = this.ZYmedicineList
+            break
+          // 门诊耗材
+          case '3':
+            this.MZmaterialList = items
+            this.showItems = this.MZmaterialList
+            break
+          // 住院耗材
+          case '4':
+            this.ZYmaterialList = items
+            this.showItems = this.ZYmaterialList
+        }
+        this.listLoading = false
+      })
+    }
+  }
 }
 </script>
 
 <style lang="scss" scoped>
-
+  .app-container{
+    padding-top: 0;
+    .title{
+      width: 1000px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+    }
+    .el-radio{
+      margin: 0;
+    }
+    .table-container{
+      .header{
+        position: relative;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        .sum{
+          float: left;
+          position: absolute;
+          bottom: 20px;
+          right: 0;
+          color: #ff6666;
+        }
+      }
+    }
+  }
 </style>

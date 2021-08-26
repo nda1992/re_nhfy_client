@@ -40,3 +40,12 @@ export function searchDeptOperate(data) {
     data
   })
 }
+
+// 门诊和住院的药品和耗材明细
+export function deptMaterialMedicineDetail(data) {
+  return request({
+    url: '/reportmake/specialQuery/searchDeptOperate/deptMaterialMedicineDetail',
+    method: 'post',
+    data
+  })
+}
