@@ -142,11 +142,18 @@ export const constantRoutes = [
         meta: { title: '首页', icon: 'el-icon-house' }
       },
       {
-        // 人才招聘发文
+        // 岗位管理
         path: 'release',
         name: 'Release',
         component: () => import('@/views/recruit/release'),
-        meta: { title: '招聘发文', icon: 'el-icon-edit' }
+        meta: { title: '岗位管理', icon: 'el-icon-edit' }
+      },
+      {
+        // 投递列表
+        path: 'postlist',
+        name: 'Postlist',
+        component: () => import('@/views/recruit/postlist'),
+        meta: { title: '投递列表', icon: 'list' }
       }
     ]
   },
