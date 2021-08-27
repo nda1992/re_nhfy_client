@@ -300,6 +300,7 @@ export const constantRoutes = [
             path: 'deptOperate',
             name: 'DeptOperate',
             component: () => import('@/views/reportmake/children/deptOperate'),
+            meta: { title: '科室收入情况' },
             hidden: true
           },
           {
@@ -307,6 +308,7 @@ export const constantRoutes = [
             path: 'deptMaterialMedicineProp',
             name: 'DeptMaterialMedicineProp',
             component: () => import('@/views/reportmake/children/deptMaterialMedicineProp'),
+            meta: { title: '科室药耗占比' },
             hidden: true
           },
           {
@@ -314,6 +316,7 @@ export const constantRoutes = [
             path: 'deptMaterialMedicineDetail',
             name: 'DeptMaterialMedicineDetail',
             component: () => import('@/views/reportmake/children/deptMaterialMedicineDetail'),
+            meta: { title: '门诊住院的药品和耗材' },
             hidden: true
           }
         ]
@@ -333,15 +336,15 @@ export const constantRoutes = [
         path: 'personal',
         name: 'Personal',
         component: () => import('@/views/bussinessManager/index'),
-        meta: { title: '个人业务办理',icon: 'el-icon-user-solid' }
+        meta: { title: '个人业务办理', icon: 'el-icon-user-solid' }
       },
       {
         // 科室业务办理
         path: 'department',
         name: 'Department',
         component: () => import('@/views/bussinessManager/department'),
-        meta: { title: '部门业务办理',icon: 'el-icon-postcard' }
-      },
+        meta: { title: '部门业务办理', icon: 'el-icon-postcard' }
+      }
     ]
   },
   // 辅助系统

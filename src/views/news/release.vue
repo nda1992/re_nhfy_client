@@ -239,9 +239,9 @@ export default {
 
     // 获取草稿列表
     querySearchAsync(queryString, cb) {
-      let draftList = this.draftTitleList
+      const draftList = this.draftTitleList
       this.draftNums = this.draftTitleList.length
-      let results = queryString ? draftList.filter(this.createStateFilter(queryString)) : draftList
+      const results = queryString ? draftList.filter(this.createStateFilter(queryString)) : draftList
       clearTimeout(this.timeout)
       this.timeout = setTimeout(() => {
         cb(results)

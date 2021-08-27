@@ -9,20 +9,24 @@
         <el-radio label="1" border size="medium">药品</el-radio>
         <el-radio label="2" border size="medium">耗材</el-radio>
       </el-radio-group>
-      <el-button @click="search" type="warning">查询</el-button>
-      <span style="color: #ff6666;font-size: 12px;">查询时间约为120秒!</span>
+      <el-select clearable :loading="select_loading" v-model="searchForm.deptName" placeholder="请选择部门(不选则为全院)" width="20px" :remote-method="getRemoteDeptList" filterable default-first-option remote>
+        <el-option v-for="(item,index) in deptListOptions" :key="item+index" :label="item" :value="item"></el-option>
+      </el-select>
+      <el-button @click="search" type="primary" icon="el-icon-search">查询</el-button>
+      <el-button @click="handleDownload" type="success" icon="el-icon-download">导出表格</el-button>
+      <span style="color: #ff6666;font-size: 12px;">耗材查询时间约为120秒!</span>
     </div>
     <div class="table-container">
       <div class="header">
         <span style="margin-bottom: 10px;font-size: 22px;font-weight: bold">{{ tableTitle }}</span>
-        <span class="sum">总收入: {{ sum }}</span>
+        <span class="sum">总金额: {{ sum }}</span>
       </div>
       <el-table
         :data="showItems"
         v-loading="listLoading"
         border
         stripe
-        fit
+        fix
         height="500"
         highlight-current-row
         style="width: 100%;">
@@ -56,14 +60,14 @@
             <span>{{ row.大项目编码 }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="单价" prop="单价" align="center" width="100px">
-          <template slot-scope="{row}">
-            <span>{{ Math.floor((row.单价)*100)/100 }}</span>
-          </template>
-        </el-table-column>
         <el-table-column label="单位" prop="单位" align="center" width="80px">
           <template slot-scope="{row}">
             <span>{{ row.单位 }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="单价" prop="单价" sortable :sort-method="sortByValue" align="center" width="100px">
+          <template slot-scope="{row}">
+            <span>{{ Math.floor((row.单价)*100)/100 }}</span>
           </template>
         </el-table-column>
         <el-table-column label="数量" prop="数量" align="center" width="50px">
@@ -71,7 +75,7 @@
             <span>{{ row.数量 }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="总金额" prop="总金额" align="center" width="100px">
+        <el-table-column label="总金额" prop="总金额" sortable :sort-method="sortBySum" align="center" width="100px">
           <template slot-scope="{row}">
             <span>{{ Math.floor((row.总金额)*100)/100 }}</span>
           </template>
@@ -121,6 +125,11 @@
             <span>{{ row.是否中药注射剂 }}</span>
           </template>
         </el-table-column>
+        <el-table-column label="是否高值耗材" prop="是否高值耗材" align="center" width="120px">
+          <template slot-scope="{row}">
+            <span>{{ row.是否高值耗材 }}</span>
+          </template>
+        </el-table-column>
       </el-table>
     </div>
   </div>
@@ -128,15 +137,18 @@
 
 <script>
 import { deptMaterialMedicineDetail } from '@/api/reportmake/reportmake'
+import { searchDept } from '@/api/news/news'
 import moment from 'moment'
 export default {
   name: 'deptMaterialMedicineDetail',
   data() {
     return {
+      deptListOptions: [],
       listLoading: false,
-      // 门诊药品
+      select_loading: false,
+      // 门诊药品（设置了默认值）
       MZmedicineList: [],
-      // 住院药品
+      // 住院药品（设置了默认值）
       ZYmedicineList: [],
       // 门诊耗材
       MZmaterialList: [],
@@ -145,13 +157,14 @@ export default {
       // 最终显示到表格的数据
       showItems: [],
       searchDate: '',
-      searchForm: { startDate: '', endDate: '', Depttype: '门诊', Catetype: '1' },
+      searchForm: { startDate: '', endDate: '', Depttype: '门诊', Catetype: '1', deptName: '' },
       // 选择住院还是门诊？
       MZorZYOptions: [{ id: 1, item: '门诊' }, { id: 2, item: '住院' }],
       // 显示的表格标题，由后端返回
       tableTitle: '门诊药品明细',
       // 查询回来某一项的总收入
-      sum: 0
+      sum: 0,
+      downloadLoading: false
     }
   },
   mounted() {
@@ -161,6 +174,12 @@ export default {
     this.searchForm.endDate = moment(new Date() - 24 * 60 * 60 * 1000).format('YYYY-MM-DD')
   },
   methods: {
+    sortBySum(val1, val2) {
+      return val1.总金额 - val2.总金额
+    },
+    sortByValue(val1, val2) {
+      return val1.单价 - val2.单价
+    },
     // 日期选择器触发
     pickerDate() {
       this.searchForm.startDate = this.searchDate[0]
@@ -170,16 +189,17 @@ export default {
       console.log(id)
     },
     search() {
+      this.showItems = []
       this.listLoading = true
       const temp = Object.assign({}, this.searchForm)
       if (this.searchForm.Depttype === '门诊') {
         temp.Depttype = '1'
-      } else if (this.searchForm.Catetype === '住院') {
+      } else if (this.searchForm.Depttype === '住院') {
         temp.Depttype = '2'
       }
       deptMaterialMedicineDetail(temp).then(res => {
         const { items, flag, msg, title } = res
-        console.log(res)
+        // console.log(res)
         this.$message.success(msg)
         this.tableTitle = title
         switch (flag) {
@@ -203,8 +223,59 @@ export default {
             this.ZYmaterialList = items
             this.showItems = this.ZYmaterialList
         }
+        if (this.showItems.length !== 0) {
+          this.sum = Math.floor((this.showItems.map(v => v.总金额).reduce((cur, acc) => cur + acc)) * 100) / 100
+        }
         this.listLoading = false
       })
+    },
+    getRemoteDeptList(query) {
+      this.select_loading = true
+      searchDept(query).then(res => {
+        const { items } = res
+        if (!items) return
+        this.deptListOptions = items.map(v => v.name)
+      })
+      this.select_loading = false
+    },
+    // 导出表格
+    handleDownload() {
+      this.downloadLoading = true
+      import('@/vendor/Export2Excel').then(excel => {
+        let tHeader = []
+        let data = []
+        if (this.searchForm.Catetype === '1') {
+          tHeader = ['序号', '科室名称', '项目名称', '大项目名称', '项目编码', '大项目编码', '单位', '单价', '数量', '总金额', '是否中草药', '是否国家谈判品种', '是否国家谈判品种', '是否重点监管药品', '是否国家辅助用药', '是否PPI', '是否抗菌药品', '是否中枢呕吐', '是否口服中成药', '是否中药注射剂']
+          data = this.formatJson('1')
+        } else if (this.searchForm.Catetype === '2') {
+          tHeader = ['序号', '科室名称', '项目名称', '大项目名称', '项目编码', '大项目编码', '单位', '单价', '数量', '总金额', '是否高值耗材']
+          data = this.formatJson('2')
+          // console.log(this.formatJson('2'))
+        }
+        excel.export_json_to_excel({
+          header: tHeader,
+          data,
+          filename: '费用'
+        })
+        this.downloadLoading = false
+      })
+    },
+    formatJson(filterVal) {
+      const data = []
+      if (filterVal === '1') {
+        this.showItems.forEach(item => {
+          const temp = []
+          temp.push(item.XH, item.开单科室, item.项目名称, item.大项目名称, item.项目编码, item.大项目编码, item.单位, item.单价, item.数量, item.总金额, item.是否中草药, item.是否国家谈判品种, item.是否重点监管药品, item.是否国家辅助用药, item.是否PPI, item.是否抗菌药品, item.是否中枢呕吐, item.是否口服中成药, item.是否中药注射剂)
+          data.push(temp)
+        })
+      } else if (filterVal === '2') {
+        this.showItems.forEach(item => {
+          const temp = []
+          temp.push(item.XH, item.开单科室, item.项目名称, item.大项目名称, item.项目编码, item.大项目编码, item.单位, item.单价, item.数量, item.总金额, item.是否高值耗材)
+          data.push(temp)
+        })
+      }
+      return data
     }
   }
 }
@@ -214,7 +285,7 @@ export default {
   .app-container{
     padding-top: 0;
     .title{
-      width: 1000px;
+      width: 1350px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -222,6 +293,9 @@ export default {
     }
     .el-radio{
       margin: 0;
+    }
+    .el-select{
+      width: 210px;
     }
     .table-container{
       .header{
@@ -234,7 +308,7 @@ export default {
           float: left;
           position: absolute;
           bottom: 20px;
-          right: 0;
+          right: 60px;
           color: #ff6666;
         }
       }
