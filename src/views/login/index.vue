@@ -51,8 +51,11 @@
         <span style="margin:0 2px;">|</span>
         <router-link :to="{path:'register'}"><span style="margin-left:12px;">点击这里注册</span></router-link>
       </div>
-
     </el-form>
+
+    <div class="footer">
+      <el-button type="text" @click="gotoPosition">在招职位,欢迎投递</el-button>
+    </div>
   </div>
 </template>
 
@@ -62,13 +65,6 @@
 export default {
   name: 'Login',
   data() {
-    // const validateUsername = (rule, value, callback) => {
-    //   if (!validUsername(value)) {
-    //     callback(new Error('请输入用户名'))
-    //   } else {
-    //     callback()
-    //   }
-    // }
     const validatePassword = (rule, value, callback) => {
       if (value.length < 6) {
         callback(new Error('密码不能小于6位'))
@@ -128,6 +124,10 @@ export default {
           return false
         }
       })
+    },
+    // 跳转到position页面
+    gotoPosition() {
+      this.$router.push({ path: '/position' })
     }
   }
 }
@@ -190,7 +190,7 @@ $light_gray:#eee;
   width: 100%;
   background-color: $bg;
   overflow: hidden;
-
+  position: relative;
   .login-form {
     position: relative;
     width: 520px;
@@ -264,6 +264,14 @@ $light_gray:#eee;
         }
       }
     }
+  }
+  .footer{
+    position: absolute;
+    bottom: 30px;
+    left: 46%;
+    /*display: flex;*/
+    /*justify-content: center;*/
+    /*align-items: center;*/
   }
 }
 </style>

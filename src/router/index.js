@@ -60,6 +60,12 @@ export const constantRoutes = [
     component: () => import('@/views/error-page/404'),
     hidden: true
   },
+  // 在招岗位列表页面
+  {
+    path: '/position',
+    component: () => import('@/views/position/index'),
+    hidden: true
+  },
   {
     path: '/',
     component: Layout,
@@ -388,7 +394,7 @@ export const constantRoutes = [
         path: 'home',
         name: 'Home',
         component: () => import('@/views/wechat/index'),
-        meta: { title: '微信小程序管理', icon: 'el-icon-chat-dot-round'}
+        meta: { title: '微信小程序管理', icon: 'wechat'}
       }
     ]
   },

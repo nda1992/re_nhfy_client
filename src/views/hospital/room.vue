@@ -2,7 +2,7 @@
 <!-- 科室管理 -->
     <div class="app-container">
       <div class="filter-container">
-        <el-input v-model="searchVal" :placeholder="'按'+searchType+'搜索'" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter(searchType)" />
+        <el-input v-model="searchVal" :placeholder="'按'+searchType+'搜索'" style="width: 200px;" class="filter-item" clearable @keyup.enter.native="handleFilter(searchType)" />
         <el-select v-model="searchType" placeholder="请选择搜索类型" style="width: 150px" class="filter-item">
           <el-option v-for="item in typeItems" :key="item" :label="item" :value="item" />
         </el-select>
@@ -102,7 +102,6 @@
           </div>
         </el-dialog>
       </div>
-
     </div>
 </template>
 <script>
@@ -128,7 +127,7 @@ export default {
       list: null,
       searchList: [],
       total: 0,
-      // 对话框
+      // 对话框title
       textMap: {
         update: '更新部门信息',
         create: '新增科室'
@@ -312,7 +311,7 @@ export default {
     .filter-container{
       width: 720px;
       display: flex;
-      justify-content: space-around;
+      justify-content: space-between;
     }
     .el-table{
       &:hover{
