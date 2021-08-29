@@ -1,8 +1,22 @@
 <template>
   <div class="header">
-    <el-button type="text" @click="HandleRegister" v-if="showBtn">注册</el-button>
-    <el-button type="text" @click="HandleLogin" v-if="showBtn">登录</el-button>
-    <el-button type="text" @click="back" v-if="!showBtn" style="position: absolute;right: 20px;">返回</el-button>
+    <div class="btns" v-if="!isLogin">
+      <el-button type="text" @click="HandleRegister">注册</el-button>
+      <el-button type="text" @click="HandleLogin">登录</el-button>
+    </div>
+    <div class="userinfo" v-else>
+      <el-dropdown trigger="click" style="float: right;cursor: pointer;">
+        <span class="el-dropdown-link">
+          更多操作<i class="el-icon-arrow-down el-icon--right"></i>
+        </span>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item icon="el-icon-s-custom" @click.native="Userinfo">个人主页</el-dropdown-item>
+          <el-dropdown-item icon="el-icon-circle-close" @click.native="logout">退出系统</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+      <div style="float: right;margin-right: 50px;color: #e7e7eb;">{{username}}欢迎你系统招聘系统</div>
+    </div>
+    <!--<el-button type="text" @click="back" style="position: absolute;right: 20px;">返回</el-button>-->
   </div>
 </template>
 
@@ -10,10 +24,16 @@
 export default {
   name: 'Header',
   props: {
-    showBtn: {
+    isLogin: {
       type: Boolean,
       default: () => {
-        return true
+        return false
+      }
+    },
+    username: {
+      type: String,
+      default:() => {
+        return ''
       }
     }
   },
@@ -26,6 +46,12 @@ export default {
     },
     back() {
       this.$emit('back')
+    },
+    Userinfo() {
+      this.$emit('Userinfo')
+    },
+    logout() {
+      this.$emit('logout')
     }
   }
 }
@@ -43,18 +69,24 @@ export default {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    .el-button{
-      color: #e7e7eb;
-      &:hover{
-        color: #1f3134;
+    .btns{
+      position: absolute;
+      right: 50px;
+      .el-button{
+        color: #e7e7eb;
+        &:hover{
+          color: #1f3134;
+        }
       }
-      &:nth-child(1){
-        position: absolute;
-        right: 100px;
-      }
-      &:nth-child(2){
-        position: absolute;
-        right: 50px;
+    }
+    .userinfo{
+      position: absolute;
+      right: 50px;
+      .el-dropdown{
+        color: #e7e7eb;
+        &:hover{
+          color: #1f3134;
+        }
       }
     }
   }
