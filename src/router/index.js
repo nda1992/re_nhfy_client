@@ -5,7 +5,8 @@ Vue.use(Router)
 
 /* Layout */
 import Layout from '@/layout'
-
+/* Position */
+import Position from '@/views/position/index'
 /**
  * Note: sub-menu only appear when route children.length >= 1
  * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
@@ -63,8 +64,22 @@ export const constantRoutes = [
   // 在招岗位列表页面
   {
     path: '/position',
-    component: () => import('@/views/position/index'),
-    hidden: true
+    component: Position,
+    redirect: '/position/list',
+    children: [
+      {
+        path: 'list',
+        name: 'List',
+        component: () => import('@/views/position/positionList'),
+        hidden: true
+      },
+      {
+        path: 'positionRegister',
+        name: 'PositionRegister',
+        component: () => import('@/views/position/positionRegister'),
+        hidden: true
+      }
+    ]
   },
   {
     path: '/',

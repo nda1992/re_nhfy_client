@@ -3,9 +3,9 @@
 </template>
 
 <script>
-  export default {
-    name: 'postlist'
-  }
+export default {
+  name: 'postlist'
+}
 </script>
 
 <style scoped>

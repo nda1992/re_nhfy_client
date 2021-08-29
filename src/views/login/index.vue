@@ -54,7 +54,7 @@
     </el-form>
 
     <div class="footer">
-      <el-button type="text" @click="gotoPosition">在招职位,欢迎投递</el-button>
+      <el-button type="text" @click="gotoPosition">招贤纳士,欢迎投递</el-button>
     </div>
   </div>
 </template>

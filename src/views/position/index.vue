@@ -1,147 +1,120 @@
 <template>
-  <!-- 招聘管理主页：轮播图+已发布的岗位列表 -->
+  <!-- 岗位列表主页：轮播图+已发布的岗位列表 -->
   <div class="app-container">
-    <div>
-      <el-backtop :bottom="100"></el-backtop>
+    <div><el-backtop :bottom="100"></el-backtop></div>
+    <!--顶部-->
+    <Header @HandleRegister="HandleRegister" @HandleLogin="HandleLogin" @back="back" :showBtn="show"/>
+    <!--内容显示-->
+    <div class="content">
+      <transition name="fade-transform" mode="out-in">
+        <router-view :key="key" />
+      </transition>
     </div>
-    <div class="header">
-      <el-button type="text" @click="HandleRegister">注册</el-button>
-      <el-button type="text" @click="HandleLogin">登录</el-button>
-    </div>
-    <!--<div class="tip"><span>需要发布招聘信息的老师请访问"新闻管理的新闻发布"页面</span></div>-->
-    <div class="post">
-      <div class="user-images">
-        <el-carousel :interval="6000" type="card" height="320px">
-          <el-carousel-item v-for="item in carouselImages" :key="item">
-            <img :src="item" class="image">
-          </el-carousel-item>
-        </el-carousel>
+    <!--顶部-->
+    <Footer />
+    <el-dialog title="用户登录" :visible.sync="dialogFormVisible">
+      <el-form ref="dataForm" :rules="rules" :model="Logintemp" label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
+        <el-form-item label="邮箱" prop="email">
+          <el-input v-model="Logintemp.email" placeholder="请输入邮箱"/>
+        </el-form-item>
+        <el-form-item label="密码" prop="password">
+          <el-input v-model="Logintemp.password" placeholder="请输入密码"/>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取消</el-button>
+        <el-button type="primary" @click="Login">确定</el-button>
       </div>
-    </div>
-    <!--岗位列表-->
-    <div class="list">
-      <h2 style="margin-left: 20px">在招岗位</h2>
-      <PositionCard :positionInfo="position" v-for="(position,index) in positionList"></PositionCard>
-      <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getPositionList()" />
-    </div>
-    <div class="footer">
-      <div>南华大学附属第一医院</div>
-      <div>©Copyright</div>
-      <div>医院地址：衡阳市船山路69号</div>
-    </div>
+    </el-dialog>
   </div>
 </template>
 <script>
-  import PositionCard from '@/components/PositionCard/index'
-  import { getPositionList } from '@/api/recruit/recruit'
-  import Pagination from '@/components/Pagination'
-  export default {
+import { getPositionList } from '@/api/recruit/position'
+import Header from './components/Header'
+import Footer from './components/Footer'
+import { positionLogin, positionRegister } from '@/api/recruit/position'
 
-    components: {
-      PositionCard,
-      Pagination
-    },
-    data() {
-      return {
-        carouselImages: [
-          `${process.env.BASE_URL}images/test1.png`,
-          `${process.env.BASE_URL}images/test2.jpg`,
-          `${process.env.BASE_URL}images/test3.jpg`,
-          `${process.env.BASE_URL}images/test4.jpg`,
-          `${process.env.BASE_URL}images/test5.png`,
-          `${process.env.BASE_URL}images/test6.jpg`,
-          `${process.env.BASE_URL}images/test7.jpg`,
-          `${process.env.BASE_URL}images/test8.jpg`
-        ],
-        listLoading: false,
-        listQuery: {
-          page: 1,
-          limit: 10
-          // role: localStorage.getItem('role')
-        },
-        total: 0,
-        positionList: []
+export default {
+  components: {
+    Header,
+    Footer
+  },
+  data() {
+    // 验证邮箱格式
+    const checkEmail = (rule, value, callback) => {
+      const mailReg = /^([a-zA-Z0-9_-])+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/
+      if (!value) {
+        return callback(new Error('邮箱不能为空'))
       }
-    },
-    mounted() {
-      this.getPositionList()
-    },
-    methods: {
-      // 获取所有岗位列表
-      getPositionList() {
-        getPositionList(this.listQuery).then(res => {
-          this.listLoading = true
-          this.positionList = res.positions
-          this.total = res.total
-          setTimeout(() => {
-            this.listLoading = false
-          }, 1000)
-        })
+      setTimeout(() => {
+        if (mailReg.test(value)) {
+          callback()
+        } else {
+          callback(new Error('请输入正确的邮箱格式'))
+        }
+      }, 100)
+    }
+    return {
+      show: true,
+      dialogFormVisible: false,
+      Logintemp: {
+        email: '',
+        password: ''
       },
-      // 处理注册
-      HandleRegister() {
-
+      rules: {
+        email: [{ required: true, message: '请输入邮箱', trigger: 'blur' },
+          { validator: checkEmail, trigger: 'blur' }],
+        password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
       }
-
+    }
+  },
+  computed: {
+    key() {
+      return this.$route.path
+    }
+  },
+  methods: {
+    resetLogintemp() {
+      this.Logintemp = {
+        email: '',
+        password: ''
+      }
+    },
+    // 处理注册
+    HandleRegister() {
+      this.$router.push({ path: '/position/positionRegister' })
+      this.show = !this.show
+    },
+    // 处理登录
+    HandleLogin() {
+      this.resetLogintemp()
+      this.dialogFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
+    },
+    Login() {
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          positionLogin(this.Logintemp).then( res => {
+            console.log(res)
+            const { msg } = res
+            this.$message.success(msg)
+          })
+        }
+      })
+    },
+    back() {
+      this.$router.go(-1)
+      this.show = !this.show
     }
   }
+}
 </script>
 <style lang="scss" scoped>
   .app-container{
     position: relative;
     padding: 0;
-    .header{
-      z-index: 10;
-      width: 100%;
-      position: fixed;
-      top: 0;
-      padding-right: 50px;
-      height: 50px;
-      background: #5c9291;
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      .el-button{
-        color: #e7e7eb;
-        &:hover{
-          color: #1f3134;
-        }
-      }
-    }
-    .tip{
-      width: 100%;
-      display: inline-block;
-      height: 20px;
-      background: #99a9bf;
-      color: #000;
-    }
-    .post {
-      font-size: 14px;
-      /*border-bottom: 1px solid #d2d6de;*/
-      /*margin: 20px;*/
-      padding-top: 32px;
-      color: #666;
-      .image {
-        width: 100%;
-        height: 100%;
-      }
-      .user-images {
-        padding-top: 20px;
-      }
-    }
-    .list{
-      padding: 20px;
-      box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)
-    }
-    .footer{
-      height: 150px;
-      padding: 40px 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: space-around;
-      margin: 0 auto;
-      color: #99a9bf;
-    }
+    min-height: 100%;
   }
 </style>
