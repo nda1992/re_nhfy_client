@@ -56,7 +56,7 @@ import { getPositionList } from '@/api/recruit/position'
 import Header from './components/Header'
 import Footer from './components/Footer'
 import { positionLogin, positionRegister } from '@/api/recruit/position'
-
+import { mapState } from 'vuex'
 export default {
   components: {
     Header,
@@ -99,7 +99,6 @@ export default {
       }
     }
     return {
-      isLogin: false,
       show: true,
       dialogFormVisible: false,
       dialogRegisterFormVisible: false,
@@ -132,6 +131,9 @@ export default {
   computed: {
     key() {
       return this.$route.path
+    },
+    isLogin() {
+      return sessionStorage.getItem('isLogin')
     }
   },
   methods: {
@@ -196,11 +198,11 @@ export default {
     Login() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          positionLogin(this.Logintemp).then( res => {
-            this.isLogin = !this.isLogin
-            const { msg, data } = res
-            this.userinfo = data
+          this.$store.dispatch('position/positionLogin', this.Logintemp).then( res => {
+            const { msg } = res
             this.dialogFormVisible = false
+            console.log(this.$router)
+            this.$router.push({ path: '/position/list' })
             this.$notify({
               title: 'Success',
               message: msg,
@@ -220,7 +222,8 @@ export default {
       this.$router.push({ path: '/position/positionUserinfo' })
     },
     logout() {
-      this.isLogin = !this.isLogin
+      this.$store.dispatch('position/logout')
+      this.$router.push({ path: '/position/list' })
       this.$notify({
         title: 'Success',
         message: '你已退出登录',
@@ -231,17 +234,12 @@ export default {
   }
 }
 </script>
-<style scoped>
+
+<style lang="scss" scoped>
   .app-container{
     position: relative;
     padding: 0;
     min-height: 100%;
-  }
-</style>
-<style lang="scss" scoped>
-  .el-popup-parent--hidden {
-    .fixed-header {
-      padding-right: 15px;
-    }
+    margin: 0;
   }
 </style>

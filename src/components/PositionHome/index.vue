@@ -25,6 +25,7 @@
           <span>招聘科室：{{ positionInfo.deptName }}</span>
           <span>需求人数：{{ positionInfo.requireNum }}</span>
           <span>工作地点：{{ positionInfo.address }}</span>
+          <span>发布时间：{{ moment(positionInfo.createdAt).format('YYYY-MM-DD') }}</span>
         </div>
         <div class="line3">
           <span>职位描述：{{ positionInfo.desc }}</span>
@@ -35,26 +36,27 @@
 </template>
 
 <script>
-  export default {
-    name: 'PositionCard',
-    props: {
-      positionInfo: {
-        type: Object,
-        default: () => {return {}}
-      }
-    },
-    data() {
-      return {
-        // 岗位类别
-        type: ''
-      }
-    },
-    methods: {
-      gotoPosition() {
-        this.$emit('gotoPosition')
-      }
+import moment from 'moment'
+export default {
+  name: 'PositionCard',
+  props: {
+    positionInfo: {
+      type: Object,
+      default: () => {return {}}
+    }
+  },
+  data() {
+    return {
+      // 岗位类别
+      type: ''
+    }
+  },
+  methods: {
+    gotoPosition() {
+      this.$emit('gotoPosition')
     }
   }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -158,6 +160,16 @@
             border-radius: 5px;
           }
           &:nth-child(3){
+            width: 310px;
+            height: 25px;
+            padding: 2px;
+            background: #F2F6FC;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 5px;
+          }
+          &:nth-child(4){
             width: 310px;
             height: 25px;
             padding: 2px;

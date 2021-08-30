@@ -25,6 +25,7 @@
           <span>招聘科室：{{ positionInfo.deptName }}</span>
           <span>需求人数：{{ positionInfo.requireNum }}</span>
           <span>工作地点：{{ positionInfo.address }}</span>
+          <span>发布时间：{{ positionInfo.simpleDate }}</span>
         </div>
         <div class="line3">
           <span>职位描述：{{ positionInfo.desc }}</span>
@@ -35,26 +36,26 @@
 </template>
 
 <script>
-  export default {
-    name: 'PositionCard',
-    props: {
-      positionInfo: {
-        type: Object,
-        default: () => {return {}}
-      }
-    },
-    data() {
-      return {
-        // 岗位类别
-        type: ''
-      }
-    },
-    methods: {
-      gotoPosition() {
-        this.$emit('gotoPosition')
-      }
+export default {
+  name: 'PositionCard',
+  props: {
+    positionInfo: {
+      type: Object,
+      default: () => {return {}}
+    }
+  },
+  data() {
+    return {
+      // 岗位类别
+      type: ''
+    }
+  },
+  methods: {
+    gotoPosition() {
+      this.$emit('gotoPosition')
     }
   }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -74,7 +75,7 @@
         margin-bottom: 18px;
       }
       .line1{
-        width: 1260px;
+        width: 1250px;
         display: flex;
         justify-content: space-between;
         color: #909399;
@@ -132,13 +133,13 @@
         }
       }
       .line2{
-        width: 950px;
+        width: 1250px;
         display: flex;
         justify-content: space-between;
         color: #909399;
         span{
           &:nth-child(1){
-            width: 280px;
+            width: 380px;
             height: 25px;
             padding: 2px;
             background: #F2F6FC;
@@ -148,7 +149,7 @@
             border-radius: 5px;
           }
           &:nth-child(2){
-            width: 310px;
+            width: 130px;
             height: 25px;
             padding: 2px;
             background: #F2F6FC;
@@ -159,6 +160,16 @@
           }
           &:nth-child(3){
             width: 310px;
+            height: 25px;
+            padding: 2px;
+            background: #F2F6FC;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 5px;
+          }
+          &:nth-child(4){
+            width: 200px;
             height: 25px;
             padding: 2px;
             background: #F2F6FC;
