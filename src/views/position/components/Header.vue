@@ -10,11 +10,15 @@
           更多操作<i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item icon="el-icon-s-home" @click.native="home">首页</el-dropdown-item>
           <el-dropdown-item icon="el-icon-s-custom" @click.native="Userinfo">个人主页</el-dropdown-item>
-          <el-dropdown-item icon="el-icon-circle-close" @click.native="logout">退出系统</el-dropdown-item>
+          <el-dropdown-item icon="el-icon-message-solid" @click.native="advice">消息
+            <el-badge class="mark" :value="12" />
+          </el-dropdown-item>
+          <el-dropdown-item icon="el-icon-error" @click.native="logout">退出系统</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-      <div style="float: right;margin-right: 50px;color: #e7e7eb;">{{username}}欢迎你系统招聘系统</div>
+      <div style="float: right;margin-right: 50px;color: #e7e7eb;">{{username}}，欢迎你使用系统招聘系统</div>
     </div>
     <!--<el-button type="text" @click="back" style="position: absolute;right: 20px;">返回</el-button>-->
   </div>
@@ -32,11 +36,12 @@ export default {
     },
     username: {
       type: String,
-      default:() => {
-        return ''
+      default: ()=> {
+        return sessionStorage.getItem('jobseekerUsername')
       }
     }
   },
+
   methods: {
     HandleRegister() {
       this.$emit('HandleRegister')
@@ -44,8 +49,8 @@ export default {
     HandleLogin() {
       this.$emit('HandleLogin')
     },
-    back() {
-      this.$emit('back')
+    home() {
+      this.$emit('home')
     },
     Userinfo() {
       this.$emit('Userinfo')

@@ -2,12 +2,11 @@ import { positionLogin } from '@/api/recruit/position'
 
 // 求职者的状态管理
 const state = {
-  username: '',
+  jobseekerUsername: '',
   phone: '',
   email: '',
   avatar: '',
-  role: '',
-  isLogin: false
+  role: ''
 }
 
 
@@ -22,7 +21,7 @@ const mutations = {
   },
   SET_USERNAME: (state, username) => {
     sessionStorage.setItem('jobseekerUsername', username)
-    state.username = username
+    state.jobseekerUsername = username
   },
   CLEAR_USERNAME: (state) => {
     state.username = ''
@@ -51,14 +50,6 @@ const mutations = {
   CLEAR_ROLE: (state) => {
     state.role = ''
     sessionStorage.removeItem('jobseekerRole')
-  },
-  SET_ISLOGIN: (state) => {
-    sessionStorage.setItem('isLogin', true)
-    state.isLogin = true
-  },
-  CLEAR_ISLOGIN: () => {
-    state.isLogin = false
-    sessionStorage.removeItem('isLogin')
   }
 }
 
@@ -73,7 +64,7 @@ const actions = {
         commit('SET_PHONE', phone)
         commit('SET_EMAIL', email)
         commit('SET_ROLE', role)
-        commit('SET_ISLOGIN')
+        localStorage.setItem('isLogin', true)
         resolve(res)
       }).catch(error => {
         reject(error)
@@ -87,7 +78,6 @@ const actions = {
     commit('CLEAR_PHONE')
     commit('CLEAR_EMAIL')
     commit('CLEAR_ROLE')
-    commit('CLEAR_ISLOGIN')
   }
 }
 

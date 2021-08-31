@@ -3,7 +3,7 @@
   <div class="app-container">
     <div><el-backtop :bottom="100"></el-backtop></div>
     <!--顶部-->
-    <Header @HandleRegister="HandleRegister" @HandleLogin="HandleLogin" @back="back" :username="userinfo.username" :isLogin="isLogin" @Userinfo="Userinfo" @logout="logout"/>
+    <Header @HandleRegister="HandleRegister" @HandleLogin="HandleLogin" @home="home" :username="jobseekerUsername" :isLogin="isLogin" @Userinfo="Userinfo" @logout="logout"/>
     <!--内容显示-->
     <div class="content">
       <transition name="fade-transform" mode="out-in">
@@ -100,6 +100,7 @@ export default {
     }
     return {
       show: true,
+      isLogin: false,
       dialogFormVisible: false,
       dialogRegisterFormVisible: false,
       Logintemp: {
@@ -132,9 +133,7 @@ export default {
     key() {
       return this.$route.path
     },
-    isLogin() {
-      return sessionStorage.getItem('isLogin')
-    }
+    ...mapState(['jobseekerUsername'])
   },
   methods: {
     resetLogintemp() {
@@ -201,7 +200,7 @@ export default {
           this.$store.dispatch('position/positionLogin', this.Logintemp).then( res => {
             const { msg } = res
             this.dialogFormVisible = false
-            console.log(this.$router)
+            this.isLogin = !this.isLogin
             this.$router.push({ path: '/position/list' })
             this.$notify({
               title: 'Success',
@@ -213,9 +212,8 @@ export default {
         }
       })
     },
-    back() {
-      this.$router.go(-1)
-      this.show = !this.show
+    home() {
+      this.$router.push( { path: '/position/list' } )
     },
     // 用户中心
     Userinfo() {
