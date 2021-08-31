@@ -100,7 +100,7 @@ export default {
     }
     return {
       show: true,
-      isLogin: false,
+      isLogin: sessionStorage.getItem('isLogin'),
       dialogFormVisible: false,
       dialogRegisterFormVisible: false,
       Logintemp: {

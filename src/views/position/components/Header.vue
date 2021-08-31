@@ -20,7 +20,6 @@
       </el-dropdown>
       <div style="float: right;margin-right: 50px;color: #e7e7eb;">{{username}}，欢迎你使用系统招聘系统</div>
     </div>
-    <!--<el-button type="text" @click="back" style="position: absolute;right: 20px;">返回</el-button>-->
   </div>
 </template>
 

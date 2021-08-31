@@ -2,15 +2,25 @@ import { positionLogin } from '@/api/recruit/position'
 
 // 求职者的状态管理
 const state = {
+  id: undefined,
   jobseekerUsername: '',
   phone: '',
   email: '',
   avatar: '',
-  role: ''
+  role: '',
+  isLogin: false
 }
 
 
 const mutations = {
+  SET_ID: (state, id) => {
+    sessionStorage.setItem('jobseekerId', id)
+    state.id = id
+  },
+  CLEAR_ID: () => {
+    sessionStorage.removeItem('jobseekerId')
+    state.id = undefined
+  },
   SET_AVATAR: (state, avatar) => {
     sessionStorage.setItem('avatar', avatar)
     state.avatar = avatar
@@ -50,6 +60,14 @@ const mutations = {
   CLEAR_ROLE: (state) => {
     state.role = ''
     sessionStorage.removeItem('jobseekerRole')
+  },
+  SET_ISLOGIN: (state, isLogin) => {
+    sessionStorage.setItem('isLogin', isLogin)
+    state.isLogin = isLogin
+  },
+  CLEAR_ISLOGIN: (state) => {
+    state.isLogin = false
+    sessionStorage.removeItem('isLogin')
   }
 }
 
@@ -58,13 +76,14 @@ const actions = {
     const { account, password } = userinfo
     return new Promise((resolve, reject) => {
       positionLogin({ account: account, password: password }).then(res => {
-        const { username, avatar, role, phone, email } = res.data
-        commit('SET_AVATAR',avatar)
+        const { id, username, avatar, role, phone, email } = res.data
+        commit('SET_ID', id)
+        commit('SET_AVATAR', avatar)
         commit('SET_USERNAME', username)
         commit('SET_PHONE', phone)
         commit('SET_EMAIL', email)
         commit('SET_ROLE', role)
-        localStorage.setItem('isLogin', true)
+        commit('SET_ISLOGIN', true)
         resolve(res)
       }).catch(error => {
         reject(error)
@@ -73,11 +92,13 @@ const actions = {
   },
   // 用户退出，清除所有的用户信息
   logout({ commit }) {
+    commit('CLEAR_ID')
     commit('CLEAR_AVATAR')
     commit('CLEAR_USERNAME')
     commit('CLEAR_PHONE')
     commit('CLEAR_EMAIL')
     commit('CLEAR_ROLE')
+    commit('CLEAR_ISLOGIN')
   }
 }
 
