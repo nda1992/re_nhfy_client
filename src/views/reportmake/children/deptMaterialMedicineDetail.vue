@@ -27,7 +27,6 @@
         border
         stripe
         fix
-        height="500"
         highlight-current-row
         style="width: 100%;">
         <el-table-column label="序号" prop="xh" align="center" width="70px">
@@ -131,6 +130,7 @@
           </template>
         </el-table-column>
       </el-table>
+      <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="search" />
     </div>
   </div>
 </template>
@@ -138,11 +138,19 @@
 <script>
 import { deptMaterialMedicineDetail } from '@/api/reportmake/reportmake'
 import { searchDept } from '@/api/news/news'
+import Pagination from '@/components/Pagination'
 import moment from 'moment'
 export default {
   name: 'deptMaterialMedicineDetail',
+  components: { Pagination },
   data() {
     return {
+      total: 0,
+      listQuery: {
+        page: 1,
+        limit: 10,
+        role: localStorage.getItem('role')
+      },
       deptListOptions: [],
       listLoading: false,
       select_loading: false,
@@ -191,17 +199,19 @@ export default {
     search() {
       this.showItems = []
       this.listLoading = true
-      const temp = Object.assign({}, this.searchForm)
+      const temp = Object.assign({}, this.searchForm, this.listQuery)
       if (this.searchForm.Depttype === '门诊') {
         temp.Depttype = '1'
       } else if (this.searchForm.Depttype === '住院') {
         temp.Depttype = '2'
       }
       deptMaterialMedicineDetail(temp).then(res => {
-        const { items, flag, msg, title } = res
+        const { items, flag, msg, title, total, sum } = res
         // console.log(res)
         this.$message.success(msg)
         this.tableTitle = title
+        this.total = total
+        this.sum = sum
         switch (flag) {
           // 门诊药品
           case '1':
@@ -222,9 +232,6 @@ export default {
           case '4':
             this.ZYmaterialList = items
             this.showItems = this.ZYmaterialList
-        }
-        if (this.showItems.length !== 0) {
-          this.sum = Math.floor((this.showItems.map(v => v.总金额).reduce((cur, acc) => cur + acc)) * 100) / 100
         }
         this.listLoading = false
       })
