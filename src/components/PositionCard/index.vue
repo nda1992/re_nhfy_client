@@ -10,7 +10,7 @@
           <el-button style="float: right; padding: 0;border: 0;margin-right: 15px;" type="text"><i class="el-icon-star-off">收藏</i></el-button>
         </el-tooltip>
         <el-tooltip class="item" effect="dark" content="投递简历" placement="bottom">
-          <el-button style="float: right; padding: 0" type="text" @click="gotoPosition">投递简历</el-button>
+          <el-button style="float: right; padding: 0" type="text" @click="gotoPosition" :disabled="positionInfo.isPosted">{{ positionInfo.isPosted===false?'投递简历': '已投递'}}</el-button>
         </el-tooltip>
       </div>
       <div class="card-main">

@@ -3,14 +3,14 @@
   <div class="app-container">
     <div><el-backtop :bottom="100"></el-backtop></div>
     <!--顶部-->
-    <Header @HandleRegister="HandleRegister" @HandleLogin="HandleLogin" @home="home" :username="jobseekerUsername" :isLogin="isLogin" @Userinfo="Userinfo" @logout="logout"/>
+    <Header @HandleRegister="HandleRegister" @HandleLogin="HandleLogin"  :username="username" @home="home" :isLogin="isLogin" @Userinfo="Userinfo" @logout="logout"/>
     <!--内容显示-->
     <div class="content">
       <transition name="fade-transform" mode="out-in">
         <router-view :key="key" />
       </transition>
     </div>
-    <!--顶部-->
+    <!--底部-->
     <Footer />
     <el-dialog title="用户登录" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="loginRules" :model="Logintemp" label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
@@ -52,10 +52,9 @@
   </div>
 </template>
 <script>
-import { getPositionList } from '@/api/recruit/position'
 import Header from './components/Header'
 import Footer from './components/Footer'
-import { positionLogin, positionRegister } from '@/api/recruit/position'
+import { positionLogin, positionRegister, getPositionList } from '@/api/recruit/position'
 import { mapState } from 'vuex'
 export default {
   components: {
@@ -99,6 +98,11 @@ export default {
       }
     }
     return {
+      listQuery: {
+        page: 1,
+        limit: 10
+        // role: localStorage.getItem('role')
+      },
       show: true,
       isLogin: sessionStorage.getItem('isLogin'),
       dialogFormVisible: false,
@@ -133,7 +137,9 @@ export default {
     key() {
       return this.$route.path
     },
-    ...mapState(['jobseekerUsername'])
+    username() {
+      return sessionStorage.getItem('jobseekerUsername')
+    }
   },
   methods: {
     resetLogintemp() {
@@ -201,13 +207,13 @@ export default {
             const { msg } = res
             this.dialogFormVisible = false
             this.isLogin = !this.isLogin
-            this.$router.push({ path: '/position/list' })
             this.$notify({
               title: 'Success',
               message: msg,
               type: 'success',
               duration: 2000
             })
+            window.location.reload()
           })
         }
       })
@@ -221,13 +227,14 @@ export default {
     },
     logout() {
       this.$store.dispatch('position/logout')
-      this.$router.push({ path: '/position/list' })
+      this.isLogin = !this.isLogin
       this.$notify({
         title: 'Success',
         message: '你已退出登录',
         type: 'success',
         duration: 2000
       })
+      window.location.reload()
     }
   }
 }

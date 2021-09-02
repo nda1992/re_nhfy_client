@@ -31,6 +31,7 @@
 
 <script>
 import UserinfoCard from './components/UserinfoCard'
+import { getPost2PositionListByUid } from '@/api/recruit/position'
 export default {
   name: 'Userinfo',
   components: {

@@ -1,4 +1,4 @@
-import { positionLogin } from '@/api/recruit/position'
+import { positionLogin, getPositionList } from '@/api/recruit/position'
 
 // 求职者的状态管理
 const state = {

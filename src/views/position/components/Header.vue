@@ -18,7 +18,7 @@
           <el-dropdown-item icon="el-icon-error" @click.native="logout">退出系统</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-      <div style="float: right;margin-right: 50px;color: #e7e7eb;">{{username}}，欢迎你使用系统招聘系统</div>
+      <div style="float: right;margin-right: 50px;color: #e7e7eb;">{{username}}，欢迎你使用招聘系统</div>
     </div>
   </div>
 </template>

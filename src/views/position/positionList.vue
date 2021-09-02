@@ -13,7 +13,7 @@
     <!--岗位列表-->
     <div class="list">
       <h2 style="margin-left: 20px">在招岗位</h2>
-      <PositionCard :positionInfo="position" v-for="(position,index) in positionList"></PositionCard>
+      <PositionCard :positionInfo="position" v-for="(position,index) in positionList" @gotoPosition="gotoPosition(position.id)"></PositionCard>
       <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getPositionList()" />
     </div>
   </div>
@@ -21,8 +21,9 @@
 
 <script>
 import PositionCard from '@/components/PositionCard/index'
-import { getPositionList } from '@/api/recruit/recruit'
+import { getPositionList } from '@/api/recruit/position'
 import Pagination from '@/components/Pagination'
+import { postPosition } from '@/api/recruit/position'
 export default {
   name: 'positionList',
   components: {
@@ -44,7 +45,8 @@ export default {
       listLoading: false,
       listQuery: {
         page: 1,
-        limit: 10
+        limit: 10,
+        jobseekerId: sessionStorage.getItem('jobseekerId')
         // role: localStorage.getItem('role')
       },
       total: 0,
@@ -52,7 +54,12 @@ export default {
     }
   },
   mounted() {
-    this.getPositionList()
+    this.getPositionList(Object.assign({},this.listQuery,{jobseekerId: sessionStorage.getItem('jobseekerId')}))
+  },
+  computed: {
+    isLogin() {
+      return sessionStorage.getItem('isLogin')
+    }
   },
   methods: {
     // 获取所有岗位列表
@@ -66,6 +73,28 @@ export default {
         }, 1000)
       })
     },
+    gotoPosition(id) {
+      if (this.isLogin === false || this.isLogin === null) {
+        this.$message.error('你还没有登录,请先登录')
+        return
+      }
+      const jobseekerId = sessionStorage.getItem('jobseekerId')
+      const temp = {  positionlId: id, jobSeekerId: jobseekerId }
+      this.$confirm('只能投递一次,是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning' }).then(() => {
+        postPosition(temp).then(res => {
+          this.getPositionList(this.listQuery)
+          const { msg } = res
+          this.$notify({
+            title: 'Success',
+            message: msg,
+            type: 'success'
+          })
+        })
+      })
+    }
   }
 }
 </script>
