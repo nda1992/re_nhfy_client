@@ -83,15 +83,15 @@
           </template>
         </el-table-column>
         <!--高值耗材费-->
-        <el-table-column label="高值耗材费" sortable :sort-method="sortByGZHCF" prop="高值耗材费" align="center" min-width="7px" v-if="searchForm.type==='2'">
+        <el-table-column label="高值耗材费" sortable :sort-method="sortByGZHCF" prop="高值耗材费" align="center" min-width="7px">
           <template slot-scope="{row}">
             <span>{{ row.高值耗材费.toFixed(2) }}</span>
           </template>
         </el-table-column>
         <!--卫生材料费-->
-        <el-table-column label="卫生材料费" prop="卫生材料费" sortable :sort-method="sortByWSCLF" align="center" min-width="7px">
+        <el-table-column label="其他耗材费" prop="其他耗材费" sortable :sort-method="sortByWSCLF" align="center" min-width="7px">
           <template slot-scope="{row}">
-            <span>{{ row.卫生材料费.toFixed(2) }}</span>
+            <span>{{ row.其他耗材费.toFixed(2) }}</span>
           </template>
         </el-table-column>
         <!--西药费-->
@@ -183,26 +183,16 @@ export default {
       this.listLoading = true
       const temp = Object.assign({}, this.searchForm)
       searchDeptOperate(temp).then((res) => {
-        const { items, msg } = res
+        const { items, msg, sum } = res
         this.$message.success(msg)
         if (this.searchForm.type === '1') {
           this.MZitemList = items
           this.MZList = items
-          const temp = this.MZList.map(v => {
-            let tempsum = 0
-            tempsum = v.检查费 + v.诊察费 + v.化验费 + v.治疗费 + v.护理费 + v.手术费 + v.卫生材料费 + v.西药费 + v.中药饮片费 + v.中成药费 + v.其他费
-            return tempsum
-          })
-          this.mzsum = Math.floor((temp.reduce((acc, cur) => acc + cur)) * 100) / 100
+          this.mzsum = sum
         } else if (this.searchForm.type === '2') {
           this.ZYitemList = items
           this.ZYList = items
-          const temp = this.ZYList.map(v => {
-            let tempsum = 0
-            tempsum = v.床位费 + v.检查费 + v.诊察费 + v.化验费 + v.治疗费 + v.护理费 + v.手术费 + v.高值耗材费 + v.卫生材料费 + v.西药费 + v.中药饮片费 + v.中成药费 + v.其他费
-            return tempsum
-          })
-          this.zysum = Math.floor((temp.reduce((acc, cur) => acc + cur)) * 100) / 100
+          this.zysum = sum
         }
         this.listLoading = false
       })
@@ -214,11 +204,11 @@ export default {
         let tHeader = []
         let data = []
         if (this.searchForm.type === '1') {
-          tHeader = ['序号', '科室名称', '检查费', '诊察费', '化验费', '治疗费', '手术费', '护理费', '卫生材料费', '西药费', '中成药费', '中药饮片费', '其他费']
+          tHeader = ['序号', '科室名称', '检查费', '诊察费', '化验费', '治疗费', '手术费', '护理费', '高值耗材费', '其他耗材费', '西药费', '中成药费', '中药饮片费', '其他费']
           // const filterVal = ['序号', '科室名称', '检查费', '诊察费', '化验费', '治疗费', '手术费', '护理费', '卫生材料费', '西药费', '中成药费', '中药饮片费', '其他费']
           data = this.formatJson(this.searchForm.type)
         } else if (this.searchForm.type === '2') {
-          tHeader = ['序号', '科室名称', '床位费', '检查费', '诊察费', '化验费', '治疗费', '手术费', '护理费', '高值耗材费', '卫生材料费', '西药费', '中成药费', '中药饮片费', '其他费']
+          tHeader = ['序号', '科室名称', '床位费', '检查费', '诊察费', '化验费', '治疗费', '手术费', '护理费', '高值耗材费', '其他耗材费', '西药费', '中成药费', '中药饮片费', '其他费']
           // const filterVal = ['序号', '科室名称', '床位费', '检查费', '诊察费', '化验费', '治疗费', '手术费', '护理费', '高值耗材费', '卫生材料费', '西药费', '中成药费', '中药饮片费', '其他费']
           data = this.formatJson(this.searchForm.type)
         }
@@ -318,7 +308,7 @@ export default {
           float: left;
           position: absolute;
           bottom: 20px;
-          right: 0;
+          right: 30px;
           color: #ff6666;
         }
       }

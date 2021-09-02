@@ -290,13 +290,13 @@ export default {
 
 <style lang="scss" scoped>
   .app-container{
-    padding-top: 0;
+    padding: 0;
     .title{
       width: 1350px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 40px;
+      margin-bottom: 10px;
     }
     .el-radio{
       margin: 0;
@@ -317,6 +317,12 @@ export default {
           bottom: 20px;
           right: 60px;
           color: #ff6666;
+        }
+      }
+      .el-table{
+        font-size: 12px;
+        &:hover{
+          box-shadow: 0 2px 12px 0 rgba(0,0,0,0.1);
         }
       }
     }

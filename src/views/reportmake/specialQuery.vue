@@ -17,7 +17,7 @@
 export default {
   data() {
     return {
-      menuList: [{ id: 1, content: '科室收入情况' }, { id: 2, content: '科室药耗占比' }, { id: 3, content: '科室不可收费耗材汇总' }, { id: 4, content: '科室耗材金额排名前20' }, { id: 5, content: '科室手术耗材' }, { id: 6, content: '住院病人耗材明细' }, { id: 7, content: '门诊住院药品和耗材明细' }]
+      menuList: [{ id: 1, content: '科室收入情况' }, { id: 2, content: '住院科室耗占比' }, { id: 3, content: '所有科室药占比' }, { id: 4, content: '科室耗材金额排名前20' }, { id: 5, content: '科室手术耗材' }, { id: 6, content: '住院病人耗材明细' }, { id: 7, content: '门诊住院药品和耗材明细' }]
     }
   },
   methods: {
@@ -25,7 +25,9 @@ export default {
       if (id === 1) {
         this.$router.push({ name: 'DeptOperate' })
       } else if (id === 2) {
-        this.$router.push({ name: 'DeptMaterialMedicineProp' })
+        this.$router.push({ name: 'DeptMaterialProportion' })
+      } else if (id === 3) {
+        this.$router.push({ name: 'DeptMedicineProportion' })
       } else if (id === 7) {
         this.$router.push({ name: 'DeptMaterialMedicineDetail' })
       }

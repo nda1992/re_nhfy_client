@@ -49,3 +49,21 @@ export function deptMaterialMedicineDetail(data) {
     data
   })
 }
+
+// 住院耗占比
+export function getdeptMaterialProportion(data) {
+  return request({
+    url: '/reportmake/specialQuery/searchDeptOperate/getdeptMaterialProportion',
+    method: 'post',
+    data
+  })
+}
+
+// 全院药占比
+export function getdeptMedicientProportion(data) {
+  return request({
+    url: '/reportmake/specialQuery/searchDeptOperate/getdeptMedicientProportion',
+    method: 'post',
+    data
+  })
+}

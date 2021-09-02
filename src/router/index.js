@@ -338,11 +338,19 @@ export const constantRoutes = [
             hidden: true
           },
           {
-            // 科室药耗占比
-            path: 'deptMaterialMedicineProp',
-            name: 'DeptMaterialMedicineProp',
-            component: () => import('@/views/reportmake/children/deptMaterialMedicineProp'),
-            meta: { title: '科室药耗占比' },
+            // 住院科室耗占比
+            path: 'deptMaterialProportion',
+            name: 'DeptMaterialProportion',
+            component: () => import('@/views/reportmake/children/DeptMaterialProportion'),
+            meta: { title: '住院科室耗占比' },
+            hidden: true
+          },
+          {
+            // 门诊和住院药占比
+            path: 'deptMedicineProportion',
+            name: 'DeptMedicineProportion',
+            component: () => import('@/views/reportmake/children/DeptMedicineProportion'),
+            meta: { title: '门诊和住院药占比' },
             hidden: true
           },
           {
