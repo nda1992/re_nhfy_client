@@ -13,8 +13,8 @@
         <el-option v-for="(item,index) in deptListOptions" :key="item+index" :label="item" :value="item"></el-option>
       </el-select>
       <el-button @click="search" type="primary" icon="el-icon-search">查询</el-button>
-      <el-button @click="handleDownload" type="success" icon="el-icon-download">导出表格</el-button>
-      <span style="color: #ff6666;font-size: 12px;">耗材查询时间约为120秒!</span>
+      <el-button @click="handleDownload" type="success" icon="el-icon-download" :loading="downloadLoading">导出表格</el-button>
+<!--      <span style="color: #ff6666;font-size: 12px;">耗材查询时间约为120秒!</span>-->
     </div>
     <div class="table-container">
       <div class="header">
@@ -136,7 +136,7 @@
 </template>
 
 <script>
-import { deptMaterialMedicineDetail } from '@/api/reportmake/reportmake'
+import { deptMaterialMedicineDetail } from '@/api/QueryTheam/revenue/revenue'
 import { searchDept } from '@/api/news/news'
 import Pagination from '@/components/Pagination'
 import moment from 'moment'
@@ -207,7 +207,6 @@ export default {
       }
       deptMaterialMedicineDetail(temp).then(res => {
         const { items, flag, msg, title, total, sum } = res
-        // console.log(res)
         this.$message.success(msg)
         this.tableTitle = title
         this.total = total
@@ -246,18 +245,18 @@ export default {
       this.select_loading = false
     },
     // 导出表格
-    handleDownload() {
+    async handleDownload() {
       this.downloadLoading = true
+      const { items } = await deptMaterialMedicineDetail(Object.assign({}, { startDate: this.searchForm.startDate, endDate: this.searchForm.endDate, Depttype: this.searchForm.Depttype === '门诊' ? '1' : '2', Catetype: this.searchForm.Catetype, deptName: this.searchForm.deptName }))
       import('@/vendor/Export2Excel').then(excel => {
         let tHeader = []
         let data = []
         if (this.searchForm.Catetype === '1') {
           tHeader = ['序号', '科室名称', '项目名称', '大项目名称', '项目编码', '大项目编码', '单位', '单价', '数量', '总金额', '是否中草药', '是否国家谈判品种', '是否国家谈判品种', '是否重点监管药品', '是否国家辅助用药', '是否PPI', '是否抗菌药品', '是否中枢呕吐', '是否口服中成药', '是否中药注射剂']
-          data = this.formatJson('1')
+          data = this.formatJson('1', items)
         } else if (this.searchForm.Catetype === '2') {
           tHeader = ['序号', '科室名称', '项目名称', '大项目名称', '项目编码', '大项目编码', '单位', '单价', '数量', '总金额', '是否高值耗材']
-          data = this.formatJson('2')
-          // console.log(this.formatJson('2'))
+          data = this.formatJson('2', items)
         }
         excel.export_json_to_excel({
           header: tHeader,
@@ -267,16 +266,16 @@ export default {
         this.downloadLoading = false
       })
     },
-    formatJson(filterVal) {
+    formatJson(filterVal, items) {
       const data = []
       if (filterVal === '1') {
-        this.showItems.forEach(item => {
+        items.forEach(item => {
           const temp = []
           temp.push(item.XH, item.开单科室, item.项目名称, item.大项目名称, item.项目编码, item.大项目编码, item.单位, item.单价, item.数量, item.总金额, item.是否中草药, item.是否国家谈判品种, item.是否重点监管药品, item.是否国家辅助用药, item.是否PPI, item.是否抗菌药品, item.是否中枢呕吐, item.是否口服中成药, item.是否中药注射剂)
           data.push(temp)
         })
       } else if (filterVal === '2') {
-        this.showItems.forEach(item => {
+        items.forEach(item => {
           const temp = []
           temp.push(item.XH, item.开单科室, item.项目名称, item.大项目名称, item.项目编码, item.大项目编码, item.单位, item.单价, item.数量, item.总金额, item.是否高值耗材)
           data.push(temp)
@@ -292,7 +291,7 @@ export default {
   .app-container{
     padding: 0;
     .title{
-      width: 1350px;
+      width: 1250px;
       display: flex;
       justify-content: space-between;
       align-items: center;

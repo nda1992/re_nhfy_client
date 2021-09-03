@@ -67,3 +67,12 @@ export function getdeptMedicientProportion(data) {
     data
   })
 }
+
+// 科室使用金额排名前20的耗材
+export function getdeptMaterialAmountTop20(data) {
+  return request({
+    url: '/reportmake/specialQuery/searchDeptOperate/deptMaterialAmountTop20',
+    method: 'post',
+    data
+  })
+}

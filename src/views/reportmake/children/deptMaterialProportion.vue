@@ -3,14 +3,16 @@
   <div class="app-container">
     <div class="title">
       <el-date-picker v-model="searchDate" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd" clearable @change="pickerDate"></el-date-picker>
-      <el-input placeholder="请输入科室名称搜索" style="width: 200px" clearable v-model="deptname" @keyup.enter.native="handleFilter" :disabled="showItems.length===0?true:false"></el-input>
+      <el-tooltip effect="dark" content="按回车键搜索" placement="bottom">
+        <el-input placeholder="请输入科室名称搜索" style="width: 200px" clearable v-model="deptname" @keyup.enter.native="handleFilter" :disabled="showItems.length===0?true:false"></el-input>
+      </el-tooltip>
       <el-button @click="search" icon="el-icon-search" type="primary">查询</el-button>
-      <el-button @click="handleDownload" icon="el-icon-download" type="success">导出表格</el-button>
+      <el-button @click="handleDownload" icon="el-icon-download" type="success" :disabled="showItems.length===0">导出表格</el-button>
     </div>
     <div class="table-container">
       <div class="header">
         <span style="margin-bottom: 10px;font-size: 22px;font-weight: bold">住院科室耗占比</span>
-        <span class="sum">耗材总费用: {{ sum }}</span>
+        <span class="sum">住院耗材总费用: {{ sum }}</span>
       </div>
       <el-table
       :key="tableKey"
@@ -79,7 +81,7 @@
 
 <script>
 import moment from 'moment'
-import { getdeptMaterialProportion } from '@/api/reportmake/reportmake'
+import { deptMaterialProportion } from '@/api/QueryTheam/revenue/revenue'
 export default {
   name: 'deptMaterialProportion',
   data() {
@@ -112,7 +114,7 @@ export default {
     },
     search() {
       this.listLoading = true
-      getdeptMaterialProportion(this.searchForm).then(res => {
+      deptMaterialProportion(this.searchForm).then(res => {
         const { msg, items, sum } = res
         this.sum = sum
         this.showItems = items

@@ -341,7 +341,7 @@ export const constantRoutes = [
             // 住院科室耗占比
             path: 'deptMaterialProportion',
             name: 'DeptMaterialProportion',
-            component: () => import('@/views/reportmake/children/DeptMaterialProportion'),
+            component: () => import('@/views/reportmake/children/deptMaterialProportion'),
             meta: { title: '住院科室耗占比' },
             hidden: true
           },
@@ -349,7 +349,7 @@ export const constantRoutes = [
             // 门诊和住院药占比
             path: 'deptMedicineProportion',
             name: 'DeptMedicineProportion',
-            component: () => import('@/views/reportmake/children/DeptMedicineProportion'),
+            component: () => import('@/views/reportmake/children/deptMedicineProportion'),
             meta: { title: '门诊和住院药占比' },
             hidden: true
           },
@@ -359,6 +359,22 @@ export const constantRoutes = [
             name: 'DeptMaterialMedicineDetail',
             component: () => import('@/views/reportmake/children/deptMaterialMedicineDetail'),
             meta: { title: '门诊住院的药品和耗材' },
+            hidden: true
+          },
+          {
+            // 科室使用金额排名前20的耗材
+            path: 'deptMaterialAmountTop20',
+            name: 'DeptMaterialAmountTop20',
+            component: () => import('@/views/reportmake/children/deptMaterialAmountTop20'),
+            meta: { title: '科室使用金额排名前20的耗材' },
+            hidden: true
+          },
+          {
+            // 科室使用金额排名
+            path: 'deptMaterialSorted',
+            name: 'DeptMaterialSorted',
+            component: () => import('@/views/reportmake/children/deptMaterialSorted'),
+            meta: { title: '科室使用金额排名' },
             hidden: true
           }
         ]

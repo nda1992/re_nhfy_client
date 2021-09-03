@@ -5,7 +5,7 @@
       <el-date-picker v-model="searchDate" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd" clearable @change="pickerDate"></el-date-picker>
       <el-input placeholder="请输入科室名称搜索" style="width: 200px" clearable v-model="deptname" @keyup.enter.native="handleFilter" :disabled="showItems.length===0?true:false"></el-input>
       <el-button @click="search" icon="el-icon-search" type="primary">查询</el-button>
-      <el-button @click="handleDownload" icon="el-icon-download" type="success">导出表格</el-button>
+      <el-button @click="handleDownload" icon="el-icon-download" type="success" :disabled="showItems.length===0">导出表格</el-button>
     </div>
     <div class="table-container">
       <div class="header">
@@ -108,7 +108,7 @@
 </template>
 
 <script>
-import { getdeptMedicientProportion } from '@/api/reportmake/reportmake'
+import { deptMedicientProportion } from '@/api/QueryTheam/revenue/revenue'
 import moment from 'moment'
 export default {
   name: 'deptMaterialProportion',
@@ -142,7 +142,7 @@ export default {
     },
     search() {
       this.listLoading = true
-      getdeptMedicientProportion(this.searchForm).then(res => {
+      deptMedicientProportion(this.searchForm).then(res => {
         const { items, msg, sum } = res
         this.sum = sum
         this.showItems = items

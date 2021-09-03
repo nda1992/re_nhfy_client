@@ -129,7 +129,7 @@
   </div>
 </template>
 <script>
-import { searchDeptOperate } from '@/api/reportmake/reportmake'
+import { deptRevenueClassification } from '@/api/QueryTheam/revenue/revenue'
 import moment from 'moment'
 export default {
   data() {
@@ -182,7 +182,7 @@ export default {
     search() {
       this.listLoading = true
       const temp = Object.assign({}, this.searchForm)
-      searchDeptOperate(temp).then((res) => {
+      deptRevenueClassification(temp).then((res) => {
         const { items, msg, sum } = res
         this.$message.success(msg)
         if (this.searchForm.type === '1') {
