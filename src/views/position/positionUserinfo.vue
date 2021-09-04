@@ -19,11 +19,11 @@
       </div>
       <!--岗位收藏列表-->
       <div class="collected">
-        <UserinfoCard></UserinfoCard>
+        <UserinfoCard :statusTitle="positionStatus" :statusflag="2"></UserinfoCard>
       </div>
       <!--岗位投递列表-->
       <div class="posted">
-        <UserinfoCard></UserinfoCard>
+        <UserinfoCard :showList="postedList" :title="Posttitle" :statusTitle="resumeStatus" :statusflag="1" @HandleCancelPost="HandleCancelPost" @handleConfirm="handleConfirm"></UserinfoCard>
       </div>
     </div>
   </div>
@@ -31,11 +31,23 @@
 
 <script>
 import UserinfoCard from './components/UserinfoCard'
-import { getPost2PositionListByUid } from '@/api/recruit/position'
+import { getPost2PositionListByUid, cancelPostedByPid, confirmStauts } from '@/api/recruit/position'
 export default {
   name: 'Userinfo',
   components: {
     UserinfoCard
+  },
+  data() {
+    return {
+      // 已投递的岗位列表
+      postedList: [],
+      Posttitle: '已投递的岗位',
+      // 简历状态或在招状态
+      resumeStatus: '简历状态',
+      positionStatus: '在招状态',
+      // 1=投递列表，2=收藏列表
+      statusflag: 1
+    }
   },
   computed: {
     avatar() {
@@ -49,9 +61,43 @@ export default {
     },
     email() {
       return sessionStorage.getItem('email')
+    },
+    jobseekerId() {
+      return sessionStorage.getItem('jobseekerId')
     }
   },
+  mounted() {
+    this.getPost2PositionListByUid()
+  },
   methods: {
+    // 获取已投递的岗位列表
+    getPost2PositionListByUid() {
+      getPost2PositionListByUid(this.jobseekerId).then(res => {
+        const { items } = res
+        this.postedList = items
+      })
+    },
+    // 取消投递
+    HandleCancelPost(id) {
+      this.$confirm('取消投递将会从列表中删除,是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning' }).then(() => {
+        const temp = { pid: id, uid: this.jobseekerId }
+        cancelPostedByPid(temp).then(res => {
+          const { msg } = res
+          this.$message.success(msg)
+          this.getPost2PositionListByUid()
+        })
+      })
+    },
+    // 用户确认参加考试
+    handleConfirm(id) {
+      const temp = { pid: id, uid: this.jobseekerId }
+      confirmStauts().then(res => {
+
+      })
+    },
     completeUserinfo() {
       console.log('error')
     }

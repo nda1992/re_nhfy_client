@@ -255,7 +255,7 @@ export default {
       tableKey: 0,
       searchVal: '',
       searchType: '岗位名称',
-      typeItems: ['岗位名称', '部门名称', '职工号', '学历', '英语要求', '专业要求'],
+      typeItems: ['岗位名称', '部门名称', '职工号', '学历要求', '英语要求', '专业要求'],
       searchList: [],
       list: [],
       // 对话框title
@@ -321,7 +321,7 @@ export default {
         this.searchList = this.list.filter(item => { return item.deptName.match(this.searchVal) })
       } else if (type === '职工号') {
         this.searchList = this.list.filter(item => { return item.userCode.match(this.searchVal) })
-      } else if (type === '学历') {
+      } else if (type === '学历要求') {
         this.searchList = this.list.filter(item => { return item.degree.match(this.searchVal) })
       } else if (type === '英语要求') {
         this.searchList = this.list.filter(item => { return item.english.match(this.searchVal) })

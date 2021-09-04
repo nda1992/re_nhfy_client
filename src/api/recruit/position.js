@@ -40,7 +40,25 @@ export function postPosition(data) {
 export function getPost2PositionListByUid(id) {
   return request({
     url: '/position/getPost2PositionListByUid',
-    method: 'post',
-    params: { id }
+    method: 'get',
+    params: { jobseekerId: id }
+  })
+}
+
+// 用户取消投递的某个岗位
+export function cancelPostedByPid(data) {
+  return request({
+    url: '/position/cancelPostedByPid',
+    method: 'get',
+    params: data
+  })
+}
+
+// 用户确认参加考试
+export function confirmStauts(data) {
+  return request({
+    url: '/position/confirmStauts',
+    method: 'get',
+    params: data
   })
 }

@@ -4,21 +4,53 @@
     <div slot="header" class="clearfix">
       <span style="font-size: 16px;color: #000">{{ title }}</span>
     </div>
-    <el-table style="width: 100%" :data="showList">
-      <el-table-column
-        align="center"
-        prop="id"
-        label="序号"
-        width="180">
-        <template slot-scope="{row}">
-          <span>{{ row.id }}</span>
+    <el-table style="width: 100%" :data="showList" :row-class-name="rowClassName">
+      <!--可展开行-->
+      <el-table-column type="expand">
+        <template slot-scope="props">
+          <el-form label-position="left" inline class="demo-table-expand">
+            <el-form-item label="岗位名称">
+              <span>{{ props.row.positionName }}</span>
+            </el-form-item>
+            <el-form-item label="发布时间">
+              <span>{{ props.row.createdTime }}</span>
+            </el-form-item>
+            <el-form-item label="招聘科室">
+              <span>{{ props.row.deptName }}</span>
+            </el-form-item>
+            <el-form-item label="岗位类型">
+              <span>{{ props.row.type }}</span>
+            </el-form-item>
+            <el-form-item label="学历要求">
+              <span>{{ props.row.degree }}</span>
+            </el-form-item>
+            <el-form-item label="需求人数">
+              <span>{{ props.row.requireNum }}</span>
+            </el-form-item>
+            <el-form-item label="年龄要求">
+              <span>{{ props.row.age }}</span>
+            </el-form-item>
+            <el-form-item label="英语要求">
+              <span>{{ props.row.english }}</span>
+            </el-form-item>
+            <el-form-item label="专业要求">
+              <span>{{ props.row.professional }}</span>
+            </el-form-item>
+            <el-form-item label="工作地点">
+              <span>{{ props.row.address }}</span>
+            </el-form-item>
+            <el-form-item label="其他描述">
+              <span>{{ props.row.desc }}</span>
+            </el-form-item>
+          </el-form>
         </template>
       </el-table-column>
+      <el-table-column label="序号" align="center" prop="xh" width="50"></el-table-column>
       <el-table-column
         align="center"
         prop="positionName"
         label="岗位名称"
-        width="180">
+        width="380">
         <template slot-scope="{row}">
           <span>{{ row.positionName }}</span>
         </template>
@@ -26,7 +58,8 @@
       <el-table-column
         align="center"
         prop="createdTime"
-        label="收藏时间">
+        width="280"
+        :label="statusflag===1?'投递时间':'收藏时间'">
         <template slot-scope="{row}">
           <i class="el-icon-time" style="margin-right: 3px;"></i>
           <span>{{ row.createdTime }}</span>
@@ -34,9 +67,42 @@
       </el-table-column>
       <el-table-column
         align="center"
-        label="操作">
-        <el-button @click="HandleCollect" type="warning" size="mini">已收藏</el-button>
-        <el-button @click="HandleDelete" type="danger" size="mini">删除</el-button>
+        prop="currentStatus"
+        width="280"
+        :label="statusTitle" v-if="statusflag===2">
+        <template slot-scope="{row}">
+          <el-tag :type="row.currentStatus | statusFilter">
+            {{ row.currentStatus }}
+          </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column
+        align="center"
+        prop="Handlestatus"
+        :label="statusTitle"
+        width="280" v-if="statusflag===1">
+        <template slot-scope="{row}">
+          <el-tag :type="row.status | HandlestatusFilter" v-if="row.status==='未审核'||row.status==='审核未通过'||row.status==='已确认'">
+            {{ row.status }}
+          </el-tag>
+          <el-popconfirm v-else
+             @onConfirm="handleConfirm(row)"
+             confirm-button-text='确定'
+             cancel-button-text='取消'
+             icon="el-icon-info"
+             icon-color="red"
+             title="是否确认参加考试?"
+          >
+            <el-button slot="reference" type="primary" size="mini">{{ row.status }}</el-button>
+          </el-popconfirm>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="操作">
+        <template slot-scope="{row,$index}">
+          <el-button @click="HandleCollect" type="warning" size="mini" v-if="statusflag===2&&row.currentStatus===1">取消收藏</el-button>
+          <el-button @click="HandleCollect" type="info" size="mini" v-if="statusflag===2&&row.currentStatus===2">收藏</el-button>
+          <el-button @click="HandleCancelPost(row)" type="primary" size="mini" v-if="statusflag===1">取消投递</el-button>
+        </template>
       </el-table-column>
     </el-table>
   </el-card>
@@ -45,6 +111,23 @@
 <script>
   export default {
     name: 'UserinfoCard',
+    filters: {
+      statusFilter(status) {
+        const statusMap = {
+          '在招': 'success',
+          '已结束': 'danger'
+        }
+        return statusMap[status]
+      },
+      HandlestatusFilter(status) {
+        const statusMap = {
+          '未审核': 'info',
+          '已确认': 'success',
+          '审核未通过': 'danger'
+        }
+        return statusMap[status]
+      }
+    },
     props: {
       title: {
         type: String,
@@ -55,16 +138,42 @@
       showList: {
         type: Array,
         default: ()=> {
-          return [{ id:1, positionName: '消化内科医师', createdTime: '2021-08-31 15:02:31' }]
+          return []
+          // return [{ id:1, positionName: '消化内科医师', createdTime: '2021-08-31 15:02:31' }]
+        }
+      },
+      // 简历状态或在招状态
+      statusTitle: {
+        type: String,
+        default: () => {
+          return ''
+        }
+      },
+      // 1=投递列表，2=收藏列表
+      statusflag: {
+        type: Number,
+        default: () => {
+          return 1
         }
       }
     },
     methods: {
+      rowClassName({ row, rowIndex }) {
+        row.xh = rowIndex + 1;
+      },
       HandleCollect() {
         this.$emit('collect')
       },
       HandleDelete() {
         this.$emit('delete')
+      },
+      // 取消投递
+      HandleCancelPost(row) {
+        this.$emit('HandleCancelPost',row.id)
+      },
+      // 确认参加考试
+      handleConfirm(row) {
+        this.$emit('handleConfirm',row.id)
       }
     }
   }
@@ -74,5 +183,14 @@
   .box-card{
     margin: 0 !important;
     padding: 0 !important;
+  }
+  .demo-table-expand{
+    color: #99a9bf;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    .el-form-item{
+      margin-bottom: 0;
+    }
   }
 </style>
