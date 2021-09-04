@@ -101,82 +101,102 @@
         <template slot-scope="{row,$index}">
           <el-button @click="HandleCollect" type="warning" size="mini" v-if="statusflag===2&&row.currentStatus===1">取消收藏</el-button>
           <el-button @click="HandleCollect" type="info" size="mini" v-if="statusflag===2&&row.currentStatus===2">收藏</el-button>
-          <el-button @click="HandleCancelPost(row)" type="primary" size="mini" v-if="statusflag===1">取消投递</el-button>
+          <el-button @click="HandleCancelPost(row)" type="danger" size="mini" v-if="statusflag===1" :disabled="row.status==='已确认'">取消投递</el-button>
         </template>
       </el-table-column>
     </el-table>
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getPostedPosition()" v-if="statusflag===1" />
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getPostedPosition()" v-if="statusflag===2" />
   </el-card>
 </template>
 
 <script>
-  export default {
-    name: 'UserinfoCard',
-    filters: {
-      statusFilter(status) {
-        const statusMap = {
-          '在招': 'success',
-          '已结束': 'danger'
-        }
-        return statusMap[status]
-      },
-      HandlestatusFilter(status) {
-        const statusMap = {
-          '未审核': 'info',
-          '已确认': 'success',
-          '审核未通过': 'danger'
-        }
-        return statusMap[status]
+import Pagination from '@/components/Pagination'
+export default {
+  name: 'UserinfoCard',
+  components: { Pagination },
+  filters: {
+    statusFilter(status) {
+      const statusMap = {
+        '在招': 'success',
+        '已结束': 'danger'
+      }
+      return statusMap[status]
+    },
+    HandlestatusFilter(status) {
+      const statusMap = {
+        '未审核': 'info',
+        '已确认': 'success',
+        '审核未通过': 'danger'
+      }
+      return statusMap[status]
+    }
+  },
+  props: {
+    title: {
+      type: String,
+      default: () => {
+        return  '已收藏的岗位'
       }
     },
-    props: {
-      title: {
-        type: String,
-        default: () => {
-          return  '已收藏的岗位'
-        }
-      },
-      showList: {
-        type: Array,
-        default: ()=> {
-          return []
-          // return [{ id:1, positionName: '消化内科医师', createdTime: '2021-08-31 15:02:31' }]
-        }
-      },
-      // 简历状态或在招状态
-      statusTitle: {
-        type: String,
-        default: () => {
-          return ''
-        }
-      },
-      // 1=投递列表，2=收藏列表
-      statusflag: {
-        type: Number,
-        default: () => {
-          return 1
-        }
+    showList: {
+      type: Array,
+      default: ()=> {
+        return []
+        // return [{ id:1, positionName: '消化内科医师', createdTime: '2021-08-31 15:02:31' }]
       }
     },
-    methods: {
-      rowClassName({ row, rowIndex }) {
-        row.xh = rowIndex + 1;
-      },
-      HandleCollect() {
-        this.$emit('collect')
-      },
-      HandleDelete() {
-        this.$emit('delete')
-      },
-      // 取消投递
-      HandleCancelPost(row) {
-        this.$emit('HandleCancelPost',row.id)
-      },
-      // 确认参加考试
-      handleConfirm(row) {
-        this.$emit('handleConfirm',row.id)
+    // 简历状态或在招状态
+    statusTitle: {
+      type: String,
+      default: () => {
+        return ''
+      }
+    },
+    // 1=投递列表，2=收藏列表
+    statusflag: {
+      type: Number,
+      default: () => {
+        return 1
+      }
+    },
+    listQuery: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    },
+    total: {
+      type: Number,
+      default: () => {
+        return 0
       }
     }
+  },
+  methods: {
+    rowClassName({ row, rowIndex }) {
+      row.xh = rowIndex + 1;
+    },
+    HandleCollect() {
+      this.$emit('collect')
+    },
+    HandleDelete() {
+      this.$emit('delete')
+    },
+    // 取消投递
+    HandleCancelPost(row) {
+      this.$emit('HandleCancelPost',row.id)
+    },
+    // 确认参加考试
+    handleConfirm(row) {
+      this.$emit('handleConfirm',row.id)
+    },
+    // 点击分页触发
+    getPostedPosition() {
+      this.$emit('getPostedPosition')
+    }
   }
+}
 </script>
 
 <style lang="scss"  scoped>

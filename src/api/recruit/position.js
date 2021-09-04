@@ -27,6 +27,24 @@ export function positionLogin(data) {
   })
 }
 
+// 根据jobseeker拉取用户的所有信息
+export function UserinfoDetail(id) {
+  return request({
+    url: '/position/UserinfoDetail',
+    method: 'get',
+    params: { uid: id }
+  })
+}
+
+// 更新个人信息
+export function updateUserinfo(data) {
+  return request({
+    url: '/position/updateUserinfo',
+    method: 'post',
+    data
+  })
+}
+
 // 求职者投递简历
 export function postPosition(data) {
   return request({
@@ -37,11 +55,11 @@ export function postPosition(data) {
 }
 
 // 获取某个用户已经投递的岗位列表
-export function getPost2PositionListByUid(id) {
+export function getPost2PositionListByUid(data) {
   return request({
     url: '/position/getPost2PositionListByUid',
     method: 'get',
-    params: { jobseekerId: id }
+    params: data
   })
 }
 
@@ -59,6 +77,24 @@ export function confirmStauts(data) {
   return request({
     url: '/position/confirmStauts',
     method: 'get',
+    params: data
+  })
+}
+
+// 管理员审核求职者的简历状态
+export function setPositionStatus(data) {
+  return request({
+    url: '/position/setPositionStatus',
+    method: 'post',
+    data
+  })
+}
+
+// 管理员删除jobseeker投递的简历
+export function deletePost2Position(data) {
+  return request({
+    url: '/position/deletePost2Position',
+    method: 'delete',
     params: data
   })
 }

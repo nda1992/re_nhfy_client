@@ -18,7 +18,7 @@
         highlight-current-row
         style="width: 100%;">
         <!--自增id-->
-        <el-table-column label="ID" prop="id" align="center" min-width="5px">
+        <el-table-column label="ID" prop="id" align="center" min-width="3px">
           <template slot-scope="{row}">
             <span>{{ row.id }}</span>
           </template>
@@ -37,7 +37,7 @@
           </template>
         </el-table-column>
         <!--求职者姓名-->
-        <el-table-column label="姓名" prop="username" align="center" :show-overflow-tooltip="true" min-width="7px">
+        <el-table-column label="姓名" prop="username" align="center" :show-overflow-tooltip="true" min-width="5px">
           <template slot-scope="{row}">
             <span>{{ row.username }}</span>
           </template>
@@ -55,7 +55,7 @@
           </template>
         </el-table-column>
         <!--毕业学校-->
-        <el-table-column label="手机号" prop="phone" align="center" min-width="8px" :show-overflow-tooltip="true">
+        <el-table-column label="手机号" prop="phone" align="center" min-width="7px" :show-overflow-tooltip="true">
           <template slot-scope="{row}">
             <span>{{ row.phone }}</span>
           </template>
@@ -67,34 +67,80 @@
           </template>
         </el-table-column>
         <!--附件简历下载-->
-        <el-table-column label="简历下载" prop="resume" align="center" min-width="8px" :show-overflow-tooltip="true">
+        <el-table-column label="简历下载" prop="attachmentUrl" align="center" min-width="6px" :show-overflow-tooltip="true">
           <template slot-scope="{row}">
-            <span>{{ row.resume }}</span>
+            <span>
+              <el-tooltip class="item" effect="dark" content="点击下载简历" placement="bottom">
+              <el-button type="text" size="mini" @click="gotoResume(row.attachmentUrl)">简历</el-button>
+            </el-tooltip>
+            </span>
+          </template>
+        </el-table-column>
+        <!--当前状态-->
+        <el-table-column label="当前状态" prop="status" align="center" min-width="8px" :show-overflow-tooltip="true">
+          <template slot-scope="{row}">
+            <el-tag :type="row.status | statusFilter">
+              {{ row.status }}
+            </el-tag>
           </template>
         </el-table-column>
         <!--状态审核-->
-        <el-table-column label="状态审核" prop="status" align="center" min-width="8px" :show-overflow-tooltip="true">
+        <el-table-column label="状态审核" prop="Switch" align="center" min-width="12px">
           <template slot-scope="{row}">
-            <span>{{ row.status }}</span>
+            <el-switch
+              :disabled="row.status==='求职者已确认'"
+              @change="handleSetStatus(row)"
+              v-model="row.Switch"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+              inactive-text="不通过"
+              active-text="通过"
+            >
+            </el-switch>
           </template>
         </el-table-column>
         <!--操作-->
-        <el-table-column label="操作" align="center" min-width="8px" class-name="small-padding fixed-width">
+        <el-table-column label="操作" align="center" min-width="7px" class-name="small-padding fixed-width">
           <template slot-scope="{row,$index}">
-            <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="handleDelete(row,$index)" icon="el-icon-delete">删除</el-button>
+            <el-button
+              v-if="row.status!='deleted'"
+              size="mini" type="danger"
+              @click="handleDelete(row,$index)"
+              icon="el-icon-delete" :disabled="row.status==='求职者已确认'">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
+      <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getPostedPosition()" />
     </div>
   </div>
 </template>
 
 <script>
-import { getPost2PositionListByUid } from '@/api/recruit/position'
+import Pagination from '@/components/Pagination'
+import { getPost2PositionListByUid, setPositionStatus, deletePost2Position } from '@/api/recruit/position'
 export default {
   name: 'postlist',
+  components: { Pagination },
+  filters: {
+    statusFilter(status) {
+      const statusMap = {
+        '已审核通过': 'success',
+        '审核未通过': 'danger',
+        '未审核': 'info',
+        '已确认': 'primary'
+      }
+      return statusMap[status]
+    },
+  },
   data() {
     return {
+      listQuery: {
+        page: 1,
+        limit: 10,
+        role: localStorage.getItem('role')
+      },
+      total: 0,
+      tableKey: 0,
       listLoading: false,
       searchVal: '',
       searchType: '岗位名称',
@@ -102,6 +148,9 @@ export default {
       list: [],
       searchList:[],
     }
+  },
+  mounted() {
+    this.getPostedPosition()
   },
   methods: {
     // 过滤显示处理函数
@@ -119,17 +168,56 @@ export default {
     // 获取post2position对应jobseeker和position
     getPostedPosition() {
       this.listLoading = true
-      getPost2PositionListByUid().then(res => {
-        const { items, msg } = res
+      getPost2PositionListByUid(this.listQuery).then(res => {
+        const { items, msg, total } = res
+        this.total = total
         this.searchList = items
         this.list = items
         this.$message.success(msg)
-        this.listLoading = true
+        this.listLoading = false
       })
+    },
+    // 触发switch按钮发送审核通过
+    handleSetStatus(row) {
+      setPositionStatus(row).then(res => {
+        const { msg } = res
+        this.$notify({
+          title:'Success',
+          message: msg,
+          type: 'success'
+        })
+        this.getPostedPosition()
+      })
+    },
+    // 删除
+    handleDelete(row) {
+      const temp = { pid: row.id, uid: row.jobseekerId }
+      this.$confirm('删除该条记录的同时,也会删除求职者已投递的岗位,是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning' }).then(() => {
+        deletePost2Position().then(res => {
+          const { msg } = res
+          this.$notify({
+            title: 'Success',
+            message: msg,
+            type: 'success'
+          })
+        })
+      })
+    },
+    // 查看用户的pdf简历
+    gotoResume(url) {
+      console.log(url)
     }
   }
 }
 </script>
+<style scoped>
+  .el-switch__label *{
+    font-size: 11px !important;
+  }
+</style>
 
 <style lang="scss" scoped>
   .app-container{
@@ -140,6 +228,10 @@ export default {
     }
     .table-container{
       margin-top: 15px;
+      .el-table{
+        font-size: 12px;
+
+      }
     }
   }
 </style>

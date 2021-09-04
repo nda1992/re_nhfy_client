@@ -234,7 +234,7 @@ export default {
         type: 'success',
         duration: 2000
       })
-      window.location.reload()
+      this.$router.push({ path: '/position/list' })
     }
   }
 }

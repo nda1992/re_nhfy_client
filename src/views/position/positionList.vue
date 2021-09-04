@@ -21,7 +21,7 @@
 
 <script>
 import PositionCard from '@/components/PositionCard/index'
-import { getPositionList } from '@/api/recruit/position'
+import { getPositionList, UserinfoDetail } from '@/api/recruit/position'
 import Pagination from '@/components/Pagination'
 import { postPosition } from '@/api/recruit/position'
 export default {
@@ -50,18 +50,32 @@ export default {
         // role: localStorage.getItem('role')
       },
       total: 0,
-      positionList: []
+      positionList: [],
+      // 用户信息是否完整,如果不完整，不能投递简历
+      doneUserinfo: undefined
     }
   },
   mounted() {
+    this.getUserinfoDetail()
     this.getPositionList(Object.assign({},this.listQuery,{jobseekerId: sessionStorage.getItem('jobseekerId')}))
   },
   computed: {
     isLogin() {
       return sessionStorage.getItem('isLogin')
+    },
+    jobseekerId() {
+      return sessionStorage.getItem('jobseekerId')
     }
   },
   methods: {
+    // 根据用户id拉取完整信息
+    getUserinfoDetail() {
+      UserinfoDetail(this.jobseekerId).then(res => {
+        const { userinfo, doneUserinfo } = res
+        this.doneUserinfo = doneUserinfo
+        console.log(doneUserinfo)
+      })
+    },
     // 获取所有岗位列表
     getPositionList() {
       getPositionList(this.listQuery).then(res => {
@@ -78,8 +92,11 @@ export default {
         this.$message.error('你还没有登录,请先登录')
         return
       }
-      const jobseekerId = sessionStorage.getItem('jobseekerId')
-      const temp = {  positionlId: id, jobSeekerId: jobseekerId }
+      if(this.doneUserinfo){
+        this.$message.error('你的个人信息还未完善，请先完善个人信息')
+        return
+      }
+      const temp = {  positionlId: id, jobSeekerId: this.jobseekerId }
       this.$confirm('只能投递一次,是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
