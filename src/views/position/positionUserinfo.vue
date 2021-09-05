@@ -269,7 +269,6 @@ export default {
         const { userinfo, doneUserinfo } = res
         this.userinfo = userinfo
         this.show_badge = doneUserinfo
-        console.log(this.show_badge)
         this.fileList.push({name: userinfo.attachmentUrl, url: userinfo.attachmentUrl})
       })
     },
@@ -382,7 +381,6 @@ export default {
     },
     // 文件上传成功后的钩子
     handleSuccessFile(file) {
-      console.log(this.fileList)
       const { msg, files } = file
       this.$message.success(msg)
       this.registerForm.attachmentUrl = files[0].file
