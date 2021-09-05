@@ -73,7 +73,6 @@ export default {
       UserinfoDetail(this.jobseekerId).then(res => {
         const { userinfo, doneUserinfo } = res
         this.doneUserinfo = doneUserinfo
-        console.log(doneUserinfo)
       })
     },
     // 获取所有岗位列表
@@ -118,6 +117,7 @@ export default {
 
 <style lang="scss" scoped>
   .position-list{
+    margin-bottom: 80px;
     .post {
       font-size: 14px;
       padding-top: 32px;
@@ -131,7 +131,7 @@ export default {
       }
     }
     .list{
-      padding: 20px 20px 100px 20px;
+      padding: 20px;
       box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)
     }
   }

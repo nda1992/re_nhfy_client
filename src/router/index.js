@@ -89,6 +89,7 @@ export const constantRoutes = [
   },
   {
     path: '/pdf/download',
+    name: 'Download',
     component: () => import('@/views/pdf/download'),
     hidden: true
   },

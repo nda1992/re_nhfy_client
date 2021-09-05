@@ -18,7 +18,7 @@
         highlight-current-row
         style="width: 100%;">
         <!--自增id-->
-        <el-table-column label="ID" prop="id" align="center" min-width="3px">
+        <el-table-column label="ID" prop="id" align="center" min-width="2px">
           <template slot-scope="{row}">
             <span>{{ row.id }}</span>
           </template>
@@ -70,9 +70,10 @@
         <el-table-column label="简历下载" prop="attachmentUrl" align="center" min-width="6px" :show-overflow-tooltip="true">
           <template slot-scope="{row}">
             <span>
-              <el-tooltip class="item" effect="dark" content="点击下载简历" placement="bottom">
-              <el-button type="text" size="mini" @click="gotoResume(row.attachmentUrl)">简历</el-button>
-            </el-tooltip>
+              <el-tooltip class="item" effect="dark" content="点击查看简历" placement="bottom">
+                <a :href="row.attachmentUrl" v-if="row.attachmentUrl.split('/').slice(-1)[0].indexOf('pdf')!==-1" style="color: #409EFF">简历</a>
+                <el-button type="text" size="mini" @click="gotoResume(row.attachmentUrl)" v-else>简历</el-button>
+              </el-tooltip>
             </span>
           </template>
         </el-table-column>
@@ -206,9 +207,10 @@ export default {
         })
       })
     },
-    // 查看用户的pdf简历
+    // 查看用户的用户简历
     gotoResume(url) {
-      console.log(url)
+      this.$router.push({ name: 'Download', params: { url: url } })
+      // console.log(url)
     }
   }
 }

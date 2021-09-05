@@ -45,6 +45,15 @@ export function updateUserinfo(data) {
   })
 }
 
+// 用户密码找回
+export function updatePasswd(data) {
+  return request({
+    url: '/position/updatePasswd',
+    method: 'post',
+    data
+  })
+}
+
 // 求职者投递简历
 export function postPosition(data) {
   return request({
@@ -96,5 +105,14 @@ export function deletePost2Position(data) {
     url: '/position/deletePost2Position',
     method: 'delete',
     params: data
+  })
+}
+
+//根据文件的url查看简历
+export function getResumeFile(data) {
+  return request({
+    url: '/position/getResumeFile',
+    method: 'post',
+    data
   })
 }

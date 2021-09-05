@@ -1,5 +1,5 @@
 <template>
-    <!--岗位收藏列表-->
+    <!--岗位收藏和投递列表-->
   <el-card class="box-card">
     <div slot="header" class="clearfix">
       <span style="font-size: 16px;color: #000">{{ title }}</span>

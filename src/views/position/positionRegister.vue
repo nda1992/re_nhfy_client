@@ -14,6 +14,11 @@
             <el-option v-for="(item,index) in ageOptions" :key="item+index" :label="item" :value="item"></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item prop="degree" label="学历">
+          <el-select v-model="registerForm.degree" placeholder="请学历" width="20px" clearable>
+            <el-option v-for="(item,index) in degreeOptions" :key="item+index" :label="item.value" :value="item.key"></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item prop="birthday" label="出生日期">
           <el-date-picker
             clearable
@@ -77,6 +82,7 @@ export default {
       dialogVisible: false,
       sexOptions: [{ key: 1, value:'男' }, { key: 2, value: '女' }],
       ageOptions: [20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40],
+      degreeOptions: ['本科', '研究生', '博士'],
       registerForm: {
         sex: '',
         age: '',

@@ -99,6 +99,13 @@ const actions = {
     commit('CLEAR_EMAIL')
     commit('CLEAR_ROLE')
     commit('CLEAR_ISLOGIN')
+  },
+  // 重置sessionStorage中的value
+  resetSession({ commit }, data) {
+    commit('SET_AVATAR', data.avatar)
+    commit('SET_USERNAME', data.username)
+    commit('SET_PHONE', data.phone)
+    commit('SET_EMAIL', data.email)
   }
 }
 

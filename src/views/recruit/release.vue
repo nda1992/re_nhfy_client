@@ -18,6 +18,7 @@
         border
         fit
         highlight-current-row
+        :default-sort = "{prop: 'createDate', order: 'descending'}"
         style="width: 100%;"
       >
         <!--可展开行-->
@@ -61,7 +62,7 @@
           </template>
         </el-table-column>
         <!--自增id-->
-        <el-table-column label="ID" prop="id" align="center" min-width="5px">
+        <el-table-column label="ID" prop="id" align="center" min-width="3px">
           <template slot-scope="{row}">
             <span>{{ row.id }}</span>
           </template>
@@ -73,7 +74,7 @@
           </template>
         </el-table-column>
         <!--创建时间-->
-        <el-table-column label="发布时间" prop="createDate" align="center" min-width="8px" :show-overflow-tooltip="true">
+        <el-table-column label="发布时间" sortable prop="createDate" align="center" min-width="10px" :show-overflow-tooltip="true">
           <template slot-scope="{row}">
             <i class="el-icon-time" style="margin-right: 3px;"></i>
             <span>{{ row.createDate }}</span>
@@ -95,12 +96,6 @@
         <el-table-column label="学历要求" prop="degree" align="center" min-width="8px" :show-overflow-tooltip="true">
           <template slot-scope="{row}">
             <span>{{ row.degree }}</span>
-          </template>
-        </el-table-column>
-        <!--需求人数-->
-        <el-table-column label="需求人数" prop="requireNum" align="center" min-width="8px">
-          <template slot-scope="{row}">
-            <span>{{ row.requireNum }}</span>
           </template>
         </el-table-column>
         <!--年龄要求-->

@@ -15,16 +15,15 @@ export default {
 <style lang="scss" scoped>
   .footer{
     font-size: 13px;
-    margin: 20px 0;
+    /*margin: 30px 0;*/
     height: 80px;
     width: 100%;
-    position: absolute;
-    bottom: 0;
+    position: relative;
+    bottom: 5px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: space-around;
-    /*margin: 0 auto;*/
     color: #99a9bf;
     clear: both;
   }
