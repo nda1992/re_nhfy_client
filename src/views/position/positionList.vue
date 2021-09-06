@@ -13,7 +13,7 @@
     <!--岗位列表-->
     <div class="list">
       <h2 style="margin-left: 20px">在招岗位</h2>
-      <PositionCard :positionInfo="position" v-for="(position,index) in positionList" @gotoPosition="gotoPosition(position.id)"></PositionCard>
+      <PositionCard :positionInfo="position" v-for="(position,index) in positionList" @gotoPosition="gotoPosition(position.id)" @gotoCollect="gotoCollect(position.id, position.isCollected)"></PositionCard>
       <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getPositionList()" />
     </div>
   </div>
@@ -21,9 +21,8 @@
 
 <script>
 import PositionCard from '@/components/PositionCard/index'
-import { getPositionList, UserinfoDetail } from '@/api/recruit/position'
+import { getPositionList, UserinfoDetail, postPosition, handleCollect } from '@/api/recruit/position'
 import Pagination from '@/components/Pagination'
-import { postPosition } from '@/api/recruit/position'
 export default {
   name: 'positionList',
   components: {
@@ -86,6 +85,21 @@ export default {
         }, 1000)
       })
     },
+    // 岗位收藏
+    gotoCollect(id, isCollected) {
+      if (this.isLogin === false || this.isLogin === null) {
+        this.$message.error('你还没有登录,请先登录')
+        return
+      }
+      const temp = { positionId: id, jobSeekerId: this.jobseekerId, isCollected: isCollected }
+      handleCollect(temp).then(res => {
+        const { msg } = res
+        this.$message.success(msg)
+        this.getPositionList(this.listQuery)
+      })
+    },
+
+    // 投递简历
     gotoPosition(id) {
       if (this.isLogin === false || this.isLogin === null) {
         this.$message.error('你还没有登录,请先登录')
@@ -95,7 +109,7 @@ export default {
         this.$message.error('你的个人信息还未完善，请先完善个人信息')
         return
       }
-      const temp = {  positionlId: id, jobSeekerId: this.jobseekerId }
+      const temp = {  positionId: id, jobSeekerId: this.jobseekerId }
       this.$confirm('只能投递一次,是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',

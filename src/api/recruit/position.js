@@ -54,6 +54,16 @@ export function updatePasswd(data) {
   })
 }
 
+// 求职者收藏岗位
+export function handleCollect(data) {
+  return request({
+    url: '/position/handleCollect',
+    method: 'post',
+    data
+  })
+}
+
+
 // 求职者投递简历
 export function postPosition(data) {
   return request({

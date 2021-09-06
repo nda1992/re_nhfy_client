@@ -23,11 +23,11 @@
       </div>
       <!--岗位收藏列表-->
       <div class="collected">
-        <UserinfoCard :statusTitle="positionStatus" :statusflag="2"></UserinfoCard>
+        <UserinfoCard :statusTitle="positionStatus" :statusflag="2" :total="collectedTotal" :getPostedPosition="getPost2PositionListByUid" :showList="collectedList"></UserinfoCard>
       </div>
       <!--岗位投递列表-->
       <div class="posted">
-        <UserinfoCard  :total="total" :listQuery="listQuery" :getPostedPosition="getPost2PositionListByUid" :showList="postedList" :title="Posttitle" :statusTitle="resumeStatus" :statusflag="1" @HandleCancelPost="HandleCancelPost" @handleConfirm="handleConfirm"></UserinfoCard>
+        <UserinfoCard  :total="postedTotal" :listQuery="listQuery" :getPostedPosition="getPost2PositionListByUid" :showList="postedList" :title="Posttitle" :statusTitle="resumeStatus" :statusflag="1" @HandleCancelPost="HandleCancelPost" @handleConfirm="handleConfirm"></UserinfoCard>
       </div>
     </div>
     <!--完善用户信息的对话框-->
@@ -150,7 +150,9 @@ export default {
         limit: 10,
         role: localStorage.getItem('role')
       },
-      total: 0,
+      collectedTotal: 0,
+      collectedList: [],
+      postedTotal: 0,
       // 已投递的岗位列表
       postedList: [],
       Posttitle: '已投递的岗位',
@@ -235,9 +237,11 @@ export default {
     getPost2PositionListByUid() {
       const temp = Object.assign({}, this.listQuery, { jobseekerId: this.jobseekerId })
       getPost2PositionListByUid(temp).then(res => {
-        const { items, total } = res
-        this.postedList = items
-        this.total = total
+        const { postedPositions, postedTotal, collectedPositions, collectedTotal } = res
+        this.postedList = postedPositions
+        this.postedTotal = postedTotal
+        this.collectedTotal = collectedTotal
+        this.collectedList = collectedPositions
       })
     },
     // 取消投递

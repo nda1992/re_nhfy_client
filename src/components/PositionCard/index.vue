@@ -3,11 +3,11 @@
     <el-card>
       <div slot="header" class="clearfix">
         <span style="font-size: 16px;font-weight: bold">{{ positionInfo.positionName }}</span>
-        <el-tooltip class="item" effect="dark" content="分享" placement="bottom">
+        <el-tooltip class="item" effect="dark" content="分享岗位" placement="bottom">
           <el-button style="float: right; padding: 0;margin-right: 15px;" type="text"><i class="el-icon-share">分享</i></el-button>
         </el-tooltip>
-        <el-tooltip class="item" effect="dark" content="收藏" placement="bottom">
-          <el-button style="float: right; padding: 0;border: 0;margin-right: 15px;" type="text"><i class="el-icon-star-off">收藏</i></el-button>
+        <el-tooltip class="item" effect="dark" content="收藏岗位" placement="bottom">
+          <el-button style="float: right; padding: 0;border: 0;margin-right: 15px;" type="text" @click="gotoCollect"><i :class="positionInfo.isCollected===false?'el-icon-star-off':'el-icon-star-on'">{{positionInfo.isCollected===false?'收藏':'已收藏'}}</i></el-button>
         </el-tooltip>
         <el-tooltip class="item" effect="dark" content="投递简历" placement="bottom">
           <el-button style="float: right; padding: 0" type="text" @click="gotoPosition" :disabled="positionInfo.isPosted">{{ positionInfo.isPosted===false?'投递简历': '已投递'}}</el-button>
@@ -51,8 +51,13 @@ export default {
     }
   },
   methods: {
+    // 简历投递
     gotoPosition() {
       this.$emit('gotoPosition')
+    },
+    // 岗位收藏
+    gotoCollect() {
+      this.$emit('gotoCollect')
     }
   }
 }
