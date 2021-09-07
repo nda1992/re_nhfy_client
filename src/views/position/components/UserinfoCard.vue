@@ -99,8 +99,7 @@
       </el-table-column>
       <el-table-column align="center" label="操作">
         <template slot-scope="{row,$index}">
-          <el-button @click="HandleCollect" type="warning" size="mini" v-if="statusflag===2&&row.isCllected">取消收藏</el-button>
-          <el-button @click="HandleCollect" type="info" size="mini" v-if="statusflag===2&&row.currentStatus===2">收藏</el-button>
+          <el-button @click="HandleCollect(row.isCollected,row.id)" type="warning" size="mini" v-if="statusflag===2&&row.isCollected">取消收藏</el-button>
           <el-button @click="HandleCancelPost(row)" type="danger" size="mini" v-if="statusflag===1" :disabled="row.status==='已确认'">取消投递</el-button>
         </template>
       </el-table-column>
@@ -177,8 +176,8 @@ export default {
     rowClassName({ row, rowIndex }) {
       row.xh = rowIndex + 1;
     },
-    HandleCollect() {
-      this.$emit('collect')
+    HandleCollect(isCollected,id) {
+      this.$emit('HandleCollect', { isCollected: isCollected, positionId: id })
     },
     HandleDelete() {
       this.$emit('delete')

@@ -10,6 +10,7 @@
     </div>
     <div class="table-container">
       <el-table
+        :row-class-name="rowClassName"
         :key="tableKey"
         v-loading="listLoading"
         :data="searchList"
@@ -18,11 +19,7 @@
         highlight-current-row
         style="width: 100%;">
         <!--自增id-->
-        <el-table-column label="ID" prop="id" align="center" min-width="2px">
-          <template slot-scope="{row}">
-            <span>{{ row.id }}</span>
-          </template>
-        </el-table-column>
+        <el-table-column label="序号" align="center" prop="xh" min-width="3px"></el-table-column>
         <!--创建时间-->
         <el-table-column label="投递时间" prop="createdTime" align="center" min-width="8px" :show-overflow-tooltip="true">
           <template slot-scope="{row}">
@@ -31,7 +28,7 @@
           </template>
         </el-table-column>
         <!--岗位名称-->
-        <el-table-column label="岗位名称" prop="positionName" align="center" :show-overflow-tooltip="true" min-width="8px">
+        <el-table-column label="招聘岗位名称" prop="positionName" align="center" :show-overflow-tooltip="true" min-width="8px">
           <template slot-scope="{row}">
             <span>{{ row.positionName }}</span>
           </template>
@@ -154,6 +151,9 @@ export default {
     this.getPostedPosition()
   },
   methods: {
+    rowClassName({ row, rowIndex }) {
+      row.xh = rowIndex + 1;
+    },
     // 过滤显示处理函数
     handleFilter(type) {
       if (type === '岗位名称') {

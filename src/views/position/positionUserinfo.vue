@@ -10,7 +10,7 @@
     <div class="userinfo-main">
       <div class="basic">
         <div class="avatar">
-          <el-avatar shape="square" :size="105" :src="avatar"></el-avatar>
+          <el-avatar shape="square" :size="100" :src="avatar" fit="fill" style="height: 100px;width: 100%;!important;"></el-avatar>
         </div>
         <div class="username">姓名：{{ jobseekerUsername }}</div>
         <div class="phone">手机号：{{ phone }}</div>
@@ -23,7 +23,7 @@
       </div>
       <!--岗位收藏列表-->
       <div class="collected">
-        <UserinfoCard :statusTitle="positionStatus" :statusflag="2" :total="collectedTotal" :getPostedPosition="getPost2PositionListByUid" :showList="collectedList"></UserinfoCard>
+        <UserinfoCard :statusTitle="positionStatus" :statusflag="2" :total="collectedTotal" :getPostedPosition="getPost2PositionListByUid" :showList="collectedList" @HandleCollect="HandleCollect"></UserinfoCard>
       </div>
       <!--岗位投递列表-->
       <div class="posted">
@@ -44,13 +44,18 @@
           </el-select>
         </el-form-item>
         <el-form-item label="民族" class="postInfo-container-item" prop="nation">
-          <el-select :loading="select_loading" v-model="registerForm.nation" :remote-method="getnationList" filterable default-first-option remote placeholder="请输入民族">
+          <el-select :loading="select_loading" v-model="registerForm.nation" :remote-method="getnationList" filterable clearable default-first-option remote placeholder="请输入民族">
             <el-option v-for="(item,index) in nationListOptions" :key="item+index" :label="item" :value="item" />
           </el-select>
         </el-form-item>
         <el-form-item prop="degree" label="学历">
-          <el-select v-model="registerForm.degree" placeholder="请学历" width="20px" clearable>
+          <el-select v-model="registerForm.degree" placeholder="请选择学历" width="20px" clearable>
             <el-option v-for="(item,index) in degreeOptions" :key="item+index" :label="item" :value="item"></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="毕业学校" class="postInfo-container-item" prop="school">
+          <el-select :loading="select_school_loading" v-model="registerForm.school" :remote-method="getSchoolList" filterable clearable default-first-option remote placeholder="输入最高学历毕业学校">
+            <el-option v-for="(item,index) in schoolOptions" :key="item+index" :label="item" :value="item" />
           </el-select>
         </el-form-item>
         <el-form-item prop="birthday" label="出生日期">
@@ -62,8 +67,10 @@
             placeholder="选择出生日期">
           </el-date-picker>
         </el-form-item>
-        <el-form-item prop="address" label="所在城市">
-          <el-input ref="address" v-model="registerForm.address" placeholder="所在城市" name="address" type="text" tabindex="1" auto-complete="on" clearable/>
+        <el-form-item label="所在城市" class="postInfo-container-item" prop="address">
+          <el-select v-model="registerForm.address" :remote-method="getcitiesList" filterable clearable default-first-option remote placeholder="请输入所在城市">
+            <el-option v-for="(item,index) in citiesListOptions" :key="item+index" :label="item" :value="item" />
+          </el-select>
         </el-form-item>
         <el-form-item prop="professional" label="专业名称">
           <el-input ref="professional" v-model="registerForm.professional" placeholder="专业名称" name="professional" type="text" tabindex="1" auto-complete="on" clearable/>
@@ -136,7 +143,7 @@
 </template>
 
 <script>
-import { getPost2PositionListByUid, cancelPostedByPid, confirmStauts, UserinfoDetail, updateUserinfo } from '@/api/recruit/position'
+import { getPost2PositionListByUid, cancelPostedByPid, confirmStauts, UserinfoDetail, updateUserinfo, handleCollect } from '@/api/recruit/position'
 import UserinfoCard from './components/UserinfoCard'
 export default {
   name: 'Userinfo',
@@ -173,6 +180,7 @@ export default {
         age: '',
         birthday: '',
         degree: '',
+        school: '',
         nation: '',
         address: '',
         professional: '',
@@ -186,6 +194,7 @@ export default {
         birthday: [{ required: true, message: '请选择出生日期', trigger: 'blur' }],
         nation: [{ required: true, message: '请选择民族', trigger: 'blur' }],
         degree: [{ required: true, message: '请选择学历', trigger: 'blur' }],
+        school: [{ required: true, message: '请选择学校', trigger: 'blur' }],
         address: [{ required: true, message: '请输入所在城市', trigger: 'blur' }],
         professional: [{ required: true, message: '请输入专业', trigger: 'blur' }],
         undergraduateTime: [{ required: true, message: '请选择毕业时间', trigger: 'blur' }],
@@ -194,6 +203,9 @@ export default {
       },
       select_loading: false,
       nationListOptions: [],
+      schoolOptions: [],
+      select_school_loading: false,
+      citiesListOptions: [],
       query: { id: undefined },
       fileList: [],
       showdialogVisible: false,
@@ -242,6 +254,15 @@ export default {
         this.postedTotal = postedTotal
         this.collectedTotal = collectedTotal
         this.collectedList = collectedPositions
+      })
+    },
+    // 取消收藏或确定收藏岗位
+    HandleCollect(data) {
+      const temp = Object.assign({}, data, { jobSeekerId: this.jobseekerId })
+      handleCollect(temp).then(res => {
+        const { msg } = res
+        this.$message.success(msg)
+        this.getPost2PositionListByUid()
       })
     },
     // 取消投递
@@ -329,11 +350,34 @@ export default {
     },
     // 获取民族列表
     getnationList(query) {
-      import ('@/utils/nation').then(res => {
+      this.nationListOptions = []
+      import('@/utils/nation').then(res => {
         const { data } = res.default
         data.forEach(e => {
           if((e.name.indexOf(query)!==-1)){
             this.nationListOptions.push(e.name)
+          }
+        })
+      })
+    },
+    // 获取高校列表
+    getSchoolList(query) {
+      this.schoolOptions = []
+      import('@/utils/school').then(res => {
+        res.default.forEach(e => {
+          if(e.indexOf(query)!==-1){
+            this.schoolOptions.push(e)
+          }
+        })
+      })
+    },
+    // 获取城市列表
+    getcitiesList(query) {
+      this.citiesListOptions = []
+      import('@/utils/cities').then(res => {
+        res.default.forEach(e => {
+          if(e.indexOf(query)!==-1){
+            this.citiesListOptions.push(e)
           }
         })
       })
@@ -393,6 +437,7 @@ export default {
   }
 }
 </script>
+
 
 <style lang="scss" scoped>
   .userinfo-container{

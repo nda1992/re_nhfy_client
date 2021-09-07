@@ -105,7 +105,7 @@ export default {
         this.$message.error('你还没有登录,请先登录')
         return
       }
-      if(this.doneUserinfo){
+      if(!this.doneUserinfo){
         this.$message.error('你的个人信息还未完善，请先完善个人信息')
         return
       }
