@@ -36,7 +36,9 @@
         <!--求职者姓名-->
         <el-table-column label="姓名" prop="username" align="center" :show-overflow-tooltip="true" min-width="5px">
           <template slot-scope="{row}">
-            <span>{{ row.username }}</span>
+            <el-tooltip class="item" effect="dark" content="点击发送消息" placement="bottom">
+              <span @click="openMessageBox(row)" style="cursor: pointer;">{{ row.username }}</span>
+            </el-tooltip>
           </template>
         </el-table-column>
         <!--毕业专业-->
@@ -110,12 +112,38 @@
       </el-table>
       <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getPostedPosition()" />
     </div>
+    <!--消息的dialog-->
+    <el-dialog title="消息发送对话框" :visible.sync="showMsgBox">
+      <el-form ref="messageForm" :model="messageForm" label-position="left" label-width="20px" style="width: 700px;height: 120px" >
+        <el-form-item prop="content">
+          <el-input
+            width="120"
+            :rows="5"
+            ref="username"
+            v-model="messageForm.content"
+            placeholder="请输入消息..."
+            type="textarea"
+            @keyup.enter.native="sendMessage"/>
+        </el-form-item>
+      </el-form>
+      <el-popover placement="bottom" width="500" height="100%" trigger="click" v-model="emojiShow" >
+        <el-button slot="reference" style="transform: translateX(640px)">😀</el-button>
+        <div class="browBox">
+          <ul><li v-for="(item, index) in faceList" :key="index" @click="getBrow(index)">{{ item }}</li></ul>
+        </div>
+      </el-popover>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="showMsgBox = false">取消</el-button>
+        <el-button type="primary" @click="sendMessage">发送</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import Pagination from '@/components/Pagination'
 import { getPost2PositionListByUid, setPositionStatus, deletePost2Position } from '@/api/recruit/position'
+import { sendMessage } from '@/api/recruit/recruit'
 export default {
   name: 'postlist',
   components: { Pagination },
@@ -145,10 +173,29 @@ export default {
       typeItems: ['岗位名称', '求职者姓名', '专业', '毕业学校'],
       list: [],
       searchList:[],
+      // 发送消息定义的变量
+      showMsgBox: false,
+      // 要发送目标用户的id
+      uid: '',
+      messageForm: {
+        content: ''
+      },
+      //表情框是否展示
+      emojiShow: false,
+      //表情列表
+      faceList: [],
+      //表情文本
+      getBrowString: ''
+    }
+  },
+  computed: {
+    userCode() {
+      return localStorage.getItem('userCode')
     }
   },
   mounted() {
     this.getPostedPosition()
+    this.loadEmojis()
   },
   methods: {
     rowClassName({ row, rowIndex }) {
@@ -211,6 +258,40 @@ export default {
     gotoResume(url) {
       this.$router.push({ name: 'Download', params: { url: url } })
       // console.log(url)
+    },
+    // 获取表情列表
+    loadEmojis() {
+      import('@/utils/emojis.js').then(res => {
+        this.faceList = res.default
+      })
+    },
+    // 打开发送消息的dialog
+    openMessageBox(row) {
+      // 用户id
+      this.uid = row.jobseekerId
+      this.showMsgBox = true
+      this.messageForm.content = ''
+      this.$nextTick(() => {
+        this.$refs['messageForm'].clearValidate()
+      })
+    },
+    getBrow(index) {
+      for (let i in this.faceList) {
+        if (parseInt(index) === parseInt(i)) {
+          this.getBrowString = this.faceList[index];
+          this.messageForm.content += this.getBrowString;
+        }
+      }
+      this.emojiShow = false;
+    },
+    // 发送消息
+    sendMessage() {
+      const temp = Object.assign({}, { receive_id: this.uid, send_id: this.userCode, content: this.messageForm.content })
+      sendMessage(temp).then(res => {
+        const { msg }  = res
+        this.$message.success(msg)
+        this.showMsgBox = false
+      })
     }
   }
 }
@@ -232,8 +313,32 @@ export default {
       margin-top: 15px;
       .el-table{
         font-size: 12px;
-
       }
     }
   }
+  .el-popover{
+    .browBox {
+      width: 100%;
+      height: 200px;
+      background: #e6e6e6;
+      /*position: absolute;*/
+      z-index: 100;
+      /*bottom: 0;*/
+      right: 0;
+      overflow: scroll;
+      ul {
+        display: flex;
+        flex-wrap: wrap;
+        padding: 10px;
+        li {
+          cursor: pointer;
+          width: 10%;
+          font-size: 26px;
+          list-style: none;
+          text-align: center;
+        }
+      }
+    }
+  }
+
 </style>

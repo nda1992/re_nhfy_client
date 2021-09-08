@@ -12,8 +12,8 @@
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item icon="el-icon-s-home" @click.native="home">首页</el-dropdown-item>
           <el-dropdown-item icon="el-icon-s-custom" @click.native="Userinfo">个人主页</el-dropdown-item>
-          <el-dropdown-item icon="el-icon-message-solid" @click.native="advice">消息
-            <el-badge class="mark" :value="12" />
+          <el-dropdown-item icon="el-icon-message-solid" @click.native="notice">消息
+            <el-badge class="mark" :value="msgNum" :hidden="msgNum===0"/>
           </el-dropdown-item>
           <el-dropdown-item icon="el-icon-error" @click.native="logout">退出系统</el-dropdown-item>
         </el-dropdown-menu>
@@ -38,6 +38,13 @@ export default {
       default: ()=> {
         return sessionStorage.getItem('jobseekerUsername')
       }
+    },
+    // 收到的消息数量
+    msgNum: {
+      type: Number,
+      default: () => {
+        return 0
+      }
     }
   },
 
@@ -48,8 +55,8 @@ export default {
     HandleLogin() {
       this.$emit('HandleLogin')
     },
-    home() {
-      this.$emit('home')
+    notice() {
+      this.$emit('notice')
     },
     Userinfo() {
       this.$emit('Userinfo')

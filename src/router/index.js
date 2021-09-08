@@ -74,9 +74,9 @@ export const constantRoutes = [
         hidden: true
       },
       {
-        path: 'positionRegister',
-        name: 'PositionRegister',
-        component: () => import('@/views/position/positionRegister'),
+        path: 'positionNoticeList',
+        name: 'PositionNoticeList',
+        component: () => import('@/views/position/positionNoticeList'),
         hidden: true
       },
       {

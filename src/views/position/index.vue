@@ -3,7 +3,7 @@
   <div class="app-container">
     <div><el-backtop :bottom="100"></el-backtop></div>
     <!--顶部-->
-    <Header @HandleRegister="HandleRegister" @HandleLogin="HandleLogin"  :username="username" @home="home" :isLogin="isLogin" @Userinfo="Userinfo" @logout="logout"/>
+    <Header @HandleRegister="HandleRegister" @HandleLogin="HandleLogin" :username="username" :msgNum="msgNum"  @notice="notice" :isLogin="isLogin" @Userinfo="Userinfo" @logout="logout"/>
     <!--内容显示-->
     <div>
       <transition name="fade-transform" mode="out-in">
@@ -73,6 +73,7 @@
 import Header from './components/Header'
 import Footer from './components/Footer'
 import { positionLogin, positionRegister, getPositionList, updatePasswd } from '@/api/recruit/position'
+import { getMsgNum } from '@/api/recruit/recruit'
 export default {
   components: {
     Header,
@@ -176,7 +177,11 @@ export default {
         phone: [{ required: true, message: '请输入手机号', trigger: 'blur' }, { min: 11, max: 11, message: '手机号长度为11位', trigger: 'blur' }],
       },
       // 后端返回的用户信息
-      userinfo: {}
+      userinfo: {},
+      // 用户接收到消息条数
+      msgNum: 0,
+      // 消息内容
+      MessageList: []
     }
   },
   computed: {
@@ -185,7 +190,13 @@ export default {
     },
     username() {
       return sessionStorage.getItem('jobseekerUsername')
+    },
+    jobseekerId() {
+      return sessionStorage.getItem('jobseekerId')
     }
+  },
+  mounted() {
+    this.getMsgNum()
   },
   methods: {
     resetLogintemp() {
@@ -264,8 +275,10 @@ export default {
         }
       })
     },
-    home() {
-      this.$router.push( { path: '/position/list' } )
+    // 跳转到消息列表页面
+    notice() {
+      this.$router.push( { path: '/position/positionNoticeList', params: { receive_id: this.jobseekerId } })
+      this.msgNum = 0
     },
     // 用户中心
     Userinfo() {
@@ -282,6 +295,15 @@ export default {
       })
       this.$router.push({ path: '/position/list' })
       // window.location.reload()
+    },
+    // 获取用户接收到的消息
+    getMsgNum() {
+      const temp = Object.assign({}, this.listQuery, { receive_id: this.jobseekerId })
+      getMsgNum(temp).then(res => {
+        const { msgList, total, msg } = res
+        this.msgNum = total
+        this.MessageList = msgList
+      })
     },
     // 用户密码找回
     resetPasswdForm() {
