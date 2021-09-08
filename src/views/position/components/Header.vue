@@ -58,6 +58,9 @@ export default {
     notice() {
       this.$emit('notice')
     },
+    home() {
+      this.$emit('home')
+    },
     Userinfo() {
       this.$emit('Userinfo')
     },

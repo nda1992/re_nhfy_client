@@ -3,7 +3,7 @@
   <div class="app-container">
     <div><el-backtop :bottom="100"></el-backtop></div>
     <!--顶部-->
-    <Header @HandleRegister="HandleRegister" @HandleLogin="HandleLogin" :username="username" :msgNum="msgNum"  @notice="notice" :isLogin="isLogin" @Userinfo="Userinfo" @logout="logout"/>
+    <Header @HandleRegister="HandleRegister" @home="home" @HandleLogin="HandleLogin" :username="username" :msgNum="msgNum"  @notice="notice" :isLogin="isLogin" @Userinfo="Userinfo" @logout="logout"/>
     <!--内容显示-->
     <div>
       <transition name="fade-transform" mode="out-in">
@@ -277,8 +277,12 @@ export default {
     },
     // 跳转到消息列表页面
     notice() {
-      this.$router.push( { path: '/position/positionNoticeList', params: { receive_id: this.jobseekerId } })
+      this.$router.push({ path: '/position/positionNoticeList', params: { receive_id: this.jobseekerId } })
       this.msgNum = 0
+    },
+    // 主页
+    home() {
+      this.$router.push({ path: '/position/list' })
     },
     // 用户中心
     Userinfo() {
@@ -303,6 +307,7 @@ export default {
         const { msgList, total, msg } = res
         this.msgNum = total
         this.MessageList = msgList
+        console.log(this.MessageList)
       })
     },
     // 用户密码找回
