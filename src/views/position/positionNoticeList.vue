@@ -15,13 +15,19 @@
               :ReceiveMessageList="ReceiveMessageList"
               :total="Receivetotal"
               :listQuery="listQuery"
+              :showMsgBox="showMsgBox"
               @getAllReceiveMegList="getAllReceiveMsgList"
               @receiveRemoveMsg="receiveRemoveMsg"
-              :showMsgBox="showMsgBox"
               @HandlebulkSendMessageBox="HandlebulkSendMessageBox"/>
           </el-tab-pane>
           <el-tab-pane label="已发送的消息列表" name="account">
-            <account @getAllSendMsg="getAllSendMsg" :SendMessageList="SendMessageList" :total="sendTotal" :listQuery="listQuery" :avatar="avatar"/>
+            <account
+              @getAllSendMsg="getAllSendMsg"
+              :content="content"
+              :SendMessageList="SendMessageList"
+              :total="sendTotal"
+              :listQuery="listQuery"
+              :avatar="avatar"/>
           </el-tab-pane>
         </el-tabs>
       </el-card>
@@ -85,7 +91,9 @@ export default {
       // 表情文本
       getBrowString: '',
       // 回复的给谁？管理员的id
-      mid: ''
+      mid: '',
+      // 显示求职者回复的是哪一条消息
+      content: ''
     }
   },
   computed: {
@@ -124,7 +132,6 @@ export default {
     getAllSendMsg() {
       const temp = Object.assign({}, { send_id: this.jobseekerId }, this.listQuery)
       getSendMsg(temp).then(res => {
-        console.log(res)
         const { msgList, total } = res
         this.sendTotal = total
         this.SendMessageList = msgList
@@ -165,10 +172,11 @@ export default {
         this.faceList = res.default
       })
     },
-    // 打开dialog批量发送消息
+    // 打开dialog发送消息
     HandlebulkSendMessageBox(showMsgBox) {
       this.showMsgBox = showMsgBox.showMsgBox
       this.mid = showMsgBox.userCode
+      this.content = showMsgBox.content
       this.messageForm.content = ''
       this.$nextTick(() => {
         this.$refs['messageForm'].clearValidate()
@@ -184,9 +192,9 @@ export default {
       this.emojiShow = false
     },
     sendMessage() {
-      const temp = { receive_id: this.mid, send_id: this.jobseekerId, content: this.messageForm.content, send_date: new Date(), is_read: 0, remove_receive_id: 0, remove_send_id: 0 }
+      const temp = { receive_id: this.mid, send_id: this.jobseekerId, content: this.messageForm.content, replycontent:this.content,send_date: new Date(), is_read: 0, remove_receive_id: 0, remove_send_id: 0 }
       replyMessage(temp).then(res => {
-        const { msg }  = res
+        const { msg, content }  = res
         this.$message.success(msg)
         this.showMsgBox = false
         this.getAllSendMsg()

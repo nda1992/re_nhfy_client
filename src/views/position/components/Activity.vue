@@ -10,7 +10,7 @@
         <p style="color: #1f2d3d">{{ msg.content }}</p>
         <ul class="list-inline">
           <li>
-            <span class="link-black text-sm" @click="HandlebulkSendMessageBox(!showMsgBox, msg.send_id)">回复</span>
+            <span class="link-black text-sm" @click="HandlebulkSendMessageBox(!showMsgBox, msg.send_id,msg.content)">回复</span>
             <el-popconfirm title="确定删除该条消息吗?" @onConfirm="receiveRemoveMsg(msg.id)">
               <el-button slot="reference" type="text">
                 <span class="link-black text-sm">删除</span>
@@ -74,8 +74,8 @@ export default {
     receiveRemoveMsg(id) {
       this.$emit('receiveRemoveMsg', id)
     },
-    HandlebulkSendMessageBox(showMsgBox,send_id) {
-      this.$emit('HandlebulkSendMessageBox',{ showMsgBox: showMsgBox, userCode: send_id })
+    HandlebulkSendMessageBox(showMsgBox,send_id,content) {
+      this.$emit('HandlebulkSendMessageBox',{ showMsgBox: showMsgBox, userCode: send_id, content: content })
     }
   }
 }

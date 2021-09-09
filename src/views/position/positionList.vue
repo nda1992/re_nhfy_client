@@ -46,7 +46,6 @@ export default {
         page: 1,
         limit: 10,
         jobseekerId: sessionStorage.getItem('jobseekerId')
-        // role: localStorage.getItem('role')
       },
       total: 0,
       positionList: [],

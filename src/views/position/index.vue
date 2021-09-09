@@ -297,7 +297,8 @@ export default {
         duration: 2000
       })
       this.$router.push({ path: '/position/list' })
-      // window.location.reload()
+
+      window.location.reload()
     },
     // 获取用户接收到的消息
     getReceiveMsg() {

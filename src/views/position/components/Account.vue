@@ -5,9 +5,16 @@
         <div class="user-block">
           <img class="img-circle" :src="avatar">
           <span class="username text-muted">你回复的人是 {{ msg.receive_id }} </span>
-          <span class="description">发送时间 {{ msg.format_send_date }}</span>
+          <span class="description">回复时间 {{ msg.format_send_date }}</span>
         </div>
-        <p style="color: #1f2d3d">{{ msg.content }}</p>
+        <el-popover
+          placement="top-start"
+          title="你回复的消息是"
+          width="200"
+          trigger="hover"
+          :content="msg.replycontent">
+          <p style="color: #1f2d3d" slot="reference">{{ msg.content }}</p>
+        </el-popover>
         <ul class="list-inline">
           <li>
             <el-popconfirm title="确定删除该条消息吗?">
@@ -53,6 +60,12 @@ export default {
       type: Number,
       default: () => {
         return 0
+      }
+    },
+    content: {
+      type: String,
+      default: () => {
+        return ''
       }
     }
   },
