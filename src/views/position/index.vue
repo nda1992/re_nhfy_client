@@ -73,7 +73,7 @@
 import Header from './components/Header'
 import Footer from './components/Footer'
 import { positionLogin, positionRegister, getPositionList, updatePasswd } from '@/api/recruit/position'
-import { getMsgNum } from '@/api/recruit/recruit'
+import { getReceiveMsg } from '@/api/recruit/position'
 export default {
   components: {
     Header,
@@ -87,7 +87,7 @@ export default {
         return callback(new Error('邮箱不能为空'))
       }
       setTimeout(() => {
-        if (mailReg.test(value)||value.length === 11) {
+        if (mailReg.test(value) || value.length === 11) {
           callback()
         } else {
           callback(new Error('请输入正确的邮箱或手机号格式'))
@@ -179,9 +179,7 @@ export default {
       // 后端返回的用户信息
       userinfo: {},
       // 用户接收到消息条数
-      msgNum: 0,
-      // 消息内容
-      MessageList: []
+      msgNum: 0
     }
   },
   computed: {
@@ -196,7 +194,7 @@ export default {
     }
   },
   mounted() {
-    this.getMsgNum()
+    this.getReceiveMsg()
   },
   methods: {
     resetLogintemp() {
@@ -260,7 +258,7 @@ export default {
     Login() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          this.$store.dispatch('position/positionLogin', this.Logintemp).then( res => {
+          this.$store.dispatch('position/positionLogin', this.Logintemp).then(res => {
             const { msg } = res
             this.dialogFormVisible = false
             this.isLogin = !this.isLogin
@@ -277,7 +275,8 @@ export default {
     },
     // 跳转到消息列表页面
     notice() {
-      this.$router.push({ path: '/position/positionNoticeList', params: { receive_id: this.jobseekerId } })
+      // 如果要使用params传递参数，必须使用name接收参数
+      this.$router.push({ path: '/position/positionNoticeList' })
       this.msgNum = 0
     },
     // 主页
@@ -301,13 +300,11 @@ export default {
       // window.location.reload()
     },
     // 获取用户接收到的消息
-    getMsgNum() {
+    getReceiveMsg() {
       const temp = Object.assign({}, this.listQuery, { receive_id: this.jobseekerId })
-      getMsgNum(temp).then(res => {
-        const { msgList, total, msg } = res
-        this.msgNum = total
-        this.MessageList = msgList
-        console.log(this.MessageList)
+      getReceiveMsg(temp).then(res => {
+        const { no_read_num } = res
+        this.msgNum = no_read_num
       })
     },
     // 用户密码找回
@@ -327,7 +324,7 @@ export default {
     },
     updatePasswd() {
       this.$refs['PasswdForm'].validate((valid) => {
-        if(valid) {
+        if (valid) {
           this.$confirm('是否更新密码?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',

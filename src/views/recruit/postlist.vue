@@ -7,9 +7,12 @@
       <el-select v-model="searchType" placeholder="请选择搜索类型" style="width: 150px" class="filter-item" type="primary">
         <el-option v-for="item in typeItems" :key="item" :label="item" :value="item" />
       </el-select>
+      <el-button type="success" @click="HandlebulkSendMessageBox">群发通知</el-button>
+      <span style="color: #ff6666;font-size: 12px;">(请根据左边的多选框选择)</span>
     </div>
     <div class="table-container">
       <el-table
+        @selection-change="handleSelectionChange"
         :row-class-name="rowClassName"
         :key="tableKey"
         v-loading="listLoading"
@@ -17,7 +20,9 @@
         border
         fit
         highlight-current-row
+        ref="currentData"
         style="width: 100%;">
+        <el-table-column type="selection" width="55"></el-table-column>
         <!--自增id-->
         <el-table-column label="序号" align="center" prop="xh" min-width="3px"></el-table-column>
         <!--创建时间-->
@@ -36,9 +41,7 @@
         <!--求职者姓名-->
         <el-table-column label="姓名" prop="username" align="center" :show-overflow-tooltip="true" min-width="5px">
           <template slot-scope="{row}">
-            <el-tooltip class="item" effect="dark" content="点击发送消息" placement="bottom">
-              <span @click="openMessageBox(row)" style="cursor: pointer;">{{ row.username }}</span>
-            </el-tooltip>
+            <span style="cursor: pointer;">{{ row.username }}</span>
           </template>
         </el-table-column>
         <!--毕业专业-->
@@ -143,7 +146,7 @@
 <script>
 import Pagination from '@/components/Pagination'
 import { getPost2PositionListByUid, setPositionStatus, deletePost2Position } from '@/api/recruit/position'
-import { sendMessage } from '@/api/recruit/recruit'
+import { sendMessage } from '@/api/recruit/position'
 export default {
   name: 'postlist',
   components: { Pagination },
@@ -156,7 +159,7 @@ export default {
         '已确认': 'primary'
       }
       return statusMap[status]
-    },
+    }
   },
   data() {
     return {
@@ -172,7 +175,7 @@ export default {
       searchType: '岗位名称',
       typeItems: ['岗位名称', '求职者姓名', '专业', '毕业学校'],
       list: [],
-      searchList:[],
+      searchList: [],
       // 发送消息定义的变量
       showMsgBox: false,
       // 要发送目标用户的id
@@ -180,11 +183,15 @@ export default {
       messageForm: {
         content: ''
       },
-      //表情框是否展示
+      // 临时保存多选结果
+      tempSelect: [],
+      // 批量要发送消息的用户
+      bulkUid: [],
+      // 表情框是否展示
       emojiShow: false,
-      //表情列表
+      // 表情列表
       faceList: [],
-      //表情文本
+      // 表情文本
       getBrowString: ''
     }
   },
@@ -199,7 +206,7 @@ export default {
   },
   methods: {
     rowClassName({ row, rowIndex }) {
-      row.xh = rowIndex + 1;
+      row.xh = rowIndex + 1
     },
     // 过滤显示处理函数
     handleFilter(type) {
@@ -230,7 +237,7 @@ export default {
       setPositionStatus(row).then(res => {
         const { msg } = res
         this.$notify({
-          title:'Success',
+          title: 'Success',
           message: msg,
           type: 'success'
         })
@@ -256,7 +263,7 @@ export default {
     },
     // 查看用户的用户简历
     gotoResume(url) {
-      this.$router.push({ name: 'Download', params: { url: url } })
+      this.$router.push({ name: 'Download', params: { url: url }})
       // console.log(url)
     },
     // 获取表情列表
@@ -265,10 +272,22 @@ export default {
         this.faceList = res.default
       })
     },
-    // 打开发送消息的dialog
-    openMessageBox(row) {
-      // 用户id
-      this.uid = row.jobseekerId
+    // // 打开发送消息的dialog
+    // openMessageBox(row) {
+    //   // 用户id
+    //   this.uid = row.jobseekerId
+    //   this.showMsgBox = true
+    //   this.messageForm.content = ''
+    //   this.$nextTick(() => {
+    //     this.$refs['messageForm'].clearValidate()
+    //   })
+    // },
+    // 多选按钮触发
+    handleSelectionChange(val) {
+      this.tempSelect = val
+    },
+    // 打开dialog批量发送消息
+    HandlebulkSendMessageBox() {
       this.showMsgBox = true
       this.messageForm.content = ''
       this.$nextTick(() => {
@@ -278,17 +297,23 @@ export default {
     getBrow(index) {
       for (let i in this.faceList) {
         if (parseInt(index) === parseInt(i)) {
-          this.getBrowString = this.faceList[index];
-          this.messageForm.content += this.getBrowString;
+          this.getBrowString = this.faceList[index]
+          this.messageForm.content += this.getBrowString
         }
       }
-      this.emojiShow = false;
+      this.emojiShow = false
     },
-    // 发送消息
+    // 执行批量发送消息
     sendMessage() {
-      const temp = Object.assign({}, { receive_id: this.uid, send_id: this.userCode, content: this.messageForm.content })
+      const send_date = new Date()
+      this.bulkUid = this.tempSelect.map(e => e.jobseekerId)
+      const msgList = this.bulkUid.map(e => {
+        return { receive_id: e, send_id: this.userCode, content: this.messageForm.content, send_date: send_date, is_read: 0 }
+      })
+      // const msgList = [{ receive_id: this.uid, send_id: this.userCode, content: this.messageForm.content, send_date: send_date, is_read: 0 }]
+      const temp = Object.assign({}, { msgList: msgList })
       sendMessage(temp).then(res => {
-        const { msg }  = res
+        const { msg } = res
         this.$message.success(msg)
         this.showMsgBox = false
       })
@@ -305,9 +330,10 @@ export default {
 <style lang="scss" scoped>
   .app-container{
     .title{
-      width: 400px;
+      width: 650px;
       display: flex;
       justify-content: space-between;
+      align-items: center;
     }
     .table-container{
       margin-top: 15px;

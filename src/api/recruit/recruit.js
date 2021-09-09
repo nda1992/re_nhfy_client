@@ -52,21 +52,3 @@ export function recoverpositionStatus(data) {
     data
   })
 }
-
-// 给求职者发送消息
-export function sendMessage(data) {
-  return request({
-    url: '/recruit/sendMessage',
-    method: 'post',
-    data
-  })
-}
-
-// 求职者接收消息
-export function getMsgNum(data) {
-  return request({
-    url: '/position/getMsgNum',
-    method: 'post',
-    data
-  })
-}

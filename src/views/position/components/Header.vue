@@ -35,7 +35,7 @@ export default {
     },
     username: {
       type: String,
-      default: ()=> {
+      default: () => {
         return sessionStorage.getItem('jobseekerUsername')
       }
     },

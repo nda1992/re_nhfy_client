@@ -1,167 +1,111 @@
 <template>
-  <div class="user-activity">
-    <div class="post">
-      <div class="user-block">
-        <img class="img-circle" :src="'https://wpimg.wallstcn.com/57ed425a-c71e-4201-9428-68760c0537c4.jpg'+avatarPrefix">
-        <span class="username text-muted">Iron Man</span>
-        <span class="description">Shared publicly - 7:30 PM today</span>
-      </div>
-      <p>
-        Lorem ipsum represents a long-held tradition for designers,
-        typographers and the like. Some people hate it and argue for
-        its demise, but others ignore the hate as they create awesome
-        tools to help create filler text for everyone from bacon lovers
-        to Charlie Sheen fans.
-      </p>
-      <ul class="list-inline">
-        <li>
-          <span class="link-black text-sm">
-            <i class="el-icon-share" />
-            Share
-          </span>
-        </li>
-        <li>
-          <span class="link-black text-sm">
-            <svg-icon icon-class="like" />
-            Like
-          </span>
-        </li>
-      </ul>
+  <div class="app-container">
+    <div class="title">
+      <span class="show-title">消息列表</span>
+      <el-badge :value="3" class="item">
+        <span class="show-tips" @click="removeAllmsg">清空所有消息</span>
+      </el-badge>
     </div>
-    <div class="post">
-      <div class="user-block">
-        <img class="img-circle" :src="'https://wpimg.wallstcn.com/9e2a5d0a-bd5b-457f-ac8e-86554616c87b.jpg'+avatarPrefix">
-        <span class="username text-muted">Captain American</span>
-        <span class="description">Sent you a message - yesterday</span>
-      </div>
-      <p>
-        Lorem ipsum represents a long-held tradition for designers,
-        typographers and the like. Some people hate it and argue for
-        its demise, but others ignore the hate as they create awesome
-        tools to help create filler text for everyone from bacon lovers
-        to Charlie Sheen fans.
-      </p>
-      <ul class="list-inline">
-        <li>
-          <span class="link-black text-sm">
-            <i class="el-icon-share" />
-            Share
-          </span>
-        </li>
-        <li>
-          <span class="link-black text-sm">
-            <svg-icon icon-class="like" />
-            Like
-          </span>
-        </li>
-      </ul>
+    <div>
+      <el-card>
+        <el-tabs v-model="activeTab">
+          <el-tab-pane label="已收到的消息列表" name="activity">
+            <activity :ReceiveMessageList="ReceiveMessageList" :total="Receivetotal" :listQuery="listQuery" @getAllReceiveMegList="getAllReceiveMsgList"/>
+          </el-tab-pane>
+          <el-tab-pane label="已发送的消息列表" name="account">
+            <account @getAllSendMsg="getAllSendMsg" :SendMessageList="SendMessageList" :total="sendTotal" :listQuery="listQuery"/>
+          </el-tab-pane>
+        </el-tabs>
+      </el-card>
     </div>
   </div>
 </template>
 
 <script>
-  const avatarPrefix = '?imageView2/1/w/80/h/80'
-  const carouselPrefix = '?imageView2/2/h/440'
-
-  export default {
-    data() {
-      return {
-        carouselImages: [
-          'https://wpimg.wallstcn.com/9679ffb0-9e0b-4451-9916-e21992218054.jpg',
-          'https://wpimg.wallstcn.com/bcce3734-0837-4b9f-9261-351ef384f75a.jpg',
-          'https://wpimg.wallstcn.com/d1d7b033-d75e-4cd6-ae39-fcd5f1c0a7c5.jpg',
-          'https://wpimg.wallstcn.com/50530061-851b-4ca5-9dc5-2fead928a939.jpg'
-        ],
-        avatarPrefix,
-        carouselPrefix
-      }
+import { getReceiveMsg, getSendMsg, updateIsread } from '@/api/recruit/position'
+import Activity from './components/Activity'
+import Account from './components/Account'
+export default {
+  components: { Activity, Account },
+  data() {
+    return {
+      activeTab: 'activity',
+      listQuery: {
+        page: 1,
+        limit: 10
+        // role: localStorage.getItem('role')
+      },
+      Receivetotal: 0,
+      // 已经接收到的消息列表
+      ReceiveMessageList: [],
+      sendTotal: 0,
+      // 已经发送的消息列表
+      SendMessageList: []
     }
+  },
+  computed: {
+    jobseekerId() {
+      return sessionStorage.getItem('jobseekerId')
+    }
+  },
+  created() {
+    // 发送一次请求，更新消息为已读（is_read=1）
+    this.updateIsread()
+    this.getAllReceiveMsgList()
+  },
+  methods: {
+    // 更新消息为已读
+    updateIsread() {
+      const temp = { receive_id: this.jobseekerId }
+      updateIsread(temp).then(res => {})
+    },
+    // 根据用户id查询接收到的所有消息
+    getAllReceiveMsgList() {
+      const temp = Object.assign({}, this.listQuery, { receive_id: this.jobseekerId })
+      getReceiveMsg(temp).then(res => {
+        const { msgList, total } = res
+        this.Receivetotal = total
+        this.ReceiveMessageList = msgList
+      })
+    },
+    // 根据用户id查询已经发送的所有列表
+    getAllSendMsg() {
+      const temp = Object.assign({}, { send_id: this.jobseekerId })
+      getSendMsg(temp).then(res => {
+        const { msgList, total } = res
+        this.sendTotal = total
+        this.SendMessageList = msgList
+      })
+    },
+    // 删除所有消息
+    removeAllmsg() {}
   }
+}
 </script>
 
 <style lang="scss" scoped>
-  .user-activity {
-    min-height: 100%;
-    margin-bottom: 80px;
-    padding: 0 20px;
+  .app-container{
     position: relative;
-    top: 80px;
-    .user-block {
-      .username,
-      .description {
-        display: block;
-        margin-left: 50px;
-        padding: 2px 0;
+    top: 60px;
+    padding: 0 20px;
+    margin: 0;
+    .title{
+      margin-bottom: 25px;
+      .show-title{
+        font-size: 24px;
+        font-weight: bold;
       }
-
-      .username{
-        font-size: 16px;
-        color: #000;
-      }
-
-      :after {
-        clear: both;
-      }
-
-      .img-circle {
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        float: left;
-      }
-
-      span {
-        font-weight: 500;
-        font-size: 12px;
-      }
-    }
-
-    .post {
-      font-size: 14px;
-      border-bottom: 1px solid #d2d6de;
-      margin-bottom: 15px;
-      padding-bottom: 15px;
-      color: #666;
-
-      .image {
-        width: 100%;
-        height: 100%;
-
-      }
-
-      .user-images {
-        padding-top: 20px;
-      }
-    }
-
-    .list-inline {
-      padding-left: 0;
-      margin-left: -5px;
-      list-style: none;
-      li {
-        display: inline-block;
-        padding-right: 5px;
-        padding-left: 5px;
-        font-size: 13px;
-      }
-
-      .link-black {
-
-        &:hover,
-        &:focus {
-          color: #999;
+      .item{
+        .show-tips{
+          margin-left: 50px;
+          font-size: 15px;
+          color: #97a8be;
+          cursor: pointer;
         }
       }
     }
-
-  }
-
-  .box-center {
-    margin: 0 auto;
-    display: table;
-  }
-
-  .text-muted {
-    color: #777;
+    .el-card{
+      margin-bottom: 80px;
+    }
   }
 </style>

@@ -118,10 +118,46 @@ export function deletePost2Position(data) {
   })
 }
 
-//根据文件的url查看简历
+// 根据文件的url查看简历
 export function getResumeFile(data) {
   return request({
     url: '/position/getResumeFile',
+    method: 'post',
+    data
+  })
+}
+
+// 给求职者发送消息
+export function sendMessage(data) {
+  return request({
+    url: '/position/sendMessage',
+    method: 'post',
+    data
+  })
+}
+
+// 求职者接收到的消息列表
+export function getReceiveMsg(data) {
+  return request({
+    url: '/position/getReceiveMsg',
+    method: 'post',
+    data
+  })
+}
+
+// 求职者发送的消息列表
+export function getSendMsg(data) {
+  return request({
+    url: '/position/getSendMsg',
+    method: 'post',
+    data
+  })
+}
+
+// 根据jobseekerid更新消息为已读
+export function updateIsread(data) {
+  return request({
+    url: '/position/updateIsread',
     method: 'post',
     data
   })

@@ -41,3 +41,4 @@ npm run build
 ### 目前累计的bug
 - 基于tinymce实现文件上传时，点击文件上传至服务器的按钮后，显示上传成功，但是又新打开一个选择文件的对话框；
 - "住院科室收入"中手术费和治疗费的数据显示有问题，排序也出现了bug
+- 消息映射表中的两个唯一id要确保数据类型是都是integer或string，项目中在users表的userCode是string，而在messages表中是integer，后面会修复
