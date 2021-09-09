@@ -4,14 +4,18 @@
       <div class="post" v-for="(msg,index) in ReceiveMessageList" :key="msg.id">
         <div class="user-block">
           <img class="img-circle" :src="'https://wpimg.wallstcn.com/57ed425a-c71e-4201-9428-68760c0537c4.jpg'+avatarPrefix">
-          <span class="username text-muted">管理员ID {{ msg.send_id }} </span>
+          <span class="username text-muted">发送者是 {{ msg.send_id }} </span>
           <span class="description">发送时间 {{ msg.format_send_date }}</span>
         </div>
-        <p>{{ msg.content }}</p>
+        <p style="color: #1f2d3d">{{ msg.content }}</p>
         <ul class="list-inline">
           <li>
-            <span class="link-black text-sm">回复</span>
-            <span class="link-black text-sm">删除</span>
+            <span class="link-black text-sm" @click="HandlebulkSendMessageBox(!showMsgBox, msg.send_id)">回复</span>
+            <el-popconfirm title="确定删除该条消息吗?" @onConfirm="receiveRemoveMsg(msg.id)">
+              <el-button slot="reference" type="text">
+                <span class="link-black text-sm">删除</span>
+              </el-button>
+            </el-popconfirm>
           </li>
         </ul>
       </div>
@@ -48,6 +52,12 @@ export default {
       default: () => {
         return 0
       }
+    },
+    showMsgBox: {
+      type: Boolean,
+      default: () => {
+        return false
+      }
     }
   },
   data() {
@@ -56,8 +66,16 @@ export default {
     }
   },
   methods: {
+    // 获取所有收到的消息
     getAllReceiveMsgList() {
       this.$emit('getAllReceiveMsgList')
+    },
+    // 删除某条消息
+    receiveRemoveMsg(id) {
+      this.$emit('receiveRemoveMsg', id)
+    },
+    HandlebulkSendMessageBox(showMsgBox,send_id) {
+      this.$emit('HandlebulkSendMessageBox',{ showMsgBox: showMsgBox, userCode: send_id })
     }
   }
 }
@@ -128,14 +146,18 @@ export default {
         padding-left: 5px;
         font-size: 13px;
       }
-
       .link-black {
+        color: #999;
+        font-size: 13px;
         margin-left: 5px;
         cursor: pointer;
         &:hover,
         &:focus {
-          color: #999;
+          color: #409EFF;
         }
+      }
+      .el-button{
+        padding: 0 !important;
       }
     }
     .message{

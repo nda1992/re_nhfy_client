@@ -272,22 +272,16 @@ export default {
         this.faceList = res.default
       })
     },
-    // // 打开发送消息的dialog
-    // openMessageBox(row) {
-    //   // 用户id
-    //   this.uid = row.jobseekerId
-    //   this.showMsgBox = true
-    //   this.messageForm.content = ''
-    //   this.$nextTick(() => {
-    //     this.$refs['messageForm'].clearValidate()
-    //   })
-    // },
     // 多选按钮触发
     handleSelectionChange(val) {
       this.tempSelect = val
     },
     // 打开dialog批量发送消息
     HandlebulkSendMessageBox() {
+      if (this.tempSelect.length === 0) {
+        this.$message.error('请至少选择一个求职者发送消息')
+        return
+      }
       this.showMsgBox = true
       this.messageForm.content = ''
       this.$nextTick(() => {
@@ -308,7 +302,8 @@ export default {
       const send_date = new Date()
       this.bulkUid = this.tempSelect.map(e => e.jobseekerId)
       const msgList = this.bulkUid.map(e => {
-        return { receive_id: e, send_id: this.userCode, content: this.messageForm.content, send_date: send_date, is_read: 0 }
+        // remove_receive_id和remove_send_id默认值设置为0
+        return { receive_id: e, send_id: this.userCode, content: this.messageForm.content, send_date: send_date, is_read: 0, remove_receive_id: 0, remove_send_id: 0 }
       })
       // const msgList = [{ receive_id: this.uid, send_id: this.userCode, content: this.messageForm.content, send_date: send_date, is_read: 0 }]
       const temp = Object.assign({}, { msgList: msgList })

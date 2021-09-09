@@ -162,3 +162,30 @@ export function updateIsread(data) {
     data
   })
 }
+
+// 接收者删除消息
+export function receiveRemoveMsg(data) {
+  return request({
+    url: '/position/receiveRemoveMsg',
+    method: 'post',
+    data
+  })
+}
+
+// 求职者删除所有消息
+export function removeAllReceiveMsg(data) {
+  return request({
+    url: '/position/removeAllReceiveMsg',
+    method: 'post',
+    data
+  })
+}
+
+// 求职者回复消息
+export function replyMessage(data) {
+  return request({
+    url: '/position/replyMessage',
+    method: 'post',
+    data
+  })
+}

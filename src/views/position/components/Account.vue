@@ -3,15 +3,18 @@
     <div v-if="SendMessageList.length!==0">
       <div class="post" v-for="(msg,index) in SendMessageList" :key="msg.id">
         <div class="user-block">
-          <img class="img-circle" :src="'https://wpimg.wallstcn.com/57ed425a-c71e-4201-9428-68760c0537c4.jpg'+avatarPrefix">
-          <span class="username text-muted">管理员ID {{ msg.send_id }} </span>
+          <img class="img-circle" :src="avatar">
+          <span class="username text-muted">你回复的人是 {{ msg.receive_id }} </span>
           <span class="description">发送时间 {{ msg.format_send_date }}</span>
         </div>
-        <p>{{ msg.content }}</p>
+        <p style="color: #1f2d3d">{{ msg.content }}</p>
         <ul class="list-inline">
           <li>
-            <span class="link-black text-sm">回复</span>
-            <span class="link-black text-sm">删除</span>
+            <el-popconfirm title="确定删除该条消息吗?">
+              <el-button slot="reference" type="text">
+                <span class="link-black text-sm">删除</span>
+              </el-button>
+            </el-popconfirm>
           </li>
         </ul>
       </div>
@@ -28,6 +31,12 @@
 export default {
   components: { Pagination },
   props: {
+    avatar: {
+      type: String,
+      default: () => {
+        return ''
+      }
+    },
     SendMessageList: {
       type: Array,
       default: () => {
@@ -124,11 +133,15 @@ export default {
       .link-black {
         margin-left: 5px;
         cursor: pointer;
+        color: #999;
         &:hover,
         &:focus {
-          color: #999;
+          color: #409EFF;
         }
       }
+    }
+    .el-button{
+      padding: 0 !important;
     }
   .nomessage{
     display: flex;
