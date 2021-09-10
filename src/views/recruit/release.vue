@@ -184,6 +184,9 @@
         <el-form-item label="作者工号" prop="userCode">
           <el-input v-model="temp.userCode" />
         </el-form-item>
+        <el-form-item label="联系电话" prop="contactPhone">
+          <el-input v-model="temp.contactPhone" />
+        </el-form-item>
         <el-form-item label="需求人数" prop="requireNum">
           <el-input v-model="temp.requireNum" />
         </el-form-item>
@@ -207,8 +210,8 @@
             <el-option v-for="(item,index) in englishOptions" :key="index" :label="item" :value="item" />
           </el-select>
         </el-form-item>
-        <el-form-item label="专业要求" prop="desc">
-          <el-input v-model="temp.professional" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="招聘岗位的其他描述" />
+        <el-form-item label="专业要求" prop="professional">
+          <el-input v-model="temp.professional" type="text" placeholder="请输入专业要求" />
         </el-form-item>
         <el-form-item label="岗位描述" prop="desc">
           <el-input v-model="temp.desc" :autosize="{ minRows: 2, maxRows: 4}" type="textarea" placeholder="招聘岗位的其他描述" />
@@ -285,6 +288,7 @@ export default {
         degree: '',
         english: '',
         professional: '',
+        contactPhone: '',
         Handlestatus: '',
         status: '',
         desc: ''
@@ -299,6 +303,7 @@ export default {
         age: [{ required: true, message: '请输入年龄要求', trigger: 'blur' }],
         degree: [{ required: true, message: '请选择学历要求', trigger: 'blur' }],
         english: [{ required: true, message: '请选择英语要求', trigger: 'blur' }],
+        contactPhone: [{ required: true, message: '请输入联系电话', trigger: 'blur' }],
         professional: [{ required: true, message: '请输入专业要求', trigger: 'blur' }],
         desc: [{ required: true, message: '请输入其他描述', trigger: 'blur' }]
       }

@@ -10,18 +10,20 @@
         <el-popover
           placement="top-start"
           title="你回复的消息是"
-          width="200"
+          width="400"
           trigger="hover"
           :content="msg.replycontent">
           <p style="color: #1f2d3d" slot="reference">{{ msg.content }}</p>
         </el-popover>
         <ul class="list-inline">
           <li>
-            <el-popconfirm title="确定删除该条消息吗?">
+            <el-popconfirm title="确定删除该条消息吗?" @onConfirm="removeSendMsg(msg.id)">
               <el-button slot="reference" type="text">
                 <span class="link-black text-sm">删除</span>
               </el-button>
             </el-popconfirm>
+            <span style="margin-left: 5px;color: #97a8be" v-if="msg.is_read">已读</span>
+            <span style="margin-left: 5px;color: #4455aa" v-else>未读</span>
           </li>
         </ul>
       </div>
@@ -34,7 +36,8 @@
   </div>
 </template>
 
-<script>import Pagination from '@/components/Pagination'
+<script>
+import Pagination from '@/components/Pagination'
 export default {
   components: { Pagination },
   props: {
@@ -72,6 +75,9 @@ export default {
   methods: {
     getAllSendMsg() {
       this.$emit('getAllSendMsg')
+    },
+    removeSendMsg(id) {
+      this.$emit('removeSendMsg', id)
     }
   }
 }
@@ -94,7 +100,7 @@ export default {
 
       .username{
         font-size: 16px;
-        color: #000;
+        color: #97a8be;
       }
 
       :after {

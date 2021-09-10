@@ -3,7 +3,16 @@
   <div class="app-container">
     <div><el-backtop :bottom="100"></el-backtop></div>
     <!--顶部-->
-    <Header @HandleRegister="HandleRegister" @home="home" @HandleLogin="HandleLogin" :username="username" :msgNum="msgNum"  @notice="notice" :isLogin="isLogin" @Userinfo="Userinfo" @logout="logout"/>
+    <Header
+      @HandleRegister="HandleRegister"
+      @home="home"
+      @HandleLogin="HandleLogin"
+      :username="username"
+      :msgNum="msgNum"
+      @notice="notice"
+      :isLogin="isLogin"
+      @Userinfo="Userinfo"
+      @logout="logout"/>
     <!--内容显示-->
     <div>
       <transition name="fade-transform" mode="out-in">
@@ -72,7 +81,7 @@
 <script>
 import Header from './components/Header'
 import Footer from './components/Footer'
-import { positionLogin, positionRegister, getPositionList, updatePasswd } from '@/api/recruit/position'
+import { positionRegister, updatePasswd } from '@/api/recruit/position'
 import { getReceiveMsg } from '@/api/recruit/position'
 export default {
   components: {
@@ -140,10 +149,9 @@ export default {
       listQuery: {
         page: 1,
         limit: 10
-        // role: localStorage.getItem('role')
       },
       show: true,
-      isLogin: sessionStorage.getItem('isLogin'),
+      isLogin: JSON.parse(sessionStorage.getItem('isLogin')),
       dialogFormVisible: false,
       dialogRegisterFormVisible: false,
       Logintemp: {
@@ -282,11 +290,14 @@ export default {
     // 主页
     home() {
       this.$router.push({ path: '/position/list' })
+      this.getReceiveMsg()
     },
-    // 用户中心
+    // 个人中心
     Userinfo() {
       this.$router.push({ path: '/position/positionUserinfo' })
+      this.getReceiveMsg()
     },
+    // 退出登录
     logout() {
       this.$store.dispatch('position/logout')
       this.isLogin = !this.isLogin
@@ -316,6 +327,7 @@ export default {
         checkPassword: ''
       }
     },
+    // 打开密码找回对话框
     HandleupdatePasswd() {
       this.resetPasswdForm()
       this.PasswdVisible = true
@@ -323,6 +335,7 @@ export default {
         this.$refs['PasswdForm'].clearValidate()
       })
     },
+    // 密码更新
     updatePasswd() {
       this.$refs['PasswdForm'].validate((valid) => {
         if (valid) {

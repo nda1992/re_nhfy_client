@@ -66,6 +66,18 @@
         </template>
       </el-table-column>
       <el-table-column
+        v-if="statusflag===1"
+        align="center"
+        prop="approveDate"
+        width="280"
+        label="审核通过时间">
+        <template slot-scope="{row}">
+          <i class="el-icon-time" style="margin-right: 3px;"></i>
+          <span v-if="row.approveDate!=='Invalid date'">{{ row.approveDate }}</span>
+          <span v-else>-</span>
+        </template>
+      </el-table-column>
+      <el-table-column
         align="center"
         prop="currentStatus"
         width="280"
@@ -135,12 +147,12 @@ export default {
     title: {
       type: String,
       default: () => {
-        return  '已收藏的岗位'
+        return '已收藏的岗位'
       }
     },
     showList: {
       type: Array,
-      default: ()=> {
+      default: () => {
         return []
         // return [{ id:1, positionName: '消化内科医师', createdTime: '2021-08-31 15:02:31' }]
       }
@@ -174,9 +186,9 @@ export default {
   },
   methods: {
     rowClassName({ row, rowIndex }) {
-      row.xh = rowIndex + 1;
+      row.xh = rowIndex + 1
     },
-    HandleCollect(isCollected,id) {
+    HandleCollect(isCollected, id) {
       this.$emit('HandleCollect', { isCollected: isCollected, positionId: id })
     },
     HandleDelete() {
@@ -184,11 +196,11 @@ export default {
     },
     // 取消投递
     HandleCancelPost(row) {
-      this.$emit('HandleCancelPost',row.id)
+      this.$emit('HandleCancelPost', row.id)
     },
     // 确认参加考试
     handleConfirm(row) {
-      this.$emit('handleConfirm',row.id)
+      this.$emit('handleConfirm', row.id)
     },
     // 点击分页触发
     getPostedPosition() {

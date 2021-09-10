@@ -163,7 +163,7 @@ export function updateIsread(data) {
   })
 }
 
-// 接收者删除消息
+// 接收者删除收到的某条消息
 export function receiveRemoveMsg(data) {
   return request({
     url: '/position/receiveRemoveMsg',
@@ -172,7 +172,7 @@ export function receiveRemoveMsg(data) {
   })
 }
 
-// 求职者删除所有消息
+// 求职者删除收到的所有消息
 export function removeAllReceiveMsg(data) {
   return request({
     url: '/position/removeAllReceiveMsg',
@@ -185,6 +185,24 @@ export function removeAllReceiveMsg(data) {
 export function replyMessage(data) {
   return request({
     url: '/position/replyMessage',
+    method: 'post',
+    data
+  })
+}
+
+// 求职者删除已发送的某条消息
+export function removeSendMsg(data) {
+  return request({
+    url: '/position/removeSendMsg',
+    method: 'post',
+    data
+  })
+}
+
+// 求职者删除所有已发送的消息
+export function removeAllSendMsg(data) {
+  return request({
+    url: '/position/removeAllSendMsg',
     method: 'post',
     data
   })

@@ -26,6 +26,7 @@
           <span>需求人数：{{ positionInfo.requireNum }}</span>
           <span>工作地点：{{ positionInfo.address }}</span>
           <span>发布时间：{{ positionInfo.simpleDate }}</span>
+          <span>联系电话：{{ positionInfo.contactPhone }}</span>
         </div>
         <div class="line3">
           <span>职位描述：{{ positionInfo.desc }}</span>
@@ -41,7 +42,7 @@ export default {
   props: {
     positionInfo: {
       type: Object,
-      default: () => {return {}}
+      default: () => { return {} }
     }
   },
   data() {
@@ -138,7 +139,7 @@ export default {
         }
       }
       .line2{
-        width: 1250px;
+        width: 1300px;
         display: flex;
         justify-content: space-between;
         color: #909399;
@@ -174,6 +175,16 @@ export default {
             border-radius: 5px;
           }
           &:nth-child(4){
+            width: 200px;
+            height: 25px;
+            padding: 2px;
+            background: #F2F6FC;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 5px;
+          }
+          &:nth-child(5){
             width: 200px;
             height: 25px;
             padding: 2px;

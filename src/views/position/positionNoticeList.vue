@@ -23,6 +23,7 @@
           <el-tab-pane label="已发送的消息列表" name="account">
             <account
               @getAllSendMsg="getAllSendMsg"
+              @removeSendMsg="removeSendMsg"
               :content="content"
               :SendMessageList="SendMessageList"
               :total="sendTotal"
@@ -61,7 +62,7 @@
 </template>
 
 <script>
-import { getReceiveMsg, getSendMsg, updateIsread, receiveRemoveMsg, removeAllReceiveMsg, replyMessage } from '@/api/recruit/position'
+import { getReceiveMsg, getSendMsg, updateIsread, receiveRemoveMsg, removeAllReceiveMsg, replyMessage, removeSendMsg, removeAllSendMsg } from '@/api/recruit/position'
 import Activity from './components/Activity'
 import Account from './components/Account'
 export default {
@@ -108,7 +109,9 @@ export default {
   created() {
     // 发送一次请求，更新消息为已读（is_read=1）
     this.updateIsread()
+    // 获取所有接收到的通知
     this.getAllReceiveMsgList()
+    // 获取所有已发送的通知
     this.getAllSendMsg()
     // 加载表情列表
     this.loadEmojis()
@@ -137,9 +140,9 @@ export default {
         this.SendMessageList = msgList
       })
     },
-    // 删除某条消息
+    // 删除接收到的某条消息
     receiveRemoveMsg(id) {
-      const temp = Object.assign({}, {id: id, receive_id: this.jobseekerId})
+      const temp = Object.assign({}, { id: id, receive_id: this.jobseekerId })
       receiveRemoveMsg(temp).then(res => {
         const { msg } = res
         this.$message.success(msg)
@@ -148,7 +151,7 @@ export default {
     },
     // 删除所有接收到的消息
     removeAllReceiveMsg() {
-      this.$confirm('是否清空所有消息?', '提示', {
+      this.$confirm('是否清空所有接收到的消息?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -159,13 +162,37 @@ export default {
         removeAllReceiveMsg({ msgList: temp }).then(res => {
           const { msg } = res
           this.getAllReceiveMsgList()
-          this.showMsgBox = false
+          // this.showMsgBox = false
           this.$message.success(msg)
         })
       })
     },
+    // 删除发送的某条消息
+    removeSendMsg(id) {
+      const temp = Object.assign({}, { send_id: this.jobseekerId, id: id })
+      removeSendMsg(temp).then(res => {
+        const { msg } = res
+        this.$message.success(msg)
+        this.getAllSendMsg()
+      })
+    },
     // 删除所有发送的消息
-    removeAllSendMsg() {},
+    removeAllSendMsg() {
+      this.$confirm('是否清空所有已发送的消息?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        const temp = this.SendMessageList.map(e => {
+          return { id: e.id, remove_send_id: this.jobseekerId }
+        })
+        removeAllSendMsg({ msgList: temp }).then(res => {
+          const { msg } = res
+          this.$message.success(msg)
+          this.getAllSendMsg()
+        })
+      })
+    },
     // 获取表情列表
     loadEmojis() {
       import('@/utils/emojis.js').then(res => {
@@ -192,9 +219,9 @@ export default {
       this.emojiShow = false
     },
     sendMessage() {
-      const temp = { receive_id: this.mid, send_id: this.jobseekerId, content: this.messageForm.content, replycontent:this.content,send_date: new Date(), is_read: 0, remove_receive_id: 0, remove_send_id: 0 }
+      const temp = { receive_id: this.mid, send_id: this.jobseekerId, content: this.messageForm.content, replycontent: this.content, send_date: new Date(), is_read: 0, remove_receive_id: 0, remove_send_id: 0 }
       replyMessage(temp).then(res => {
-        const { msg, content }  = res
+        const { msg } = res
         this.$message.success(msg)
         this.showMsgBox = false
         this.getAllSendMsg()

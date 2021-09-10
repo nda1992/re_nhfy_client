@@ -172,8 +172,8 @@ export default {
       userinfo: {},
       // 用户信息完善表单信息
       dialogVisible: false,
-      sexOptions: [{ key: 1, value:'男' }, { key: 2, value: '女' }],
-      ageOptions: [20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40],
+      sexOptions: [{ key: 1, value: '男' }, { key: 2, value: '女' }],
+      ageOptions: [20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40],
       degreeOptions: ['本科', '研究生', '博士'],
       registerForm: {
         sex: '',
@@ -199,7 +199,7 @@ export default {
         professional: [{ required: true, message: '请输入专业', trigger: 'blur' }],
         undergraduateTime: [{ required: true, message: '请选择毕业时间', trigger: 'blur' }],
         faceimgUrl: [{ required: true, message: '请上传头像', trigger: 'blur' }],
-        attachmentUrl: [{ required: true, message: '请上传附件简历', trigger: 'blur' }],
+        attachmentUrl: [{ required: true, message: '请上传附件简历', trigger: 'blur' }]
       },
       select_loading: false,
       nationListOptions: [],
@@ -233,15 +233,15 @@ export default {
     },
     jobseekerId() {
       return sessionStorage.getItem('jobseekerId')
-    },
-
+    }
   },
-  created() {
-    this.getUserinfoDetail()
-  },
+  // created() {
+  //   this.getUserinfoDetail()
+  // },
   mounted() {
     // 头像上传携带的用户id
     this.query.id = sessionStorage.getItem('jobseekerId')
+    this.getUserinfoDetail()
     this.getPost2PositionListByUid()
   },
   methods: {
@@ -288,13 +288,13 @@ export default {
         this.getPost2PositionListByUid()
       })
     },
-    /// 根据用户id再次拉取数据库中最新的用户所有信息
+    // 根据用户id再次拉取数据库中最新的用户所有信息
     getUserinfoDetail() {
       UserinfoDetail(this.jobseekerId).then(res => {
         const { userinfo, doneUserinfo } = res
         this.userinfo = userinfo
         this.show_badge = doneUserinfo
-        this.fileList.push({name: userinfo.attachmentUrl, url: userinfo.attachmentUrl})
+        this.fileList.push({ name: userinfo.attachmentUrl, url: userinfo.attachmentUrl })
       })
     },
     // 用户信息完善或用户信息更新的相关方法

@@ -13,7 +13,7 @@
     <!--岗位列表-->
     <div class="list">
       <h2 style="margin-left: 20px">在招岗位</h2>
-      <PositionCard :positionInfo="position" v-for="(position,index) in positionList" @gotoPosition="gotoPosition(position.id)" @gotoCollect="gotoCollect(position.id, position.isCollected)"></PositionCard>
+      <PositionCard :positionInfo="position" v-for="(position,index) in positionList" :key="position.id" @gotoPosition="gotoPosition(position.id)" @gotoCollect="gotoCollect(position.id, position.isCollected)" />
       <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getPositionList()" />
     </div>
   </div>
@@ -55,7 +55,7 @@ export default {
   },
   mounted() {
     this.getUserinfoDetail()
-    this.getPositionList(Object.assign({},this.listQuery,{jobseekerId: sessionStorage.getItem('jobseekerId')}))
+    this.getPositionList(Object.assign({}, this.listQuery, {jobseekerId: sessionStorage.getItem('jobseekerId') }))
   },
   computed: {
     isLogin() {

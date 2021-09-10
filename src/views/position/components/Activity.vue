@@ -74,8 +74,8 @@ export default {
     receiveRemoveMsg(id) {
       this.$emit('receiveRemoveMsg', id)
     },
-    HandlebulkSendMessageBox(showMsgBox,send_id,content) {
-      this.$emit('HandlebulkSendMessageBox',{ showMsgBox: showMsgBox, userCode: send_id, content: content })
+    HandlebulkSendMessageBox(showMsgBox, send_id, content) {
+      this.$emit('HandlebulkSendMessageBox', { showMsgBox: showMsgBox, userCode: send_id, content: content })
     }
   }
 }
