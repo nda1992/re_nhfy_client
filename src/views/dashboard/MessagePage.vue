@@ -7,6 +7,10 @@
         <span class="show-tips" @click="removeAllReceiveMsg" v-if="activeTab==='activity'">清空所有接收到的消息</span>
         <span class="show-tips" @click="removeAllSendMsg" v-else>清空所有已发送的消息</span>
       </el-badge>
+      <el-tooltip class="item" effect="dark" content="按下回车键搜索" placement="bottom">
+        <el-input v-model="searchReceive" placeholder="搜索已收到的消息内容" class="search" prefix-icon="el-icon-search" v-if="activeTab==='activity'" @keyup.enter.native="searchReceiveMsg"></el-input>
+        <el-input v-model="searchSend" placeholder="搜索已发送的消息内容" class="search" prefix-icon="el-icon-search" v-else @keyup.enter.native="searchSendMsg"></el-input>
+      </el-tooltip>
     </div>
     <div>
       <el-card>
@@ -99,7 +103,10 @@ export default {
       // 回复给谁？求职者的id
       jid: '',
       // 显示求职者回复的是哪一条消息
-      content: ''
+      content: '',
+      // 需要搜索的内容
+      searchReceive: '',
+      searchSend: ''
     }
   },
   created() {
@@ -124,6 +131,9 @@ export default {
     }
   },
   methods: {
+    // 搜索内容
+    searchReceiveMsg() {},
+    searchSendMsg() {},
     // 更新消息为已读
     updateIsread() {
       const temp = { receive_id: this.userCode }
@@ -244,6 +254,10 @@ export default {
     padding: 0 20px;
     margin: 0;
     .title{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 500px;
       margin-bottom: 25px;
       .show-title{
         font-size: 24px;
@@ -251,11 +265,14 @@ export default {
       }
       .item{
         .show-tips{
-          margin-left: 50px;
+          /*margin-left: 50px;*/
           font-size: 15px;
           color: #97a8be;
           cursor: pointer;
         }
+      }
+      .el-input{
+        width: 200px;
       }
     }
     .el-card{

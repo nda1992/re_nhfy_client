@@ -6,7 +6,6 @@
 
     <div class="right-menu">
       <template v-if="device!=='mobile'">
-        <!--<search id="header-search" class="right-menu-item" />-->
         <el-tooltip effect="dark" content="全屏显示" placement="bottom">
           <screenfull id="screenfull" class="right-menu-item hover-effect" />
         </el-tooltip>
@@ -89,7 +88,6 @@ export default {
         await this.$store.dispatch('user/logout')
         this.$router.push(`/login`)
       })
-      // this.$router.push(`/login?redirect=${this.$route.fullPath}`)
     },
     deleteUser() {
       alert('该功能暂未开放，请联系管理员')
