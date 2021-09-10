@@ -1,42 +1,54 @@
 <template>
-<!--求职者接收到的所有消息-->
-  <div class="user-activity">
-    <div v-if="ReceiveMessageList.length!==0">
-      <div class="post" v-for="(msg,index) in ReceiveMessageList" :key="msg.id">
+  <div class="user-account">
+    <div v-if="SendMessageList.length!==0">
+      <div class="post" v-for="(msg,index) in SendMessageList" :key="msg.id">
         <div class="user-block">
-          <img class="img-circle" :src="msg.url">
-          <span class="username text-muted">发送者是: {{ msg.username }} </span>
-          <span class="description">发送时间 {{ msg.format_send_date }}</span>
+          <img class="img-circle" :src="avatar">
+          <span class="username text-muted">你回复的人是: {{ msg.username }} </span>
+          <span class="description">回复时间 {{ msg.format_send_date }}</span>
         </div>
-        <p style="color: #1f2d3d">{{ msg.content }}</p>
+        <el-popover v-if="msg.replycontent!==null"
+          placement="top-start"
+          title="你回复的消息是"
+          width="400"
+          trigger="hover"
+          :content="msg.replycontent">
+          <p style="color: #1f2d3d" slot="reference">{{ msg.content }}</p>
+        </el-popover>
+        <p style="color: #1f2d3d" slot="reference" v-else>{{ msg.content }}</p>
         <ul class="list-inline">
           <li>
-            <span class="link-black text-sm" @click="HandlebulkSendMessageBox(!showMsgBox, msg.send_id,msg.content)">回复</span>
-            <el-popconfirm title="确定删除该条消息吗?" @onConfirm="receiveRemoveMsg(msg.id)">
+            <el-popconfirm title="确定删除该条消息吗?" @onConfirm="removeSendMsg(msg.id)">
               <el-button slot="reference" type="text">
                 <span class="link-black text-sm">删除</span>
               </el-button>
             </el-popconfirm>
+            <span style="margin-left: 5px;color: #97a8be" v-if="msg.is_read">已读</span>
+            <span style="margin-left: 5px;color: #4455aa" v-else>未读</span>
           </li>
         </ul>
       </div>
-      <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getAllReceiveMsgList()" />
+      <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getAllSendMsg()" />
     </div>
-    <div class="message" v-else>
-      <img src="../../../icons/imgs/NoMessage.png" alt="" height="380" width="350" />
-      <span>你还没有收到消息哦~</span>
+    <div class="nomessage" v-else>
+      <img src="../../../icons/imgs/NoMessage.png" height="380" width="350">
+      <span>你还没有发送消息哦~</span>
     </div>
   </div>
 </template>
 
 <script>
 import Pagination from '@/components/Pagination'
-const avatarPrefix = '?imageView2/1/w/80/h/80'
-
 export default {
   components: { Pagination },
   props: {
-    ReceiveMessageList: {
+    avatar: {
+      type: String,
+      default: () => {
+        return 'http://localhost:3000/jobseekersAvatar/default.png'
+      }
+    },
+    SendMessageList: {
       type: Array,
       default: () => {
         return []
@@ -54,36 +66,26 @@ export default {
         return 0
       }
     },
-    showMsgBox: {
-      type: Boolean,
+    content: {
+      type: String,
       default: () => {
-        return false
+        return ''
       }
     }
   },
-  data() {
-    return {
-      avatarPrefix
-    }
-  },
   methods: {
-    // 获取所有收到的消息
-    getAllReceiveMsgList() {
-      this.$emit('getAllReceiveMsgList')
+    getAllSendMsg() {
+      this.$emit('getAllSendMsg')
     },
-    // 删除某条消息
-    receiveRemoveMsg(id) {
-      this.$emit('receiveRemoveMsg', id)
-    },
-    HandlebulkSendMessageBox(showMsgBox, send_id, content) {
-      this.$emit('HandlebulkSendMessageBox', { showMsgBox: showMsgBox, userCode: send_id, content: content })
+    removeSendMsg(id) {
+      this.$emit('removeSendMsg', id)
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-  .user-activity {
+  .user-account {
     min-height: 100%;
     margin-bottom: 80px;
     padding: 0 40px;
@@ -147,32 +149,30 @@ export default {
         padding-left: 5px;
         font-size: 13px;
       }
+
       .link-black {
-        color: #999;
-        font-size: 13px;
         margin-left: 5px;
         cursor: pointer;
+        color: #999;
         &:hover,
         &:focus {
           color: #409EFF;
         }
       }
-      .el-button{
-        padding: 0 !important;
-      }
     }
-    .message{
+    .el-button{
+      padding: 0 !important;
+    }
+    .nomessage{
       display: flex;
-      flex-direction: column;
       justify-content: center;
       align-items: center;
+      flex-direction: column;
       span{
         color: #97a8be;
       }
     }
-
   }
-
   .box-center {
     margin: 0 auto;
     display: table;

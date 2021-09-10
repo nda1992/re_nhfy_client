@@ -4,7 +4,7 @@
       <div class="post" v-for="(msg,index) in SendMessageList" :key="msg.id">
         <div class="user-block">
           <img class="img-circle" :src="avatar">
-          <span class="username text-muted">你回复的人是 {{ msg.receive_id }} </span>
+          <span class="username text-muted">你回复的人是: {{ msg.username }} </span>
           <span class="description">回复时间 {{ msg.format_send_date }}</span>
         </div>
         <el-popover

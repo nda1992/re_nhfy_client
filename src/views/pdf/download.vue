@@ -9,7 +9,6 @@
 
 <script>
 import { getResumeFile } from '@/api/recruit/position'
-import fs from 'fs'
 import path from 'path'
 export default {
   data() {

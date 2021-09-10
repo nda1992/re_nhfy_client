@@ -31,7 +31,10 @@
           更多操作<i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item icon="el-icon-s-custom" @click.native="updateUserinfo">个人主页</el-dropdown-item>
+          <el-dropdown-item icon="el-icon-user" @click.native="updateUserinfo">个人主页</el-dropdown-item>
+          <el-dropdown-item icon="el-icon-bell" @click.native="notice">消息
+            <el-badge class="mark" :value="msgNum" :hidden="msgNum===0"/>
+          </el-dropdown-item>
           <el-dropdown-item icon="el-icon-warning-outline" @click.native="deleteUser">注销账号</el-dropdown-item>
           <el-dropdown-item icon="el-icon-circle-close" @click.native="logout">退出系统</el-dropdown-item>
         </el-dropdown-menu>
@@ -46,27 +49,22 @@ import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 import Screenfull from '@/components/Screenfull'
-import SizeSelect from '@/components/SizeSelect'
-import Search from '@/components/HeaderSearch'
+import { getReceiveMsg } from '@/api/recruit/position'
 import { uuid } from '@/utils/uuid'
 import axios from 'axios'
 export default {
   components: {
     Breadcrumb,
     Hamburger,
-    Screenfull,
-    SizeSelect,
-    Search
+    Screenfull
   },
   data() {
     return {
-        avatar: localStorage.getItem('avatar')
-      }
-    },
+      avatar: localStorage.getItem('avatar'),
+      msgNum: 0
+    }
+  },
   computed: {
-    // avatar() {
-    //   return localStorage.getItem('avatar')
-    // },
     userCode() {
       return localStorage.getItem('userCode')
     },
@@ -74,6 +72,9 @@ export default {
       return localStorage.getItem('name')
     },
     ...mapGetters(['sidebar', 'device', 'name'])
+  },
+  mounted() {
+    this.getNoReadMsgNum()
   },
   methods: {
     toggleSideBar() {
@@ -84,12 +85,11 @@ export default {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(async () => {
+      }).then(async() => {
         await this.$store.dispatch('user/logout')
         this.$router.push(`/login`)
       })
       // this.$router.push(`/login?redirect=${this.$route.fullPath}`)
-
     },
     deleteUser() {
       alert('该功能暂未开放，请联系管理员')
@@ -97,13 +97,25 @@ export default {
     updateUserinfo() {
       alert('该功能暂未开放，请联系管理员')
     },
+    // 获取管理员未读的消息数量
+    getNoReadMsgNum() {
+      const temp = Object.assign({}, { receive_id: this.userCode })
+      getReceiveMsg(temp).then(res => {
+        const { no_read_num } = res
+        this.msgNum = no_read_num
+      })
+    },
+    // 打开消息页面
+    notice() {
+      this.$router.push({ name: 'Message' })
+    },
     // 头像上传处理函数
     beforeUploadFile(file) {
-      let formdata = new FormData()
+      const formdata = new FormData()
       formdata.append('file', file)
       formdata.append('userCode', localStorage.getItem('userCode'))
       formdata.append('avatar', localStorage.getItem('avatar'))
-      const { data } = axios.post('http://localhost:3000/users/uploadAvatar', formdata, { headers: { token: localStorage.getItem('token'), uuid: uuid() }}).then(res => {
+      axios.post('http://localhost:3000/users/uploadAvatar', formdata, { headers: { token: localStorage.getItem('token'), uuid: uuid() }}).then(res => {
         const { data } = res
         if (data.code === 200) {
           this.avatar = data.avatar

@@ -61,7 +61,7 @@ export const constantRoutes = [
     component: () => import('@/views/error-page/404'),
     hidden: true
   },
-  // 在招岗位列表页面
+  // 在招聘模块相关页面
   {
     path: '/position',
     component: Position,
@@ -84,7 +84,7 @@ export const constantRoutes = [
         name: 'PositionUserinfor',
         component: () => import('@/views/position/positionUserinfo'),
         hidden: true
-      },
+      }
     ]
   },
   {
@@ -97,12 +97,21 @@ export const constantRoutes = [
     path: '/',
     component: Layout,
     redirect: '/dashboard',
-    children: [{
-      path: 'dashboard',
-      name: 'Dashboard',
-      component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard', affix: true }
-    }]
+    children: [
+      {
+        path: 'dashboard',
+        name: 'Dashboard',
+        component: () => import('@/views/dashboard/index'),
+        meta: { title: 'Dashboard', icon: 'dashboard', affix: true }
+      },
+      {
+        path: 'message',
+        name: 'Message',
+        component: () => import('@/views/dashboard/MessagePage'),
+        meta: { title: '个人消息中心', icon: 'el-icon-message' },
+        hidden: true
+      }
+    ]
   },
 
   // 新闻管理

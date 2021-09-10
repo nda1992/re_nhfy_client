@@ -52,3 +52,20 @@ export function recoverpositionStatus(data) {
     data
   })
 }
+
+// 管理员获取所有已经接收到的消息
+export function getReceiveMsg2Admin(data) {
+  return request({
+    url: '/recruit/getReceiveMsg2Admin',
+    method: 'post',
+    data
+  })
+}
+// 管理员获取所有已经发送的消息
+export function getSendMsg2Admin(data) {
+  return request({
+    url: '/recruit/getSendMsg2Admin',
+    method: 'post',
+    data
+  })
+}

@@ -1,10 +1,9 @@
 <template>
-<!--求职者接收到的所有消息-->
   <div class="user-activity">
     <div v-if="ReceiveMessageList.length!==0">
       <div class="post" v-for="(msg,index) in ReceiveMessageList" :key="msg.id">
         <div class="user-block">
-          <img class="img-circle" :src="msg.url">
+          <img class="img-circle" :src="msg.faceimgUrl">
           <span class="username text-muted">发送者是: {{ msg.username }} </span>
           <span class="description">发送时间 {{ msg.format_send_date }}</span>
         </div>
@@ -31,11 +30,15 @@
 
 <script>
 import Pagination from '@/components/Pagination'
-const avatarPrefix = '?imageView2/1/w/80/h/80'
-
 export default {
   components: { Pagination },
   props: {
+    avatar: {
+      type: String,
+      default: () => {
+        return 'http://localhost:3000/jobseekersAvatar/default.jpg'
+      }
+    },
     ReceiveMessageList: {
       type: Array,
       default: () => {
@@ -61,11 +64,6 @@ export default {
       }
     }
   },
-  data() {
-    return {
-      avatarPrefix
-    }
-  },
   methods: {
     // 获取所有收到的消息
     getAllReceiveMsgList() {
@@ -76,7 +74,7 @@ export default {
       this.$emit('receiveRemoveMsg', id)
     },
     HandlebulkSendMessageBox(showMsgBox, send_id, content) {
-      this.$emit('HandlebulkSendMessageBox', { showMsgBox: showMsgBox, userCode: send_id, content: content })
+      this.$emit('HandlebulkSendMessageBox', { showMsgBox: showMsgBox, send_id: send_id, content: content })
     }
   }
 }
