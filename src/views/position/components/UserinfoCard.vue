@@ -2,7 +2,7 @@
     <!--岗位收藏和投递列表-->
   <el-card class="box-card">
     <div slot="header" class="clearfix">
-      <span style="font-size: 16px;color: #000">{{ title }}</span>
+      <span style="font-size: 16px;color: #000">{{ title }}（共{{ showList.length }}个）</span>
     </div>
     <el-table style="width: 100%" :data="showList" :row-class-name="rowClassName">
       <!--可展开行-->

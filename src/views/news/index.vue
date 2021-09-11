@@ -228,7 +228,7 @@ export default {
         deleteNewsById(row.id).then(() => {
           this.$notify({
             title: 'Success',
-            message: '删除成功',
+            message: '图片删除成功',
             type: 'success',
             duration: 2000
           })

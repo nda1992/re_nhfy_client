@@ -32,9 +32,6 @@ export default {
     TagsView
   },
   mixins: [ResizeMixin],
-  created() {
-    console.log(this.$store.state.settings.tagsView)
-  },
   computed: {
     showSettings() {
       return this.$store.state.settings.showSettings

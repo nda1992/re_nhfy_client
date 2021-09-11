@@ -17,7 +17,7 @@
       <!--岗位列表-->
       <div class="list">
         <h2 style="margin-left: 20px">在招岗位</h2>
-        <PositionCard :positionInfo="position" v-for="(position,index) in positionList" @gotoPosition="gotoPosition"></PositionCard>
+        <PositionCard :positionInfo="position" v-for="(position,index) in positionList" :showBtns="false"></PositionCard>
         <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getPositionList()" />
       </div>
     </div>
@@ -34,20 +34,14 @@ export default {
   data() {
     return {
       carouselImages: [
-        `${process.env.BASE_URL}images/test1.png`,
+        `${process.env.BASE_URL}images/test1.jpg`,
         `${process.env.BASE_URL}images/test2.jpg`,
-        `${process.env.BASE_URL}images/test3.jpg`,
-        `${process.env.BASE_URL}images/test4.jpg`,
-        `${process.env.BASE_URL}images/test5.png`,
         `${process.env.BASE_URL}images/test6.jpg`,
-        `${process.env.BASE_URL}images/test7.jpg`,
-        `${process.env.BASE_URL}images/test8.jpg`
       ],
       listLoading: false,
       listQuery: {
         page: 1,
         limit: 10
-        // role: localStorage.getItem('role')
       },
       total: 0,
       positionList: []
@@ -60,25 +54,25 @@ export default {
     // 获取所有岗位列表
     getPositionList() {
       getPositionList(this.listQuery).then(res => {
+        const { positions, total } = res
         this.listLoading = true
-        this.positionList = res.positions
-        this.total = res.total
+        this.positionList = positions
+        this.total = total
         setTimeout(() => {
           this.listLoading = false
         }, 1000)
       })
     },
-    //跳转到岗位列表页面
-    gotoPosition() {
-      // console.log(this.$route)
-      this.$router.push({ path: '/position' })
+    getAllSwiperImgs() {
+
     }
   }
 }
 </script>
 <style lang="scss" scoped>
   .app-container{
-    padding: 20px 0 20px 0;
+    margin: 0;
+    padding-top: 10px;
     .tip{
       width: 100%;
       display: inline-block;
@@ -88,20 +82,15 @@ export default {
     }
     .post {
       font-size: 14px;
-      /*border-bottom: 1px solid #d2d6de;*/
-      margin: 20px;
-      padding-bottom: 15px;
       color: #666;
       .image {
         width: 100%;
         height: 100%;
       }
-      .user-images {
-        padding-top: 20px;
-      }
     }
     .list{
-      padding: 10px 0;
+      width: 100%;
+      padding: 10px 20px 0 20px;
       &:hover{
         box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)
       }

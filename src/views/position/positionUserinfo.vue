@@ -5,6 +5,7 @@
       <h2>个人主页</h2>
       <div class="tip">
         <el-badge is-dot class="item" :hidden="show_badge"><span @click="HandleupdateUserinfo">更新或完善个人详细信息</span></el-badge>
+        <span style="color: #ff4949;font-size: 12px" @click="HandleupdateUserinfo">（头像请使用个人证件照）</span>
       </div>
     </div>
     <div class="userinfo-main">
@@ -84,7 +85,7 @@
             placeholder="选择毕业时间">
           </el-date-picker>
         </el-form-item>
-        <el-form-item prop="faceimgUrl" label="用户头像">
+        <el-form-item prop="faceimgUrl" label="证件照">
           <el-upload
             class="avatar-uploader"
             action="http://localhost:3000/position/uploadAvatar"
@@ -325,7 +326,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        const tempData = Object.assign({}, this.basicForm, { basic: false })
+        const tempData = Object.assign({}, this.basicForm, { basic: false }, { id: this.jobseekerId, avatar: this.avatar })
         updateUserinfo(tempData).then((res) => {
           const { msg, data } = res
           this.BaiscdialogVisible = false

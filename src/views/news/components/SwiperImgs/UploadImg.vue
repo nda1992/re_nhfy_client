@@ -1,0 +1,80 @@
+<template>
+  <div class="upload">
+    <h4>上传图片</h4>
+    <el-upload
+      ref="upload"
+      :headers="{ token: 'token' }"
+      action="http://localhost:3000/recruit/uploadSwiper"
+      :data="{userCode: userCode}"
+      accept=".png,.jpg,.jpeg,.bmp"
+      list-type="picture-card"
+      :on-success="handleSuccessFile"
+      :on-preview="handlePictureCardPreview"
+      :on-remove="handleRemove"
+      :file-list="fileList">
+      <i class="el-icon-plus"></i>
+    </el-upload>
+    <el-dialog :visible.sync="dialogVisible">
+      <img width="100%" :src="dialogImageUrl" alt="">
+    </el-dialog>
+  </div>
+</template>
+
+<script>
+import { uploadSwiper } from '@/api/recruit/recruit'
+Array.prototype.remove = function (val) {
+  var index = this.indexOf(val);
+  if (index > -1) {
+    this.splice(index, 1);
+  }
+}
+
+export default {
+  name: 'UploadImg',
+  props: {
+    userCode: {
+      type: String,
+      default: () => {
+        return ''
+      }
+    }
+  },
+  data() {
+    return {
+      fileList: [],
+      dialogImageUrl: '',
+      dialogVisible: false
+    }
+  },
+  methods: {
+    handleRemove(file, fileList) {
+      this.fileList.remove(file.name)
+    },
+    handlePictureCardPreview(file) {
+      this.dialogImageUrl = file.url
+      this.dialogVisible = true
+    },
+    handleSuccessFile(files) {
+      const { msg, file } = files
+      this.$message.success(msg)
+      this.fileList.push({ name: 'image', url: file.url })
+      this.$emit('getAllSwiperImgs')
+    },
+    // uploadFilesList(file) {
+    //   const fd = new FormData()
+    //   fd.append('file', file.file)
+    //   uploadSwiper(fd).then(res => {
+    //     const { msg, files } = res
+    //     this.$message.success(msg)
+    //     this.fileList.push({ name: 'image', url: files.url })
+    //   })
+    // }
+  }
+}
+</script>
+
+<style scoped>
+  .upload{
+    margin-top: 10px;
+  }
+</style>

@@ -267,7 +267,7 @@ export default {
       select_loading: false,
       degreeOptions: ['本科及以上', '硕士研究生及以上', '博士'],
       englishOptions: ['英语四级', '英语六级'],
-      typeOptions: ['事业编', '非事业编'],
+      typeOptions: ['事业编', '院编' ,'非事业编'],
       ageOptions: ['30岁及以下', '32岁及以下', '35岁及以下'],
       listQuery: {
         page: 1,

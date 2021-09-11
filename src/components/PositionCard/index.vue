@@ -4,13 +4,13 @@
       <div slot="header" class="clearfix">
         <span style="font-size: 16px;font-weight: bold">{{ positionInfo.positionName }}</span>
         <el-tooltip class="item" effect="dark" content="分享岗位" placement="bottom">
-          <el-button style="float: right; padding: 0;margin-right: 15px;" type="text"><i class="el-icon-share">分享</i></el-button>
+          <el-button style="float: right; padding: 0;margin-right: 15px;" type="text"><i class="el-icon-share" v-if="showBtns">分享</i></el-button>
         </el-tooltip>
         <el-tooltip class="item" effect="dark" content="收藏岗位" placement="bottom">
-          <el-button style="float: right; padding: 0;border: 0;margin-right: 15px;" type="text" @click="gotoCollect"><i :class="positionInfo.isCollected===false?'el-icon-star-off':'el-icon-star-on'">{{positionInfo.isCollected===false?'收藏':'已收藏'}}</i></el-button>
+          <el-button style="float: right; padding: 0;border: 0;margin-right: 15px;" type="text" @click="gotoCollect" v-if="showBtns"><i :class="positionInfo.isCollected===false?'el-icon-star-off':'el-icon-star-on'">{{positionInfo.isCollected===false?'收藏':'已收藏'}}</i></el-button>
         </el-tooltip>
         <el-tooltip class="item" effect="dark" content="投递简历" placement="bottom">
-          <el-button style="float: right; padding: 0" type="text" @click="gotoPosition" :disabled="positionInfo.isPosted">{{ positionInfo.isPosted===false?'投递简历': '已投递'}}</el-button>
+          <el-button style="float: right; padding: 0" type="text" @click="gotoPosition" :disabled="positionInfo.isPosted" v-if="showBtns">{{ positionInfo.isPosted===false?'投递简历': '已投递'}}</el-button>
         </el-tooltip>
       </div>
       <div class="card-main">
@@ -43,12 +43,12 @@ export default {
     positionInfo: {
       type: Object,
       default: () => { return {} }
-    }
-  },
-  data() {
-    return {
-      // 岗位类别
-      type: ''
+    },
+    showBtns: {
+      type: Boolean,
+      default: () => {
+        return true
+      }
     }
   },
   methods: {
@@ -83,11 +83,11 @@ export default {
       .line1{
         width: 1250px;
         display: flex;
-        justify-content: space-between;
+        justify-content: space-around;
         color: #909399;
         span{
           &:nth-child(1){
-            width: 280px;
+            width: 240px;
             height: 25px;
             padding: 2px;
             background: #F2F6FC;
@@ -117,7 +117,7 @@ export default {
             border-radius: 5px;
           }
           &:nth-child(4){
-            width: 210px;
+            width: 170px;
             height: 25px;
             padding: 2px;
             background: #F2F6FC;
@@ -127,7 +127,7 @@ export default {
             border-radius: 5px;
           }
           &:nth-child(5){
-            width: 210px;
+            width: 150px;
             height: 25px;
             padding: 2px;
             background: #F2F6FC;
@@ -139,13 +139,13 @@ export default {
         }
       }
       .line2{
-        width: 1300px;
+        width: 1200px;
         display: flex;
         justify-content: space-between;
         color: #909399;
         span{
           &:nth-child(1){
-            width: 380px;
+            width: 260px;
             height: 25px;
             padding: 2px;
             background: #F2F6FC;
@@ -165,7 +165,7 @@ export default {
             border-radius: 5px;
           }
           &:nth-child(3){
-            width: 310px;
+            width: 260px;
             height: 25px;
             padding: 2px;
             background: #F2F6FC;
@@ -175,7 +175,7 @@ export default {
             border-radius: 5px;
           }
           &:nth-child(4){
-            width: 200px;
+            width: 180px;
             height: 25px;
             padding: 2px;
             background: #F2F6FC;

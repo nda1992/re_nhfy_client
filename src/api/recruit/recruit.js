@@ -11,7 +11,7 @@ export function createPosition(data) {
 
 export function getPositionList(query) {
   return request({
-    url: '/recruit/getPositionList',
+    url: '/position/getPositionList',
     method: 'get',
     params: query
   })
@@ -67,5 +67,41 @@ export function getSendMsg2Admin(data) {
     url: '/recruit/getSendMsg2Admin',
     method: 'post',
     data
+  })
+}
+
+// 管理员上传轮播图
+export function uploadSwiper(data) {
+  return request({
+    url: '/recruit/uploadSwiper',
+    method: 'post',
+    data
+  })
+}
+
+// 查询所有已经上传的轮播图
+export function getAllSwiperImgs(query) {
+  return request({
+    url: '/recruit/getAllSwiperImgs',
+    method: 'get',
+    params: query
+  })
+}
+
+// 根据id删除轮播图片
+export function deleteImgById(query) {
+  return request({
+    url: '/recruit/deleteImgById',
+    method: 'delete',
+    params: query
+  })
+}
+
+// 提交要展示的轮播图
+export function submitSwiper(query) {
+  return request({
+    url: '/recruit/submitSwiper',
+    method: 'get',
+    params: query
   })
 }

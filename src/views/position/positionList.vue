@@ -32,14 +32,9 @@ export default {
   data() {
     return {
       carouselImages: [
-        `${process.env.BASE_URL}images/test1.png`,
+        `${process.env.BASE_URL}images/test1.jpg`,
         `${process.env.BASE_URL}images/test2.jpg`,
-        `${process.env.BASE_URL}images/test3.jpg`,
-        `${process.env.BASE_URL}images/test4.jpg`,
-        `${process.env.BASE_URL}images/test5.png`,
         `${process.env.BASE_URL}images/test6.jpg`,
-        `${process.env.BASE_URL}images/test7.jpg`,
-        `${process.env.BASE_URL}images/test8.jpg`
       ],
       listLoading: false,
       listQuery: {
