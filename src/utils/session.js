@@ -4,7 +4,7 @@ export const StorageClass = new class Session {
    * @param {any} data 转为base64数据
    */
   encrypt(data){
-    let set = encodeURIComponent(data), result = btoa(set);
+    let set = encodeURIComponent(data), result = btoa(set)
     return result;
   }
   /**
@@ -13,7 +13,7 @@ export const StorageClass = new class Session {
    */
   MyLocker(data){
     try{
-      let jieMi = atob(data), jieM = decodeURIComponent(jieMi);
+      let jieMi = atob(data), jieM = decodeURIComponent(jieMi)
       return jieM;
     }catch(e){
       throw Error('解码出错')
@@ -25,7 +25,7 @@ export const StorageClass = new class Session {
    * @returns {Storage} 返回 Session 存储对象
    */
   isSession(Session){
-    return Session ? localStorage : sessionStorage;
+    return Session ? localStorage : sessionStorage
   }
   /**
    * 判断该当前的key 是否存在
@@ -73,7 +73,7 @@ export const StorageClass = new class Session {
     }
   }
   sessionClear(key,Session){
-    this.ISKET(key);
+    this.ISKET(key)
     this.isSession(Session).removeItem(key)
   }
   sessionClearAll(Session){
