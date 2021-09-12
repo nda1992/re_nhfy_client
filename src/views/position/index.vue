@@ -7,10 +7,10 @@
       @HandleRegister="HandleRegister"
       @home="home"
       @HandleLogin="HandleLogin"
-      :username="username"
       :msgNum="msgNum"
       @notice="notice"
       :isLogin="isLogin"
+      :username="username"
       @Userinfo="Userinfo"
       @logout="logout"/>
     <!--内容显示-->
@@ -83,6 +83,8 @@ import Header from './components/Header'
 import Footer from './components/Footer'
 import { positionRegister, updatePasswd } from '@/api/recruit/position'
 import { getReceiveMsg } from '@/api/recruit/position'
+// 对sessionStorage加密
+import { StorageClass } from '@/utils/session'
 export default {
   components: {
     Header,
@@ -152,6 +154,8 @@ export default {
       },
       show: true,
       isLogin: JSON.parse(sessionStorage.getItem('isLogin')),
+      username: '',
+      jobseekerId: undefined,
       dialogFormVisible: false,
       dialogRegisterFormVisible: false,
       Logintemp: {
@@ -193,15 +197,11 @@ export default {
   computed: {
     key() {
       return this.$route.path
-    },
-    username() {
-      return sessionStorage.getItem('jobseekerUsername')
-    },
-    jobseekerId() {
-      return sessionStorage.getItem('jobseekerId')
     }
   },
   mounted() {
+    this.getJobseekerId()
+    this.getUsername()
     this.getReceiveMsg()
   },
   methods: {
@@ -263,6 +263,16 @@ export default {
         this.$refs['dataForm'].clearValidate()
       })
     },
+    getUsername() {
+      if(this.isLogin) {
+        this.username = StorageClass.getSession('jobseekerUsername').jobseekerUsername
+      }
+    },
+    getJobseekerId() {
+      if(this.isLogin) {
+        this.jobseekerId = StorageClass.getSession('jobseekerId').jobseekerId
+      }
+    },
     Login() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
@@ -313,6 +323,9 @@ export default {
     },
     // 获取用户接收到的消息
     getReceiveMsg() {
+      if(this.jobseekerId === {}) {
+        return
+      }
       const temp = Object.assign({}, this.listQuery, { receive_id: this.jobseekerId })
       getReceiveMsg(temp).then(res => {
         const { no_read_num } = res

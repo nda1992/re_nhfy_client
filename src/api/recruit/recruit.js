@@ -89,18 +89,27 @@ export function getAllSwiperImgs(query) {
 }
 
 // 根据id删除轮播图片
-export function deleteImgById(query) {
+export function deleteImgById(data) {
   return request({
     url: '/recruit/deleteImgById',
-    method: 'delete',
-    params: query
+    method: 'post',
+    data
   })
 }
 
 // 提交要展示的轮播图
-export function submitSwiper(query) {
+export function SetSwiperStatus(query) {
   return request({
-    url: '/recruit/submitSwiper',
+    url: '/recruit/SetSwiperStatus',
+    method: 'get',
+    params: query
+  })
+}
+
+// 获取轮播图并播放
+export function getSwiperImgs2Run(query) {
+  return request({
+    url: '/recruit/getSwiperImgs2Run',
     method: 'get',
     params: query
   })

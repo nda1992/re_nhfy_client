@@ -24,7 +24,7 @@
 </template>
 <script>
 import PositionCard from '@/components/PositionCard/index'
-import { getPositionList } from '@/api/recruit/recruit'
+import { getPositionList, getSwiperImgs2Run } from '@/api/recruit/recruit'
 import Pagination from '@/components/Pagination'
 export default {
   components: {
@@ -33,11 +33,12 @@ export default {
   },
   data() {
     return {
-      carouselImages: [
-        `${process.env.BASE_URL}images/test1.jpg`,
-        `${process.env.BASE_URL}images/test2.jpg`,
-        `${process.env.BASE_URL}images/test6.jpg`,
-      ],
+      // carouselImages: [
+      //   `${process.env.BASE_URL}images/test1.jpg`,
+      //   `${process.env.BASE_URL}images/test2.jpg`,
+      //   `${process.env.BASE_URL}images/test6.jpg`,
+      // ],
+      carouselImages: [],
       listLoading: false,
       listQuery: {
         page: 1,
@@ -49,6 +50,7 @@ export default {
   },
   mounted() {
     this.getPositionList()
+    this.getSwiperImgs()
   },
   methods: {
     // 获取所有岗位列表
@@ -63,9 +65,13 @@ export default {
         }, 1000)
       })
     },
-    getAllSwiperImgs() {
-
-    }
+    // 获取所有的轮播图片
+    getSwiperImgs() {
+      getSwiperImgs2Run({}).then(res => {
+        const { swipers } = res
+        this.carouselImages = swipers.map(e => e.url)
+      })
+    },
   }
 }
 </script>

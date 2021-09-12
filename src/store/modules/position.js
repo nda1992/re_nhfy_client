@@ -1,5 +1,6 @@
 import { positionLogin, getPositionList } from '@/api/recruit/position'
-
+// 对sessionStorage加密
+import { StorageClass } from '@/utils/session'
 // 求职者的状态管理
 const state = {
   id: undefined,
@@ -7,59 +8,39 @@ const state = {
   phone: '',
   email: '',
   avatar: '',
+  file: '',
   role: '',
   isLogin: false
 }
 
-
 const mutations = {
   SET_ID: (state, id) => {
-    sessionStorage.setItem('jobseekerId', id)
+    StorageClass.setSession('jobseekerId', { jobseekerId: id })
     state.id = id
   },
-  CLEAR_ID: () => {
-    sessionStorage.removeItem('jobseekerId')
-    state.id = undefined
-  },
   SET_AVATAR: (state, avatar) => {
-    sessionStorage.setItem('avatar', avatar)
+    StorageClass.setSession('avatar', { avatar: avatar })
     state.avatar = avatar
   },
-  CLEAR_AVATAR: (state) => {
-    state.avatar = ''
-    sessionStorage.removeItem('avatar')
+  SET_FILE: (state, file) => {
+    StorageClass.setSession('file', { file: file })
+    state.file = file
   },
   SET_USERNAME: (state, username) => {
-    sessionStorage.setItem('jobseekerUsername', username)
+    StorageClass.setSession('jobseekerUsername', { jobseekerUsername: username })
     state.jobseekerUsername = username
   },
-  CLEAR_USERNAME: (state) => {
-    state.username = ''
-    sessionStorage.removeItem('jobseekerUsername')
-  },
   SET_PHONE: (state, phone) => {
-    sessionStorage.setItem('phone', phone)
+    StorageClass.setSession('phone', { phone: phone })
     state.phone = phone
   },
-  CLEAR_PHONE: (state) => {
-    state.phone = ''
-    sessionStorage.removeItem('phone')
-  },
   SET_EMAIL: (state, email) => {
-    sessionStorage.setItem('email', email)
+    StorageClass.setSession('email', { email: email })
     state.email = email
   },
-  CLEAR_EMAIL: (state) => {
-    state.email = ''
-    sessionStorage.removeItem('email')
-  },
   SET_ROLE: (state, role) => {
-    sessionStorage.setItem('jobseekerRole', role)
+    StorageClass.setSession('jobseekerRole', { jobseekerRole: role })
     state.role = role
-  },
-  CLEAR_ROLE: (state) => {
-    state.role = ''
-    sessionStorage.removeItem('jobseekerRole')
   },
   SET_ISLOGIN: (state, isLogin) => {
     sessionStorage.setItem('isLogin', isLogin)
@@ -68,6 +49,17 @@ const mutations = {
   CLEAR_ISLOGIN: (state) => {
     state.isLogin = false
     sessionStorage.removeItem('isLogin')
+  },
+  CLEAR_ALL: (state) => {
+    state.id = undefined
+    state.jobseekerUsername = ''
+    state.phone = ''
+    state.email = ''
+    state.avatar = ''
+    state.file = ''
+    state.role = ''
+    state.isLogin = false
+    StorageClass.sessionClearAll()
   }
 }
 
@@ -76,9 +68,10 @@ const actions = {
     const { account, password } = userinfo
     return new Promise((resolve, reject) => {
       positionLogin({ account: account, password: password }).then(res => {
-        const { id, username, avatar, role, phone, email } = res.data
+        const { id, username, avatar, file, role, phone, email } = res.data
         commit('SET_ID', id)
         commit('SET_AVATAR', avatar)
+        commit('SET_FILE', file)
         commit('SET_USERNAME', username)
         commit('SET_PHONE', phone)
         commit('SET_EMAIL', email)
@@ -92,13 +85,7 @@ const actions = {
   },
   // 用户退出，清除所有的用户信息
   logout({ commit }) {
-    commit('CLEAR_ID')
-    commit('CLEAR_AVATAR')
-    commit('CLEAR_USERNAME')
-    commit('CLEAR_PHONE')
-    commit('CLEAR_EMAIL')
-    commit('CLEAR_ROLE')
-    commit('CLEAR_ISLOGIN')
+    commit('CLEAR_ALL')
   },
   // 重置sessionStorage中的value
   resetSession({ commit }, data) {
@@ -106,6 +93,14 @@ const actions = {
     commit('SET_USERNAME', data.username)
     commit('SET_PHONE', data.phone)
     commit('SET_EMAIL', data.email)
+  },
+  // 头像上传成功重置avatar
+  resetAvatar({ commit }, data) {
+    commit('SET_AVATAR', data.avatar)
+  },
+  // 文件上传成功后，重置file的值
+  resetFile({ commit }, data) {
+    commit('SET_FILE', data.file)
   }
 }
 

@@ -207,3 +207,12 @@ export function removeAllSendMsg(data) {
     data
   })
 }
+
+// 求职者（不用token认证）获取轮播图并播放
+export function getSwiperImgs2Run(query) {
+  return request({
+    url: '/position/getSwiperImgs2Run',
+    method: 'get',
+    params: query
+  })
+}

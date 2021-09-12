@@ -482,8 +482,8 @@ export default {
     // 获取远程科室列表
     getRemoteDeptList(query) {
       this.select_loading = true
-      searchDept(query).then(response => {
-        const { items } = response
+      searchDept(query).then(res => {
+        const { items } = res
         if (!items) return
         this.deptOptions = items.map(v => v.name)
       })

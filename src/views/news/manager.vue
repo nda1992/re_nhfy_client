@@ -11,16 +11,14 @@
         <el-tab-pane label="发文作者和科室" name="second">发文作者和科室</el-tab-pane>
         <el-tab-pane label="招聘系统轮播图" name="third">
           <div class="swiper-header">
-            <div style="color: #ff4949;font-size: 12px">(左侧第一列选择要在轮播图中展示的图片)</div>
-            <el-tooltip class="item" effect="dark" content="提交要展示的轮播图" placement="bottom">
-              <el-button type="success" @click="submit">提交</el-button>
-            </el-tooltip>
+            <div style="color: #ff4949;font-size: 12px;margin-bottom: 10px;">(切换状态选择要播放的轮播图，最多6张)</div>
           </div>
           <ImgList
             :imgList="imgList"
             :srcList="srcList"
+            :num="num"
             @handleDelete="handleDelete"
-            @handleSelectionChange="handleSelectionChange"/>
+            @handleSetStatus="handleSetStatus"/>
           <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getAllSwiperImgs" />
           <el-divider></el-divider>
           <UploadImg :userCode="userCode" @getAllSwiperImgs="getAllSwiperImgs"/>
@@ -32,7 +30,7 @@
 
 <script>
 import { createCategory } from '@/api/news/news'
-import { getAllSwiperImgs, deleteImgById, submitSwiper } from '@/api/recruit/recruit'
+import { getAllSwiperImgs, deleteImgById, SetSwiperStatus } from '@/api/recruit/recruit'
 import NewsCategory from './components/Category/NewsCategory'
 import ImgList from './components/SwiperImgs/ImgList'
 import UploadImg from './components/SwiperImgs/UploadImg'
@@ -53,6 +51,8 @@ export default {
         page: 1
       },
       activeName: 'third',
+      // 轮播图的数量
+      num: 0,
       imgList: [],
       srcList: [],
       selectList: []
@@ -91,19 +91,20 @@ export default {
     getAllSwiperImgs() {
       const temp = Object.assign({}, { userCode: this.userCode }, this.listQuery)
       getAllSwiperImgs(temp).then(res => {
-        const { files, total } = res
+        const { files, total, num } = res
         this.imgList = files
         this.total = total
+        this.num = num
         this.srcList = this.imgList.map(e => e.url)
       })
     },
-    handleDelete(id) {
+    handleDelete(row) {
       this.$confirm('是否删除?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        deleteImgById({ id: id }).then(res => {
+        deleteImgById({ id: row.id, url: row.url }).then(res => {
           const { msg } = res
           this.$notify({
             title: 'Success',
@@ -115,20 +116,18 @@ export default {
         })
       })
     },
-    // 多选框
-    handleSelectionChange(val) {
-      this.selectList = val
-    },
-    // 提交要展示的轮播图
-    submit() {
-      if(this.selectList.length < 3 || this.selectList.length > 6) {
-        this.$message.error('请选择3~6张轮播图片')
-        return
-      }
-      const temp = this.selectList.map(e => e.id)
-      submitSwiper({ selected: temp }).then(res => {
+    // 根据switch的值来更新status的状态，status=1：是轮播图，status=0：不是轮播图
+    handleSetStatus(row) {
+      const temp = Object.assign({}, { Switch: row.Switch, id: row.id })
+      SetSwiperStatus(temp).then(res => {
         const { msg } = res
-        this.$message.success(msg)
+        this.$notify({
+          title: 'Success',
+          message: msg,
+          type: 'success',
+          duration: 2000
+        })
+        this.getAllSwiperImgs()
       })
     }
   }
@@ -136,14 +135,6 @@ export default {
 </script>
 <style lang="scss" scoped>
   .app-container{
-    .tabs{
-      .swiper-header{
-        width: 300px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-      }
-    }
+
   }
 </style>

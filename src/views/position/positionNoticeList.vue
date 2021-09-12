@@ -65,6 +65,8 @@
 import { getReceiveMsg, getSendMsg, updateIsread, receiveRemoveMsg, removeAllReceiveMsg, replyMessage, removeSendMsg, removeAllSendMsg } from '@/api/recruit/position'
 import Activity from './components/Activity'
 import Account from './components/Account'
+// 对sessionStorage加密
+import { StorageClass } from '@/utils/session'
 export default {
   components: { Activity, Account },
   data() {
@@ -98,11 +100,11 @@ export default {
   },
   computed: {
     jobseekerId() {
-      return sessionStorage.getItem('jobseekerId')
+      return StorageClass.getSession('jobseekerId').jobseekerId
     },
     // 求职者头像
     avatar() {
-      return sessionStorage.getItem('avatar')
+      return StorageClass.getSession('avatar').avatar
     }
   },
   created() {

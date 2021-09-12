@@ -22,7 +22,10 @@
 <script>
 import PositionCard from '@/components/PositionCard/index'
 import { getPositionList, UserinfoDetail, postPosition, handleCollect } from '@/api/recruit/position'
+import { getSwiperImgs2Run } from '@/api/recruit/position'
 import Pagination from '@/components/Pagination'
+// 对sessionStorage加密
+import { StorageClass } from '@/utils/session'
 export default {
   name: 'positionList',
   components: {
@@ -31,17 +34,18 @@ export default {
   },
   data() {
     return {
-      carouselImages: [
-        `${process.env.BASE_URL}images/test1.jpg`,
-        `${process.env.BASE_URL}images/test2.jpg`,
-        `${process.env.BASE_URL}images/test6.jpg`,
-      ],
+      // carouselImages: [
+      //   `${process.env.BASE_URL}images/test1.jpg`,
+      //   `${process.env.BASE_URL}images/test2.jpg`,
+      //   `${process.env.BASE_URL}images/test6.jpg`,
+      // ],
+      carouselImages: [],
       listLoading: false,
       listQuery: {
         page: 1,
-        limit: 10,
-        jobseekerId: sessionStorage.getItem('jobseekerId')
+        limit: 10
       },
+      jobseekerId: undefined,
       total: 0,
       positionList: [],
       // 用户信息是否完整,如果不完整，不能投递简历
@@ -49,20 +53,34 @@ export default {
     }
   },
   mounted() {
+    this.getJobseekerId()
     this.getUserinfoDetail()
-    this.getPositionList(Object.assign({}, this.listQuery, {jobseekerId: sessionStorage.getItem('jobseekerId') }))
+    this.getPositionList()
+    this.getSwiperImgs()
   },
   computed: {
     isLogin() {
       return sessionStorage.getItem('isLogin')
-    },
-    jobseekerId() {
-      return sessionStorage.getItem('jobseekerId')
     }
   },
   methods: {
+    getJobseekerId() {
+      if(this.isLogin) {
+        this.jobseekerId = StorageClass.getSession('jobseekerId').jobseekerId
+      }
+    },
+    // 获取所有的轮播图片
+    getSwiperImgs() {
+      getSwiperImgs2Run({}).then(res => {
+        const { swipers } = res
+        this.carouselImages = swipers.map(e => e.url)
+      })
+    },
     // 根据用户id拉取完整信息
     getUserinfoDetail() {
+      if(this.jobseekerId === undefined) {
+        return
+      }
       UserinfoDetail(this.jobseekerId).then(res => {
         const { userinfo, doneUserinfo } = res
         this.doneUserinfo = doneUserinfo
@@ -70,7 +88,8 @@ export default {
     },
     // 获取所有岗位列表
     getPositionList() {
-      getPositionList(this.listQuery).then(res => {
+      const temp = Object.assign({}, this.listQuery, { jobseekerId: this.jobseekerId })
+      getPositionList(temp).then(res => {
         this.listLoading = true
         this.positionList = res.positions
         this.total = res.total

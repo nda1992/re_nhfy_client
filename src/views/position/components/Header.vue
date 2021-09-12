@@ -18,12 +18,14 @@
           <el-dropdown-item icon="el-icon-error" @click.native="logout">退出系统</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
-      <div style="float: right;margin-right: 50px;color: #e7e7eb;">{{username}}，欢迎你使用招聘系统</div>
+      <div style="float: right;margin-right: 50px;color: #e7e7eb;">{{ username }}，欢迎你使用招聘系统</div>
     </div>
   </div>
 </template>
 
 <script>
+// 对sessionStorage加密
+import { StorageClass } from '@/utils/session'
 export default {
   name: 'Header',
   props: {
@@ -36,7 +38,7 @@ export default {
     username: {
       type: String,
       default: () => {
-        return sessionStorage.getItem('jobseekerUsername')
+        return ''
       }
     },
     // 收到的消息数量

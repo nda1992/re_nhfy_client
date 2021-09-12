@@ -89,8 +89,9 @@
           <el-upload
             class="avatar-uploader"
             action="http://localhost:3000/position/uploadAvatar"
-            :data="query"
+            :data="queryAvatar"
             :show-file-list="false"
+            :before-upload="handlebeforeUploadAvatar"
             :on-success="handleSuccessAvatar"
             :on-remove="handleRemoveAvatar">
             <img v-if="registerForm.faceimgUrl" :src="registerForm.faceimgUrl" class="avatar" style="width: 88px;height: 93px">
@@ -105,7 +106,7 @@
             accept=".docx, .pdf"
             ref="upload"
             action="http://localhost:3000/position/uploadFile"
-            :data="query"
+            :data="queryFile"
             :limit="1"
             :on-success="handleSuccessFile"
             :on-remove="handleRemoveFile"
@@ -146,6 +147,8 @@
 <script>
 import { getPost2PositionListByUid, cancelPostedByPid, confirmStauts, UserinfoDetail, updateUserinfo, handleCollect } from '@/api/recruit/position'
 import UserinfoCard from './components/UserinfoCard'
+// 对sessionStorage加密
+import { StorageClass } from '@/utils/session'
 export default {
   name: 'Userinfo',
   components: {
@@ -207,7 +210,8 @@ export default {
       schoolOptions: [],
       select_school_loading: false,
       citiesListOptions: [],
-      query: { id: undefined },
+      queryAvatar: { id: undefined, avatar: undefined },
+      queryFile: { id: undefined, file: undefined },
       fileList: [],
       showdialogVisible: false,
       // 基本信息更新
@@ -221,27 +225,25 @@ export default {
   },
   computed: {
     avatar() {
-      return sessionStorage.getItem('avatar')
+      return StorageClass.getSession('avatar').avatar
     },
     jobseekerUsername() {
-      return sessionStorage.getItem('jobseekerUsername')
+      return StorageClass.getSession('jobseekerUsername').jobseekerUsername
     },
     phone() {
-      return sessionStorage.getItem('phone')
+      return StorageClass.getSession('phone').phone
     },
     email() {
-      return sessionStorage.getItem('email')
+      return StorageClass.getSession('email').email
     },
     jobseekerId() {
-      return sessionStorage.getItem('jobseekerId')
+      return StorageClass.getSession('jobseekerId').jobseekerId
     }
   },
   // created() {
   //   this.getUserinfoDetail()
   // },
   mounted() {
-    // 头像上传携带的用户id
-    this.query.id = sessionStorage.getItem('jobseekerId')
     this.getUserinfoDetail()
     this.getPost2PositionListByUid()
   },
@@ -289,7 +291,7 @@ export default {
         this.getPost2PositionListByUid()
       })
     },
-    // 根据用户id再次拉取数据库中最新的用户所有信息
+    // 根据用户id再次拉取数据库中用户最新的信息
     getUserinfoDetail() {
       UserinfoDetail(this.jobseekerId).then(res => {
         const { userinfo, doneUserinfo } = res
@@ -299,18 +301,6 @@ export default {
       })
     },
     // 用户信息完善或用户信息更新的相关方法
-    // resetRegisterForm() {
-    //   this.registerForm = {
-    //     sex: '',
-    //     age: '',
-    //     birthday: '',
-    //     nation: '',
-    //     address: '',
-    //     professional: '',
-    //     undergraduateTime: '',
-    //     attachmentUrl: null
-    //   }
-    // },
     // 更新基本信息前的设置
     HandleupdateBasicUserinfo() {
       this.basicForm = Object.assign({}, { username: this.jobseekerUsername, email: this.email, phone: this.phone })
@@ -409,18 +399,27 @@ export default {
         }
       })
     },
+    // 上传头像前的钩子
+    handlebeforeUploadAvatar() {
+      // 头像上传携带的用户id
+      this.queryAvatar.id = StorageClass.getSession('jobseekerId').jobseekerId
+      this.queryAvatar.avatar = StorageClass.getSession('avatar').avatar
+    },
     // 头像上传成功后的钩子
     handleSuccessAvatar(file) {
       const { msg, files } = file
       this.$message.success(msg)
       this.registerForm.faceimgUrl =files[0].file
+      this.$store.dispatch('position/resetAvatar', { avatar: files[0].file })
     },
     handleRemoveAvatar() {},
     // 文件上传前的钩子
     handlebeforeUploadFile(file) {
+      this.queryFile.id = StorageClass.getSession('jobseekerId').jobseekerId
+      this.queryFile.file = StorageClass.getSession('file').file
       const isLt3M = file.size / 1024 / 1024 < 3
       if(!isLt3M) {
-        this.$message.error('文件不能超过5M')
+        this.$message.error('文件不能超过3M')
       }
       return isLt3M
     },
@@ -433,6 +432,7 @@ export default {
       const { msg, files } = file
       this.$message.success(msg)
       this.registerForm.attachmentUrl = files[0].file
+      this.$store.dispatch('position/resetFile', { file: files[0].file })
     },
     handleRemoveFile() {}
   }
