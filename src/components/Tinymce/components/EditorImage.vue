@@ -1,11 +1,12 @@
 <template>
   <!--action="https://httpbin.org/post"-->
   <div class="upload-container">
-    <el-button :style="{background:color,borderColor:color}" icon="el-icon-picture" size="mini" type="primary" @click=" dialogVisible=true">
+    <el-button :style="{background:color,borderColor:color}" icon="el-icon-upload" size="mini" type="primary" @click=" dialogVisible=true">
       上传图片
     </el-button>
     <el-dialog :visible.sync="dialogVisible">
       <el-upload
+        :headers="{ token: token }"
         :multiple="true"
         :file-list="fileList"
         :show-file-list="true"
@@ -40,6 +41,11 @@ export default {
       listObj: {},
       fileList: [],
       upload_url: NEWS_IMAGES_UPLOAD
+    }
+  },
+  computed: {
+    token() {
+      return localStorage.getItem('token')
     }
   },
   methods: {

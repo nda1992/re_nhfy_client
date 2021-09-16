@@ -3,9 +3,9 @@
 // 管理员头像上传
 export const ADMIN_AVATAR_UPLOAD = 'http://localhost:3000/users/uploadAvatar'
 // 新闻图片上传
-export const NEWS_IMAGES_UPLOAD = 'http://localhost:3000/news/upload/'
+export const NEWS_IMAGES_UPLOAD = 'http://localhost:3000/news/upload'
 // 新闻附件上传
-export const NEWS_ATTACHMENT_UPLOAD = 'http://localhost:3000/news/uploadFile/'
+export const NEWS_ATTACHMENT_UPLOAD = 'http://localhost:3000/news/uploadFile'
 // 求职者头像上传
 export const JOBSEEKER_AVATAR_UPLOAD = 'http://localhost:3000/position/uploadAvatar'
 // 求职者简历上传
