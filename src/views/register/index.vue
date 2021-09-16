@@ -114,6 +114,7 @@
 </template>
 <script>
 import axios from 'axios'
+import { userRegister, searchDepts } from '@/api/user'
 export default {
   name: 'Register',
   data() {
@@ -224,8 +225,8 @@ export default {
     getRemoteDeptList(query) {
       const temp = { keyword: query }
       this.select_loading = true
-      axios.post('http://localhost:3000/users/searchDept', temp).then(res => {
-        const { items } = res.data
+      searchDepts(temp).then(res => {
+        const { items } = res
         if (!items) return
         this.deptListOptions = items.map(v => v.name)
       })
@@ -244,13 +245,13 @@ export default {
             type: 'warning'
           }).then(() => {
             this.loading = true
-            axios.post('http://localhost:3000/users/register', this.registerForm).then(res => {
-              const { code, msg } = res.data
+            const temp = Object.assign({}, this.registerForm)
+            userRegister(temp).then(res => {
+              const { code, msg } = res
               if (code === 200) {
                 this.$router.push({ path: this.redirect || '/login' })
                 this.loading = false
                 this.$message.success('用户注册成功,审核完成后即可登录')
-                // this.$router.go(-1)
               } else if (code === 201) {
                 this.$message.error(msg)
                 this.loading = false

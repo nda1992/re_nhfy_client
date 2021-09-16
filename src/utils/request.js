@@ -2,10 +2,10 @@ import axios from 'axios'
 import { MessageBox, Message } from 'element-ui'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
-import { uuid } from '@/utils/uuid'
 // create an axios instance
 const service = axios.create({
   // baseURL: process.env.VUE_APP_BASE_API, // url = base url + request url
+  // baseURL: 'http://and2ui.cn:3000/', // url = base url + request url
   baseURL: 'http://localhost:3000/', // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
   timeout: 5000 * 12 // request timeout
@@ -20,7 +20,6 @@ service.interceptors.request.use(
       // ['X-Token'] is a custom headers key
       // please modify it according to the actual situation
       config.headers.token = getToken()
-      config.headers.uuid = uuid()
       // config.headers['token'] = getToken()
     }
     return config

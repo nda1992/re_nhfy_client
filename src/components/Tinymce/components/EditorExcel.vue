@@ -6,7 +6,7 @@
         accept=".xls,.xlsx,.doc,.docx"
         class="upload-demo"
         ref="upload"
-        action="http://localhost:3000/news/uploadFile/"
+        :action="upload_url"
         :headers="tempToken"
         :on-success="handleSuccess"
         :on-preview="handlePreview"
@@ -31,6 +31,7 @@
 </template>
 
 <script>
+import { NEWS_ATTACHMENT_UPLOAD } from '@/utils/urlConfig'
 export default {
   name: 'EditorExcel',
   props: {
@@ -44,7 +45,8 @@ export default {
     return {
       dialogVisible: false,
       listObj: {},
-      fileList: []
+      fileList: [],
+      upload_url: NEWS_ATTACHMENT_UPLOAD
     }
   },
   methods: {

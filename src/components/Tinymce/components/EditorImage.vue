@@ -13,7 +13,7 @@
         :on-success="handleSuccess"
         :before-upload="beforeUpload"
         class="editor-slide-upload"
-        action="http://localhost:3000/news/upload"
+        :action="upload_url"
         list-type="picture-card"
       >
         <el-button size="small" type="primary">上传图片</el-button>
@@ -25,8 +25,7 @@
 </template>
 
 <script>
-// import { getToken } from 'api/qiniu'
-
+import { NEWS_IMAGES_UPLOAD } from '@/utils/urlConfig'
 export default {
   name: 'EditorSlideUpload',
   props: {
@@ -39,7 +38,8 @@ export default {
     return {
       dialogVisible: false,
       listObj: {},
-      fileList: []
+      fileList: [],
+      upload_url: NEWS_IMAGES_UPLOAD
     }
   },
   methods: {
@@ -67,7 +67,6 @@ export default {
         if (this.listObj[objKeyArr[i]].uid === uid) {
           this.listObj[objKeyArr[i]].url = files[0].file
           this.listObj[objKeyArr[i]].hasSuccess = true
-          console.log(this.listObj)
           return
         }
       }
@@ -83,7 +82,6 @@ export default {
       }
     },
     beforeUpload(file) {
-      console.log(file)
       const _self = this
       const _URL = window.URL || window.webkitURL
       const fileName = file.uid
@@ -94,7 +92,6 @@ export default {
         img.onload = function() {
           _self.listObj[fileName] = { hasSuccess: false, uid: file.uid, width: this.width, height: this.height }
         }
-        console.log(img)
         resolve(true)
       })
     }
