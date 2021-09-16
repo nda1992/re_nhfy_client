@@ -491,6 +491,22 @@ export const constantRoutes = [
       }
     ]
   },
+  // animation
+  {
+    path: '/animation',
+    component: Layout,
+    redirect: '/animation/home',
+    name: 'Animation',
+    children: [
+      {
+        // 首页
+        path: 'xhtx',
+        name: 'Animation',
+        component: () => import('@/views/animation/index'),
+        meta: { title: 'animation', icon: 'el-icon-video-camera-solid' }
+      }
+    ]
+  },
 
 
   // 404 page must be placed at the end !!!
