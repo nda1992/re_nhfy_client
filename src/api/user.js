@@ -1,5 +1,14 @@
 import request from '@/utils/request'
 
+// 用户注册
+export function userRegister(data) {
+  return request({
+    url: '/users/register',
+    method: 'post',
+    data
+  })
+}
+
 export function login(data) {
   return request({
     url: '/users/login',
@@ -21,5 +30,14 @@ export function logout() {
     // url: '/vue-admin-template/user/logout',
     url: '/users/logout',
     method: 'post'
+  })
+}
+
+// 搜索科室
+export function searchDepts(data) {
+  return request({
+    url: '/users/searchDept',
+    method: 'post',
+    data
   })
 }

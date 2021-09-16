@@ -4,7 +4,7 @@
     <el-upload
       ref="upload"
       :headers="{ token: 'token' }"
-      action="http://localhost:3000/recruit/uploadSwiper"
+      :action="upload_url"
       :data="{userCode: userCode}"
       accept=".png,.jpg,.jpeg,.bmp"
       list-type="picture-card"
@@ -21,11 +21,11 @@
 </template>
 
 <script>
-import { uploadSwiper } from '@/api/recruit/recruit'
-Array.prototype.remove = function (val) {
-  var index = this.indexOf(val);
+import { SWIPER_IMAGES_UPLOAD } from '@/utils/urlConfig'
+Array.prototype.remove = function(val) {
+  var index = this.indexOf(val)
   if (index > -1) {
-    this.splice(index, 1);
+    this.splice(index, 1)
   }
 }
 
@@ -43,7 +43,8 @@ export default {
     return {
       fileList: [],
       dialogImageUrl: '',
-      dialogVisible: false
+      dialogVisible: false,
+      upload_url: SWIPER_IMAGES_UPLOAD
     }
   },
   methods: {
@@ -59,7 +60,7 @@ export default {
       this.$message.success(msg)
       this.fileList.push({ name: 'image', url: file.url })
       this.$emit('getAllSwiperImgs')
-    },
+    }
     // uploadFilesList(file) {
     //   const fd = new FormData()
     //   fd.append('file', file.file)

@@ -14,9 +14,11 @@
       <div class="avatar-container right-menu-item hover-effect">
           <div class="avatar-wrapper">
             <el-upload
+              :headers="{ token: token }"
               :show-file-list="false"
-              action="aaa"
-              :before-upload="beforeUploadFile">
+              :data="{ userCode: userCode, avatar: avatar }"
+              :action="upload_url"
+              :on-success="hadndleSuccessUploadFile">
               <el-tooltip effect="dark" content="点击更换头像" placement="bottom-end">
                 <el-avatar shape="square" :size="40" :src="avatar" v-if="avatar" class="user-avatar"></el-avatar>
               </el-tooltip>
@@ -49,8 +51,7 @@ import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 import Screenfull from '@/components/Screenfull'
 import { getReceiveMsg } from '@/api/recruit/position'
-import { uuid } from '@/utils/uuid'
-import axios from 'axios'
+import { ADMIN_AVATAR_UPLOAD } from '@/utils/urlConfig'
 export default {
   components: {
     Breadcrumb,
@@ -60,10 +61,14 @@ export default {
   data() {
     return {
       avatar: localStorage.getItem('avatar'),
-      msgNum: 0
+      msgNum: 0,
+      upload_url: ADMIN_AVATAR_UPLOAD
     }
   },
   computed: {
+    token() {
+      return localStorage.getItem('token')
+    },
     userCode() {
       return localStorage.getItem('userCode')
     },
@@ -111,19 +116,29 @@ export default {
     beforeUploadFile(file) {
       const formdata = new FormData()
       formdata.append('file', file)
-      formdata.append('userCode', localStorage.getItem('userCode'))
-      formdata.append('avatar', localStorage.getItem('avatar'))
-      axios.post('http://localhost:3000/users/uploadAvatar', formdata, { headers: { token: localStorage.getItem('token'), uuid: uuid() }}).then(res => {
-        const { data } = res
-        if (data.code === 200) {
-          this.avatar = data.avatar
-          localStorage.setItem('avatar', data.avatar)
-          this.$store.dispatch('/user/uploadavatar')
-          this.$message.success(data.msg)
-        } else {
-          this.$message.success('头像上传失败')
-        }
-      })
+    },
+    // beforeUploadFile(file) {
+    //   const formdata = new FormData()
+    //   formdata.append('file', file)
+    //   formdata.append('userCode', localStorage.getItem('userCode'))
+    //   formdata.append('avatar', localStorage.getItem('avatar'))
+    //   axios.post('http://localhost:3000/users/uploadAvatar', formdata, { headers: { token: localStorage.getItem('token'), uuid: uuid() }}).then(res => {
+    //     const { data } = res
+    //     if (data.code === 200) {
+    //       this.avatar = data.avatar
+    //       localStorage.setItem('avatar', data.avatar)
+    //       this.$store.dispatch('/user/uploadavatar')
+    //       this.$message.success(data.msg)
+    //     } else {
+    //       this.$message.success('头像上传失败')
+    //     }
+    //   })
+    // },
+    // 头像上传成功
+    hadndleSuccessUploadFile(file) {
+      const { avatar, msg } = file
+      this.$message.success(msg)
+      localStorage.setItem('avatar', avatar)
     }
   }
 }

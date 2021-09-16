@@ -88,7 +88,7 @@
         <el-form-item prop="faceimgUrl" label="证件照">
           <el-upload
             class="avatar-uploader"
-            action="http://localhost:3000/position/uploadAvatar"
+            :action="avatarUpload_url"
             :data="queryAvatar"
             :show-file-list="false"
             :before-upload="handlebeforeUploadAvatar"
@@ -105,7 +105,7 @@
           <el-upload
             accept=".docx, .pdf"
             ref="upload"
-            action="http://localhost:3000/position/uploadFile"
+            :action="fileUpload_url"
             :data="queryFile"
             :limit="1"
             :on-success="handleSuccessFile"
@@ -149,6 +149,7 @@ import { getPost2PositionListByUid, cancelPostedByPid, confirmStauts, UserinfoDe
 import UserinfoCard from './components/UserinfoCard'
 // 对sessionStorage加密
 import { StorageClass } from '@/utils/session'
+import { JOBSEEKER_AVATAR_UPLOAD, JOBSEEKER_RESUME_UPLOAD } from '@/utils/urlConfig'
 export default {
   name: 'Userinfo',
   components: {
@@ -156,6 +157,8 @@ export default {
   },
   data() {
     return {
+      avatarUpload_url: JOBSEEKER_AVATAR_UPLOAD,
+      fileUpload_url: JOBSEEKER_RESUME_UPLOAD,
       listQuery: {
         page: 1,
         limit: 10,
@@ -345,7 +348,7 @@ export default {
       import('@/utils/nation').then(res => {
         const { data } = res.default
         data.forEach(e => {
-          if((e.name.indexOf(query)!==-1)){
+          if ((e.name.indexOf(query) !== -1)) {
             this.nationListOptions.push(e.name)
           }
         })
@@ -356,7 +359,7 @@ export default {
       this.schoolOptions = []
       import('@/utils/school').then(res => {
         res.default.forEach(e => {
-          if(e.indexOf(query)!==-1){
+          if (e.indexOf(query) !== -1) {
             this.schoolOptions.push(e)
           }
         })
@@ -367,7 +370,7 @@ export default {
       this.citiesListOptions = []
       import('@/utils/cities').then(res => {
         res.default.forEach(e => {
-          if(e.indexOf(query)!==-1){
+          if (e.indexOf(query) !== -1) {
             this.citiesListOptions.push(e)
           }
         })
@@ -409,7 +412,7 @@ export default {
     handleSuccessAvatar(file) {
       const { msg, files } = file
       this.$message.success(msg)
-      this.registerForm.faceimgUrl =files[0].file
+      this.registerForm.faceimgUrl = files[0].file
       this.$store.dispatch('position/resetAvatar', { avatar: files[0].file })
     },
     handleRemoveAvatar() {},
@@ -418,7 +421,7 @@ export default {
       this.queryFile.id = StorageClass.getSession('jobseekerId').jobseekerId
       this.queryFile.file = StorageClass.getSession('file').file
       const isLt3M = file.size / 1024 / 1024 < 3
-      if(!isLt3M) {
+      if (!isLt3M) {
         this.$message.error('文件不能超过3M')
       }
       return isLt3M
@@ -438,7 +441,6 @@ export default {
   }
 }
 </script>
-
 
 <style lang="scss" scoped>
   .userinfo-container{

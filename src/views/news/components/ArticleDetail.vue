@@ -67,23 +67,22 @@
 
 <script>
 import Tinymce from '@/components/Tinymce'
-import Upload from '@/components/Upload/SingleImage3'
 import MDinput from '@/components/MDinput'
 import Sticky from '@/components/Sticky' // 粘性header组件
 import { searchUser, getDraftById, searchCategory, searchDept, getDraftList, saveDraft, releaseNews } from '@/api/news/news'
 import Warning from './Warning'
-import { CommentDropdown, PlatformDropdown, SourceUrlDropdown } from './Dropdown'
+import { PlatformDropdown } from './Dropdown'
 
 const defaultForm = {
-  loginuserCode :'',
+  loginuserCode: '',
   author: '',
-  status: 'draft', //导航条的状态
+  status: 'draft', // 导航条的状态
   title: '', // 文章题目
   content: '', // 文章内容
   image_uri: '', // 文章图片
   display_time: undefined, // 前台展示时间
   id: 0,
-  platforms: ['院内网站'],  // 1=院内网站，2=院外网站，3=院内网站和院外网站
+  platforms: ['院内网站'], // 1=院内网站，2=院外网站，3=院内网站和院外网站
   category: '',
   deptName: '',
   type: '', // 1=发布，2=草稿
@@ -93,7 +92,7 @@ const defaultForm = {
 
 export default {
   name: 'ArticleDetail',
-  components: { Tinymce, MDinput, Upload, Sticky, Warning, CommentDropdown, PlatformDropdown, SourceUrlDropdown },
+  components: { Tinymce, MDinput, Sticky, Warning, PlatformDropdown },
   props: {
     isEdit: {
       type: Boolean,
@@ -121,7 +120,7 @@ export default {
       postForm: Object.assign({}, defaultForm),
       loading: false,
       userListOptions: [],
-      categoryListOptions :[],
+      categoryListOptions: [],
       deptListOptions: [],
       rules: {
         image_uri: [{ validator: validateRequire }],
@@ -196,7 +195,7 @@ export default {
         })
         return
       }
-      if(this.postForm.author === '' || this.postForm.deptName === ''|| this.postForm.category === '') {
+      if (this.postForm.author === '' || this.postForm.deptName === '' || this.postForm.category === '') {
         this.$message({
           message: '请填写作者相关信息',
           type: 'warning'
@@ -212,8 +211,8 @@ export default {
             this.postForm.status = 'published'
             this.loading = true
             this.postForm.loginuserCode = localStorage.getItem('userCode')
-            this.postForm.type = 2  // 表示已经提交，申请发布
-            this.postForm.newsStatus = 2  // 表示已经提交，但需要管理员审核
+            this.postForm.type = 2 // 表示已经提交，申请发布
+            this.postForm.newsStatus = 2 // 表示已经提交，但需要管理员审核
             this.postForm.role = localStorage.getItem('role')
             releaseNews(this.postForm).then(() => {
               this.$notify({
@@ -233,7 +232,7 @@ export default {
         }
       })
     },
-    /*文章草稿相关方法*/
+    /* 文章草稿相关方法 */
     // 获取该用户下所有的文章草稿标题
     getdraftTitleList() {
       const temp = { role: localStorage.getItem('role'), loginuserCode: localStorage.getItem('userCode') }
@@ -263,12 +262,12 @@ export default {
     draftForm() {
       this.postForm.loginuserCode = localStorage.getItem('userCode')
       this.postForm.role = localStorage.getItem('role')
-      this.postForm.newsStatus = 4  //草稿
-      this.postForm.type = 1  //草稿
+      this.postForm.newsStatus = 4 // 草稿
+      this.postForm.type = 1 // 草稿
       this.$confirm('是否存为草稿?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'warning'}).then(() => {
+        type: 'warning' }).then(() => {
         this.loading = true
         saveDraft(this.postForm).then((res) => {
           // console.log(res)
@@ -288,19 +287,19 @@ export default {
     },
     // 获取草稿列表
     querySearchAsync(queryString, cb) {
-      let draftList = this.draftTitleList
+      const draftList = this.draftTitleList
       this.draftNums = this.draftTitleList.length
-      let results = queryString?draftList.filter(this.createStateFilter(queryString)):draftList
+      const results = queryString ? draftList.filter(this.createStateFilter(queryString)) : draftList
       clearTimeout(this.timeout)
       this.timeout = setTimeout(() => {
         cb(results)
-      },2000)
+      }, 2000)
     },
     // 过滤草稿标题内容
     createStateFilter(queryString) {
       return (state) => {
-        return (state.value.indexOf(queryString.toLowerCase()) === 0);
-      };
+        return (state.value.indexOf(queryString.toLowerCase()) === 0)
+      }
     },
     // 获取作者
     getRemoteUserList(query) {
