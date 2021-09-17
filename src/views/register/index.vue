@@ -113,7 +113,6 @@
   </div>
 </template>
 <script>
-import axios from 'axios'
 import { userRegister, searchDepts } from '@/api/user'
 export default {
   name: 'Register',
