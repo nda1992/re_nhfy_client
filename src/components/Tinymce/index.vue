@@ -2,7 +2,7 @@
   <div :class="{fullscreen:fullscreen}" class="tinymce-container" :style="{width:containerWidth}">
     <textarea :id="tinymceId" class="tinymce-textarea" />
     <div class="editor-custom-btn-container">
-      <editorExcel @successExcel="ExcelSuccessCBK" class="excel-upload-btn" />
+      <editorExcel class="excel-upload-btn" @successExcel="ExcelSuccessCBK" />
       <editorImage color="#1890ff" class="editor-upload-btn" @successCBK="imageSuccessCBK" />
     </div>
   </div>

@@ -1,6 +1,6 @@
 <template>
   <div class="upload-container">
-    <el-button type="success" size="mini" icon="el-icon-document" @click="dialogVisible=true">上传文件</el-button>
+    <el-button type="success" size="mini" icon="el-icon-upload2" @click="dialogVisible=true">上传文件</el-button>
     <el-dialog :visible.sync="dialogVisible">
       <el-upload
         accept=".xls,.xlsx,.doc,.docx"
