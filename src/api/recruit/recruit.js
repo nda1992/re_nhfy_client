@@ -9,6 +9,14 @@ export function createPosition(data) {
   })
 }
 
+export function getAllPositionList(query) {
+  return request({
+    url: '/position/getAllPositionList',
+    method: 'get',
+    params: query
+  })
+}
+
 export function getPositionList(query) {
   return request({
     url: '/position/getPositionList',

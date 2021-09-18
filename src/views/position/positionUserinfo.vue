@@ -24,7 +24,14 @@
       </div>
       <!--岗位收藏列表-->
       <div class="collected">
-        <UserinfoCard :statusTitle="positionStatus" :statusflag="2" :total="collectedTotal" :getPostedPosition="getPost2PositionListByUid" :showList="collectedList" @HandleCollect="HandleCollect"></UserinfoCard>
+        <UserinfoCard
+          :statusTitle="positionStatus"
+          :statusflag="2"
+          :total="collectedTotal"
+          :getPostedPosition="getPost2PositionListByUid"
+          :showList="collectedList"
+          @HandleCollect="HandleCollect"
+          @HandleCollectpost="HandleCollectpost"></UserinfoCard>
       </div>
       <!--岗位投递列表-->
       <div class="posted">
@@ -149,6 +156,7 @@ import { getPost2PositionListByUid, cancelPostedByPid, confirmStauts, UserinfoDe
 import UserinfoCard from './components/UserinfoCard'
 // 对sessionStorage加密
 import { StorageClass } from '@/utils/session'
+import { postPosition } from '@/api/recruit/position'
 import { JOBSEEKER_AVATAR_UPLOAD, JOBSEEKER_RESUME_UPLOAD } from '@/utils/urlConfig'
 export default {
   name: 'Userinfo',
@@ -243,9 +251,6 @@ export default {
       return StorageClass.getSession('jobseekerId').jobseekerId
     }
   },
-  // created() {
-  //   this.getUserinfoDetail()
-  // },
   mounted() {
     this.getUserinfoDetail()
     this.getPost2PositionListByUid()
@@ -266,6 +271,15 @@ export default {
     HandleCollect(data) {
       const temp = Object.assign({}, data, { jobSeekerId: this.jobseekerId })
       handleCollect(temp).then(res => {
+        const { msg } = res
+        this.$message.success(msg)
+        this.getPost2PositionListByUid()
+      })
+    },
+    // 在收藏列表中点击投递岗位
+    HandleCollectpost(data) {
+      const temp = { positionId: data.pid, jobSeekerId: this.jobseekerId }
+      postPosition(temp).then(res => {
         const { msg } = res
         this.$message.success(msg)
         this.getPost2PositionListByUid()

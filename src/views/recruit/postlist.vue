@@ -246,7 +246,6 @@ export default {
     },
     // 删除
     handleDelete(row) {
-      const temp = { pid: row.id, uid: row.jobseekerId }
       this.$confirm('删除该条记录的同时,也会删除求职者已投递的岗位,是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',

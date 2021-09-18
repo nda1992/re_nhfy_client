@@ -60,8 +60,6 @@
 </template>
 
 <script>
-// import { validUsername } from '@/utils/validate'
-
 export default {
   name: 'Login',
   data() {
@@ -248,7 +246,7 @@ $light_gray:#eee;
   }
 
   .tips{
-    position: relative;;
+    position: relative;
     left: 140px;
     span{
       &:nth-child(1){
@@ -266,12 +264,16 @@ $light_gray:#eee;
     }
   }
   .footer{
-    position: absolute;
-    bottom: 30px;
-    left: 46%;
-    /*display: flex;*/
-    /*justify-content: center;*/
-    /*align-items: center;*/
+    position: relative;
+    bottom: 0;
+    margin-top: 20px;
+    left: 47%;
+    .el-button{
+      color: #99a9bf;
+      &:hover{
+        color: #20a0ff;
+      }
+    }
   }
 }
 </style>

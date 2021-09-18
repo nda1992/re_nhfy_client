@@ -18,7 +18,7 @@
         border
         fit
         highlight-current-row
-        :default-sort = "{prop: 'createDate', order: 'descending'}"
+        :default-sort = "{prop: 'createDate'}"
         style="width: 100%;"
       >
         <!--可展开行-->
@@ -222,12 +222,12 @@
         <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">确定</el-button>
       </div>
     </el-dialog>
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getPositionList()" />
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getAllPositionList" />
   </div>
 </template>
 <script>
 import Pagination from '@/components/Pagination'
-import { createPosition, updatePosition, getPositionList, updatepositionStatus, deletePosition, recoverpositionStatus } from '@/api/recruit/recruit'
+import { createPosition, updatePosition, getAllPositionList, updatepositionStatus, deletePosition, recoverpositionStatus } from '@/api/recruit/recruit'
 import { searchDept } from '@/api/news/news'
 export default {
   components: { Pagination },
@@ -267,7 +267,7 @@ export default {
       select_loading: false,
       degreeOptions: ['本科及以上', '硕士研究生及以上', '博士'],
       englishOptions: ['英语四级', '英语六级'],
-      typeOptions: ['事业编', '院编' ,'非事业编'],
+      typeOptions: ['事业编', '非事业编'],
       ageOptions: ['30岁及以下', '32岁及以下', '35岁及以下'],
       listQuery: {
         page: 1,
@@ -310,7 +310,8 @@ export default {
     }
   },
   mounted() {
-    this.getPositionList()
+    // this.getPositionList()
+    this.getAllPositionList()
   },
   methods: {
     // 过滤显示处理函数
@@ -365,11 +366,12 @@ export default {
             type: 'warning' }).then(() => {
             this.temp.status = 1
             this.temp.Handlestatus = 3
-            this.temp.type === '事业编'? this.temp.type = 1 : this.temp.type = 2
+            this.temp.type === '事业编' ? this.temp.type = 1 : this.temp.type = 2
             createPosition(this.temp).then((res) => {
               const { msg } = res
               this.dialogFormVisible = false
-              this.getPositionList()
+              // this.getPositionList()
+              this.getAllPositionList()
               this.$notify({
                 title: 'Success',
                 message: msg,
@@ -403,7 +405,8 @@ export default {
             tempData.type === '事业编' ? tempData.type = 1 : tempData.type = 2
             updatePosition(tempData).then((res) => {
               const { msg } = res
-              this.getPositionList()
+              // this.getPositionList()
+              this.getAllPositionList()
               this.dialogFormVisible = false
               this.$notify({
                 title: 'Success',
@@ -424,7 +427,8 @@ export default {
         type: 'warning'
       }).then(() => {
         deletePosition(row.id).then(() => {
-          this.getPositionList()
+          // this.getPositionList()
+          this.getAllPositionList()
           this.$notify({
             title: 'Success',
             message: '删除成功',
@@ -434,13 +438,15 @@ export default {
         })
       })
     },
-    // 获取岗位列表
-    getPositionList() {
-      getPositionList(this.listQuery).then(res => {
+    // 查询所有岗位
+    getAllPositionList() {
+      const temp = Object.assign({}, this.listQuery)
+      getAllPositionList(temp).then(res => {
         this.listLoading = true
-        this.list = res.positions
-        this.searchList = res.positions
-        this.total = res.total
+        const { positions, total } = res
+        this.list = positions
+        this.searchList = positions
+        this.total = total
         setTimeout(() => {
           this.listLoading = false
         }, 1000)
@@ -448,7 +454,7 @@ export default {
     },
     // switch触发
     handleSetStatus(row) {
-      let temp = row
+      const temp = row
       temp.role = this.role
       // switch=true：表示通过审核,switch=false:表示未通过审核
       updatepositionStatus(temp).then(res => {
@@ -459,7 +465,8 @@ export default {
           type: 'success',
           duration: 2000
         })
-        this.getPositionList()
+        this.getAllPositionList()
+        // this.getPositionList()
       })
     },
     // 从"已结束"变为"在招"
@@ -476,7 +483,8 @@ export default {
           type: 'success',
           duration: 3000
         })
-        this.getPositionList()
+        this.getAllPositionList()
+        // this.getPositionList()
       })
     },
     // 获取远程科室列表

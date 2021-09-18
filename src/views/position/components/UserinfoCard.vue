@@ -81,7 +81,8 @@
         align="center"
         prop="currentStatus"
         width="280"
-        :label="statusTitle" v-if="statusflag===2">
+        :label="statusTitle"
+        v-if="statusflag===2">
         <template slot-scope="{row}">
           <el-tag :type="row.currentStatus | statusFilter">
             {{ row.currentStatus }}
@@ -92,12 +93,14 @@
         align="center"
         prop="Handlestatus"
         :label="statusTitle"
-        width="280" v-if="statusflag===1">
+        width="280"
+        v-if="statusflag===1">
         <template slot-scope="{row}">
           <el-tag :type="row.status | HandlestatusFilter" v-if="row.status==='未审核'||row.status==='审核未通过'||row.status==='已确认'">
             {{ row.status }}
           </el-tag>
-          <el-popconfirm v-else
+          <el-popconfirm
+             v-else
              @onConfirm="handleConfirm(row)"
              confirm-button-text='确定'
              cancel-button-text='取消'
@@ -112,6 +115,7 @@
       <el-table-column align="center" label="操作">
         <template slot-scope="{row,$index}">
           <el-button @click="HandleCollect(row.isCollected,row.id)" type="warning" size="mini" v-if="statusflag===2&&row.isCollected">取消收藏</el-button>
+          <el-button @click="HandleCollectpost(row.id)" type="primary" size="mini" v-if="statusflag===2&&row.isCollected" :disabled="row.isPosted===1">投递简历</el-button>
           <el-button @click="HandleCancelPost(row)" type="danger" size="mini" v-if="statusflag===1" :disabled="row.status==='已确认'">取消投递</el-button>
         </template>
       </el-table-column>
@@ -154,7 +158,6 @@ export default {
       type: Array,
       default: () => {
         return []
-        // return [{ id:1, positionName: '消化内科医师', createdTime: '2021-08-31 15:02:31' }]
       }
     },
     // 简历状态或在招状态
@@ -190,6 +193,10 @@ export default {
     },
     HandleCollect(isCollected, id) {
       this.$emit('HandleCollect', { isCollected: isCollected, positionId: id })
+    },
+    // 收藏列表投递岗位
+    HandleCollectpost(id) {
+      this.$emit('HandleCollectpost', { pid: id })
     },
     HandleDelete() {
       this.$emit('delete')

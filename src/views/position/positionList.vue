@@ -12,7 +12,10 @@
     </div>
     <!--岗位列表-->
     <div class="list">
-      <h2 style="margin-left: 20px">在招岗位</h2>
+      <div class="header">
+        <h2 style="margin-left: 20px">在招岗位</h2>
+        <span>筛选</span>
+      </div>
       <PositionCard :positionInfo="position" v-for="(position,index) in positionList" :key="position.id" @gotoPosition="gotoPosition(position.id)" @gotoCollect="gotoCollect(position.id, position.isCollected)" />
       <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getPositionList()" />
     </div>
@@ -65,7 +68,7 @@ export default {
   },
   methods: {
     getJobseekerId() {
-      if(this.isLogin) {
+      if (this.isLogin) {
         this.jobseekerId = StorageClass.getSession('jobseekerId').jobseekerId
       }
     },
@@ -78,11 +81,11 @@ export default {
     },
     // 根据用户id拉取完整信息
     getUserinfoDetail() {
-      if(this.jobseekerId === undefined) {
+      if (this.jobseekerId === undefined) {
         return
       }
       UserinfoDetail(this.jobseekerId).then(res => {
-        const { userinfo, doneUserinfo } = res
+        const { doneUserinfo } = res
         this.doneUserinfo = doneUserinfo
       })
     },
@@ -118,11 +121,11 @@ export default {
         this.$message.error('你还没有登录,请先登录')
         return
       }
-      if(!this.doneUserinfo){
+      if (!this.doneUserinfo) {
         this.$message.error('你的个人信息还未完善，请先完善个人信息')
         return
       }
-      const temp = {  positionId: id, jobSeekerId: this.jobseekerId }
+      const temp = { positionId: id, jobSeekerId: this.jobseekerId }
       this.$confirm('只能投递一次,是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -159,7 +162,14 @@ export default {
     }
     .list{
       padding: 20px;
-      box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)
+      box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+      .header{
+        width: 500px;
+        background: #ff6666;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
     }
   }
 </style>

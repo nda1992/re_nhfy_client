@@ -41,3 +41,12 @@ export function searchDepts(data) {
     data
   })
 }
+
+// 用户密码更新
+export function updatePassword(data) {
+  return request({
+    url: '/users/updatePassword',
+    method: 'post',
+    data
+  })
+}
