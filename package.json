@@ -35,6 +35,7 @@
     "vue-pdf": "^4.3.0",
     "vue-router": "3.0.6",
     "vuex": "3.1.0",
+    "weixin-js-sdk": "^1.6.0",
     "xlsx": "^0.17.0"
   },
   "devDependencies": {

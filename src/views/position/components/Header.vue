@@ -3,6 +3,7 @@
     <div class="btns" v-if="!isLogin">
       <el-button type="text" @click="HandleRegister">注册</el-button>
       <el-button type="text" @click="HandleLogin">登录</el-button>
+      <el-button type="text" @click="back2Login">回到登录页</el-button>
     </div>
     <div class="userinfo" v-else>
       <el-dropdown trigger="click" style="float: right;cursor: pointer;">
@@ -68,6 +69,9 @@ export default {
     },
     logout() {
       this.$emit('logout')
+    },
+    back2Login() {
+      this.$emit('back2Login')
     }
   }
 }

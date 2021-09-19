@@ -216,3 +216,12 @@ export function getSwiperImgs2Run(query) {
     params: query
   })
 }
+
+// 多条件过滤岗位
+export function filterPositions(data) {
+  return request({
+    url: '/position/filterPositions',
+    method: 'post',
+    data
+  })
+}

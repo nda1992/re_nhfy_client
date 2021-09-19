@@ -4,7 +4,7 @@
       <div slot="header" class="clearfix">
         <span style="font-size: 16px;font-weight: bold">{{ positionInfo.positionName }}</span>
         <el-tooltip class="item" effect="dark" content="分享岗位" placement="bottom">
-          <el-button style="float: right; padding: 0;margin-right: 15px;" type="text"><i class="el-icon-share" v-if="showBtns">分享</i></el-button>
+          <el-button style="float: right; padding: 0;margin-right: 15px;" type="text" @click="openShareDialog"><i class="el-icon-share" v-if="showBtns">分享</i></el-button>
         </el-tooltip>
         <el-tooltip class="item" effect="dark" content="收藏岗位" placement="bottom">
           <el-button style="float: right; padding: 0;border: 0;margin-right: 15px;" type="text" @click="gotoCollect" v-if="showBtns"><i :class="positionInfo.isCollected===false?'el-icon-star-off':'el-icon-star-on'">{{positionInfo.isCollected===false?'收藏':'已收藏'}}</i></el-button>
@@ -59,6 +59,10 @@ export default {
     // 岗位收藏
     gotoCollect() {
       this.$emit('gotoCollect')
+    },
+    // 分享岗位
+    openShareDialog() {
+      this.$emit('openShareDialog')
     }
   }
 }

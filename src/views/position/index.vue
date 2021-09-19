@@ -12,6 +12,7 @@
       :isLogin="isLogin"
       :username="username"
       @Userinfo="Userinfo"
+      @back2Login="back2Login"
       @logout="logout"/>
     <!--内容显示-->
     <div>
@@ -364,6 +365,9 @@ export default {
           })
         }
       })
+    },
+    back2Login() {
+      this.$router.push({path: 'login'})
     }
   }
 }

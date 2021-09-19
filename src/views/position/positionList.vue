@@ -12,19 +12,80 @@
     </div>
     <!--岗位列表-->
     <div class="list">
-      <div class="header">
+      <div class="header" :style="scrollStyle">
         <h2 style="margin-left: 20px">在招岗位</h2>
-        <span>筛选</span>
+        <div class="filter">
+          <el-tooltip class="item" effect="dark" content="添加岗位筛选条件" placement="bottom">
+            <div @click="openFilterDialog">
+              <svg-icon icon-class="filter"/>
+              <span style="margin-left: 5px;">筛选</span>
+            </div>
+          </el-tooltip>
+          <el-button type="text" @click="clearFilter" v-show="isFilter">清除筛选</el-button>
+        </div>
+
       </div>
-      <PositionCard :positionInfo="position" v-for="(position,index) in positionList" :key="position.id" @gotoPosition="gotoPosition(position.id)" @gotoCollect="gotoCollect(position.id, position.isCollected)" />
+      <PositionCard
+        :positionInfo="position"
+        v-for="(position,index) in positionList"
+        :key="position.id"
+        @gotoPosition="gotoPosition(position.id)"
+        @gotoCollect="gotoCollect(position.id, position.isCollected)"
+        @openShareDialog="openShareDialog(position.id)"/>
       <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getPositionList()" />
+    </div>
+    <!--分享岗位对话框-->
+    <el-dialog title="请选择分享的平台" :visible.sync="shareDialog">
+      <el-button>分享</el-button>
+    </el-dialog>
+    <!--条件筛选对话框-->
+    <div>
+      <el-dialog title="岗位条件筛选" :visible.sync="dialogFormVisible">
+        <el-form ref="filterForm" :model="filterForm" label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
+          <el-form-item label="岗位类型" prop="type">
+            <el-select v-model="filterForm.type" default-first-option>
+              <el-option v-for="(item,index) in typeOptions" :key="index" :label="item" :value="item" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="英语要求" prop="english" default-first-option>
+            <el-select v-model="filterForm.english">
+              <el-option v-for="(item,index) in englishOptions" :key="index" :label="item" :value="item" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="年龄要求" prop="age" default-first-option>
+            <el-select v-model="filterForm.age">
+              <el-option v-for="(item,index) in ageOptions" :key="index" :label="item" :value="item" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="学历要求" prop="degree" default-first-option>
+            <el-select v-model="filterForm.degree">
+              <el-option v-for="(item,index) in degreeOptions" :key="index" :label="item" :value="item" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="计划人数" prop="num" default-first-option>
+            <el-select v-model="filterForm.num">
+              <el-option v-for="(item,index) in numOptions" :key="index" :label="item" :value="item" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="招聘科室" prop="deptName" default-first-option>
+            <el-select v-model="filterForm.deptName">
+              <el-option v-for="(item,index) in deptNameOptions" :key="index" :label="item" :value="item" />
+            </el-select>
+          </el-form-item>
+        </el-form>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="dialogFormVisible = false">取消</el-button>
+          <el-button type="primary" @click="submitFilterForm">确定</el-button>
+        </div>
+      </el-dialog>
     </div>
   </div>
 </template>
 
 <script>
 import PositionCard from '@/components/PositionCard/index'
-import { getPositionList, UserinfoDetail, postPosition, handleCollect } from '@/api/recruit/position'
+import wx from 'weixin-js-sdk'
+import { getPositionList, UserinfoDetail, postPosition, handleCollect, filterPositions } from '@/api/recruit/position'
 import { getSwiperImgs2Run } from '@/api/recruit/position'
 import Pagination from '@/components/Pagination'
 // 对sessionStorage加密
@@ -37,11 +98,17 @@ export default {
   },
   data() {
     return {
+      scrollStyle: { position: '', top: '', zIndex: '', left: '' },
+      // 分享岗位对话框
+      shareDialog: false,
+      // 需要分享的岗位对象
+      shareObj: { jobseekerId: undefined, positionId: undefined },
       // carouselImages: [
       //   `${process.env.BASE_URL}images/test1.jpg`,
       //   `${process.env.BASE_URL}images/test2.jpg`,
       //   `${process.env.BASE_URL}images/test6.jpg`,
       // ],
+      SelectOptions: [{ label: '', value: '' }, {}, {}],
       carouselImages: [],
       listLoading: false,
       listQuery: {
@@ -52,7 +119,26 @@ export default {
       total: 0,
       positionList: [],
       // 用户信息是否完整,如果不完整，不能投递简历
-      doneUserinfo: undefined
+      doneUserinfo: undefined,
+      // 是否使用了筛选
+      isFilter: false,
+      dialogFormVisible: false,
+      // 收集所有过滤条件的表单
+      filterForm: {
+        type: '不限',
+        english: '不限',
+        age: '不限',
+        degree: '不限',
+        num: '不限',
+        deptName: '不限'
+      },
+      // dialog中的条件选择
+      typeOptions: ['不限', '事业编', '非事业编'],
+      englishOptions: ['不限', '英语四级', '英语六级'],
+      ageOptions: ['不限', '30岁及以下', '32岁及以下', '35岁及以下'],
+      degreeOptions: ['不限', '本科及以上' ,'硕士研究生及以上', '博士'],
+      numOptions: ['不限', 1, 2, 3, 4, '4人以上'],
+      deptNameOptions: []
     }
   },
   mounted() {
@@ -60,6 +146,7 @@ export default {
     this.getUserinfoDetail()
     this.getPositionList()
     this.getSwiperImgs()
+    this.scroll()
   },
   computed: {
     isLogin() {
@@ -71,6 +158,22 @@ export default {
       if (this.isLogin) {
         this.jobseekerId = StorageClass.getSession('jobseekerId').jobseekerId
       }
+    },
+    scroll() {
+      document.addEventListener('scroll',(event) => {
+        var scrollDistance = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+        if(scrollDistance>360) {
+          this.scrollStyle.position = 'fixed'
+          this.scrollStyle.top = '50px'
+          this.scrollStyle.zIndex = 100
+          this.scrollStyle.left = '0px'
+        }else{
+          this.scrollStyle.position = 'static'
+          this.scrollStyle.top = 0
+          this.scrollStyle.zIndex = 0
+          this.scrollStyle.left = 0
+        }
+      })
     },
     // 获取所有的轮播图片
     getSwiperImgs() {
@@ -95,6 +198,8 @@ export default {
       getPositionList(temp).then(res => {
         this.listLoading = true
         this.positionList = res.positions
+        const temp = res.positions.map(e => e.deptName)
+        this.deptNameOptions = ['不限', ...temp ]
         this.total = res.total
         setTimeout(() => {
           this.listLoading = false
@@ -140,6 +245,53 @@ export default {
           })
         })
       })
+    },
+
+    // 分享岗位
+    openShareDialog(pid) {
+      this.shareDialog = true
+      this.shareObj.jobseekerId = this.jobseekerId
+      this.shareObj.positionId = pid
+    },
+    // 分享岗位的点击事件
+    sharePosition() {
+      const temp = {  }
+    },
+    // 重置filterForm
+    resetFilterForm() {
+      this.filterForm = {
+        type: '不限',
+        english: '不限',
+        age: '不限',
+        degree: '不限',
+        num: '不限',
+        deptName: '不限'
+      }
+    },
+    // 打开条件筛选对话框
+    openFilterDialog() {
+      // this.resetFilterForm()
+      this.dialogFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['filterForm'].clearValidate()
+      })
+    },
+    submitFilterForm() {
+      const temp = Object.assign({} ,this.filterForm, this.listQuery)
+      filterPositions(temp).then(res => {
+        const { positions, total, msg } = res
+        this.positionList = positions
+        this.total = total
+        this.dialogFormVisible = false
+        this.isFilter = true
+        this.$message.success(msg)
+      })
+    },
+    // 清除筛选条件
+    clearFilter() {
+      this.getPositionList()
+      this.resetFilterForm()
+      this.isFilter = false
     }
   }
 }
@@ -164,11 +316,25 @@ export default {
       padding: 20px;
       box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
       .header{
-        width: 500px;
-        background: #ff6666;
+        background: #ffffff;
+        /*background: #409EFF;*/
+        width: 100%;
         display: flex;
         align-items: center;
         justify-content: space-between;
+        .filter{
+          display: flex;
+          justify-content: space-around;
+          align-items: center;
+          margin-right: 30px;
+          cursor: pointer;
+          &:hover{
+            color: #409EFF;
+          }
+          .item{
+            margin-right: 10px;
+          }
+        }
       }
     }
   }
