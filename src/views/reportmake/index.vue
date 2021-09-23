@@ -66,6 +66,8 @@
 </template>
 <script>
 import { createTableTitle, getTableTitleList, deleteTableTitle, updateTableTitle } from '@/api/reportmake/reportmake'
+// 对sessionStorage加密
+import { StorageClass } from '@/utils/session'
 export default {
   data() {
     return {
@@ -84,10 +86,15 @@ export default {
   mounted() {
     this.getTableTitleList()
   },
+  computed: {
+    role() {
+      return StorageClass.getSession('role').role
+    }
+  },
   methods: {
     // 获取表格标题列表
     getTableTitleList() {
-      getTableTitleList(localStorage.getItem('role')).then((res) => {
+      getTableTitleList(this.role).then((res) => {
         const { items } = res
         // this.$message.success(msg)
         this.tableTitleList = items
@@ -145,7 +152,7 @@ export default {
             type: 'warning'
           }).then(() => {
             const tempData = Object.assign({}, this.tableTitle)
-            tempData.role = localStorage.getItem('role')
+            tempData.role = this.role
             updateTableTitle(tempData).then(() => {
               this.getTableTitleList()
               this.dialogCreateVisible = false
@@ -166,7 +173,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        const temp = { id: row.id, role: localStorage.getItem('role') }
+        const temp = { id: row.id, role: this.role }
         deleteTableTitle(temp).then(() => {
           this.getTableTitleList()
           this.$notify({

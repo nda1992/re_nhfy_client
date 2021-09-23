@@ -18,6 +18,8 @@
 <script>
 import { ScanById } from '../../api/news/news'
 import moment from 'moment'
+// 对sessionStorage加密
+import { StorageClass } from '@/utils/session'
 export default {
   name: 'scan',
   data() {
@@ -28,7 +30,7 @@ export default {
   },
   computed: {
     role() {
-      return localStorage.getItem('role')
+      return StorageClass.getSession('role').role
     }
   },
   mounted() {

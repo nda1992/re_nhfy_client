@@ -71,6 +71,8 @@ import { updateIsread, receiveRemoveMsg, removeAllReceiveMsg, replyMessage, remo
 import { getReceiveMsg2Admin, getSendMsg2Admin } from '@/api/recruit/recruit'
 import ReceivePage from './component/ReceivePage'
 import SendPage from './component/SendPage'
+// 对sessionStorage加密
+import { StorageClass } from '@/utils/session'
 export default {
   name: 'NoticePage',
   components: {
@@ -121,10 +123,11 @@ export default {
   },
   computed: {
     userCode() {
-      return localStorage.getItem('userCode')
+      return StorageClass.getSession('userCode').userCode
     },
+    // 管理员的头像地址
     adminAvatar() {
-      return localStorage.getItem('avatar')
+      return StorageClass.getSession('avatar').avatar
     },
     avatar() {
       return ''

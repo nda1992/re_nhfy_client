@@ -72,7 +72,8 @@ import Sticky from '@/components/Sticky' // 粘性header组件
 import { searchUser, getDraftById, searchCategory, searchDept, getDraftList, saveDraft, releaseNews } from '@/api/news/news'
 import Warning from './Warning'
 import { PlatformDropdown } from './Dropdown'
-
+// 对sessionStorage加密
+import { StorageClass } from '@/utils/session'
 const defaultForm = {
   loginuserCode: '',
   author: '',
@@ -142,6 +143,12 @@ export default {
       set(val) {
         this.postForm.display_time = new Date(val)
       }
+    },
+    userCode() {
+      return StorageClass.getSession('userCode').userCode
+    },
+    role() {
+      return StorageClass.getSession('role').role
     }
   },
   created() {
@@ -210,10 +217,10 @@ export default {
             type: 'warning' }).then(() => {
             this.postForm.status = 'published'
             this.loading = true
-            this.postForm.loginuserCode = localStorage.getItem('userCode')
+            this.postForm.loginuserCode = this.userCode
             this.postForm.type = 2 // 表示已经提交，申请发布
             this.postForm.newsStatus = 2 // 表示已经提交，但需要管理员审核
-            this.postForm.role = localStorage.getItem('role')
+            this.postForm.role = this.role
             releaseNews(this.postForm).then(() => {
               this.$notify({
                 title: '成功',
@@ -235,7 +242,7 @@ export default {
     /* 文章草稿相关方法 */
     // 获取该用户下所有的文章草稿标题
     getdraftTitleList() {
-      const temp = { role: localStorage.getItem('role'), loginuserCode: localStorage.getItem('userCode') }
+      const temp = { role: this.role, loginuserCode: this.userCode }
       getDraftList(temp).then(res => {
         const { items } = res
         this.draftTitleList = items.map(e => {
@@ -260,8 +267,8 @@ export default {
     },
     // 保存为草稿
     draftForm() {
-      this.postForm.loginuserCode = localStorage.getItem('userCode')
-      this.postForm.role = localStorage.getItem('role')
+      this.postForm.loginuserCode = this.userCode
+      this.postForm.role = this.role
       this.postForm.newsStatus = 4 // 草稿
       this.postForm.type = 1 // 草稿
       this.$confirm('是否存为草稿?', '提示', {

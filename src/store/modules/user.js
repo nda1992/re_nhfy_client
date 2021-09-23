@@ -1,7 +1,8 @@
 import { login, logout, getInfo } from '@/api/user'
-import { getToken, setToken, removeToken } from '@/utils/auth'
+import { getToken, removeToken, setToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
-
+// 对sessionStorage加密
+import { StorageClass } from '@/utils/session'
 const getDefaultState = () => {
   return {
     token: getToken(),
@@ -20,22 +21,38 @@ const mutations = {
     Object.assign(state, getDefaultState())
   },
   SET_TOKEN: (state, token) => {
-    state.token = localStorage.setItem('token', token)
+    StorageClass.setSession('token', { token: token })
+    setToken(token)
+    state.token = token
   },
   SET_NAME: (state, name) => {
-    state.name = localStorage.setItem('name', name)
+    StorageClass.setSession('name', { name: name })
+    state.name = name
   },
   SET_AVATAR: (state, avatar) => {
-    state.avatar = localStorage.setItem('avatar', avatar)
+    StorageClass.setSession('avatar', { avatar: avatar })
+    state.avatar = avatar
   },
   SET_USERCODE: (state, userCode) => {
-    state.userCode = localStorage.setItem('userCode', userCode)
+    StorageClass.setSession('userCode', { userCode: userCode })
+    state.userCode = userCode
   },
   SET_DEPTNAME: (state, deptName) => {
-    state.deptName = localStorage.setItem('deptName', deptName)
+    StorageClass.setSession('deptName', { deptName: deptName })
+    state.deptName = deptName
   },
   SET_ROLE: (state, role) => {
-    state.role = localStorage.setItem('role', role)
+    StorageClass.setSession('role', { role: role })
+    state.role = role
+  },
+  CLEAR_ALL: () => {
+    getDefaultState().avatar = ''
+    getDefaultState().token = ''
+    getDefaultState().name = ''
+    getDefaultState().userCode = ''
+    getDefaultState().deptName = ''
+    getDefaultState().role = ''
+    StorageClass.sessionClearAll()
   }
 }
 
@@ -44,7 +61,7 @@ const actions = {
   login({ commit }, userInfo) {
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: password }).then(response => {
+      login({ username: username.trim(), password: password.trim() }).then(response => {
         const { data } = response
         commit('SET_TOKEN', data.token)
         commit('SET_USERCODE', data.userCode)
@@ -52,23 +69,22 @@ const actions = {
         // setToken(data.token)
         resolve()
       }).catch(error => {
+        console.log(error)
       })
     })
   },
 
   // get user info
   getInfo({ commit, state }) {
-    const userCode = localStorage.getItem('userCode')
-    const token = localStorage.getItem('token')
+    const userCode = StorageClass.getSession('userCode').userCode
+    const token = StorageClass.getSession('token').token
     return new Promise((resolve, reject) => {
       getInfo(token, userCode).then(response => {
         const { data } = response
         if (!data) {
           return reject('Verification failed, please Login again.')
         }
-        // console.log(data)
         const { avatar, usercode, deptname, name } = data
-        // commit('SET_NAME', name)
         commit('SET_AVATAR', avatar)
         commit('SET_DEPTNAME', deptname)
         commit('SET_USERCODE', usercode)
@@ -81,14 +97,10 @@ const actions = {
   },
 
   // user logout
-  logout({ commit, state }) {
+  logout({ commit }) {
     return new Promise((resolve, reject) => {
       logout(state.token).then(() => {
-        localStorage.removeItem('avatar')
-        localStorage.removeItem('deptName')
-        localStorage.removeItem('role')
-        localStorage.removeItem('name')
-        localStorage.removeItem('userCode')
+        commit('CLEAR_ALL')
         removeToken() // must remove  token  first
         resetRouter()
         commit('RESET_STATE')

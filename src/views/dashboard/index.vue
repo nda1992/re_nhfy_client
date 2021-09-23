@@ -6,14 +6,15 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+// 对sessionStorage加密
+import { StorageClass } from '@/utils/session'
 export default {
   name: 'Dashboard',
   mounted() {
   },
   computed: {
     name() {
-      return localStorage.getItem('name')
+      return StorageClass.getSession('name').name
     }
   }
 }

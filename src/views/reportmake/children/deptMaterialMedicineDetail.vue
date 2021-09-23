@@ -140,6 +140,8 @@ import { deptMaterialMedicineDetail } from '@/api/QueryTheam/revenue/revenue'
 import { searchDept } from '@/api/news/news'
 import Pagination from '@/components/Pagination'
 import moment from 'moment'
+// 对sessionStorage加密
+import { StorageClass } from '@/utils/session'
 export default {
   name: 'deptMaterialMedicineDetail',
   components: { Pagination },
@@ -149,7 +151,7 @@ export default {
       listQuery: {
         page: 1,
         limit: 10,
-        role: localStorage.getItem('role')
+        role: StorageClass.getSession('role').role
       },
       deptListOptions: [],
       listLoading: false,

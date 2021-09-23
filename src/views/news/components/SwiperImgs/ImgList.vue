@@ -1,14 +1,15 @@
 <template>
   <div class="imglist-main">
     <div>
-      <el-table :data="imgList"
-                border
-                stripe
-                fit
-                highlight-current-row
-                :row-class-name="rowClassName"
-                :default-sort = "{prop: 'createdDate'}"
-                style="width: 100%">
+      <el-table
+        :data="imgList"
+        border
+        stripe
+        fit
+        highlight-current-row
+        :row-class-name="rowClassName"
+        :default-sort = "{prop: 'createdDate'}"
+        style="width: 100%">
         <el-table-column label="序号" align="center" prop="xh" width="50"></el-table-column>
         <el-table-column label="上传者工号" prop="userCode" align="center" width="120">
           <template slot-scope="{row}">
@@ -94,7 +95,7 @@ export default {
       row.xh = rowIndex + 1
     },
     handleDelete(row) {
-      this.$emit('handleDelete',row)
+      this.$emit('handleDelete', row)
     },
     handleSetStatus(row) {
       this.$emit('handleSetStatus', row)

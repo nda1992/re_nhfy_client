@@ -108,6 +108,8 @@
 import waves from '@/directive/waves'
 import Pagination from '@/components/Pagination'
 import { getdeptList, createDept, updateDept, deleteDept } from '@/api/hospital/hospital'
+// 对sessionStorage加密
+import { StorageClass } from '@/utils/session'
 export default {
   components: { Pagination },
   directives: { waves },
@@ -116,7 +118,7 @@ export default {
       listQuery: {
         page: 1,
         limit: 10,
-        role: localStorage.getItem('role')
+        role: StorageClass.getSession('role').role
       },
       inputVal: '',
       tableKey: 0,
@@ -154,11 +156,6 @@ export default {
       calendarTypeOptions: [1, 2, 3],
       downloadLoading: false
     }
-  },
-  watch: {
-    // inputVal(oldVal,newVal){
-    //   return `按${newVal}搜索`
-    // }
   },
   mounted() {
     this.getdeptList()

@@ -35,6 +35,8 @@ import NewsCategory from './components/Category/NewsCategory'
 import ImgList from './components/SwiperImgs/ImgList'
 import UploadImg from './components/SwiperImgs/UploadImg'
 import Pagination from '@/components/Pagination'
+// 对sessionStorage加密
+import { StorageClass } from '@/utils/session'
 export default {
   name: 'manager',
   components: {
@@ -63,10 +65,10 @@ export default {
   },
   computed: {
     username() {
-      return localStorage.getItem('name')
+      return StorageClass.getSession('name').name
     },
     userCode() {
-      return localStorage.getItem('userCode')
+      return StorageClass.getSession('userCode').userCode
     }
   },
   methods: {

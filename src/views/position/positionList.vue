@@ -30,8 +30,7 @@
         v-for="(position,index) in positionList"
         :key="position.id"
         @gotoPosition="gotoPosition(position.id)"
-        @gotoCollect="gotoCollect(position.id, position.isCollected)"
-        @openShareDialog="openShareDialog(position.id)"/>
+        @gotoCollect="gotoCollect(position.id, position.isCollected)" />
       <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getPositionList()" />
     </div>
     <!--分享岗位对话框-->
@@ -84,7 +83,6 @@
 
 <script>
 import PositionCard from '@/components/PositionCard/index'
-import wx from 'weixin-js-sdk'
 import { getPositionList, UserinfoDetail, postPosition, handleCollect, filterPositions } from '@/api/recruit/position'
 import { getSwiperImgs2Run } from '@/api/recruit/position'
 import Pagination from '@/components/Pagination'
@@ -160,14 +158,14 @@ export default {
       }
     },
     scroll() {
-      document.addEventListener('scroll',(event) => {
+      document.addEventListener('scroll', (event) => {
         var scrollDistance = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-        if(scrollDistance>360) {
+        if (scrollDistance > 360) {
           this.scrollStyle.position = 'fixed'
           this.scrollStyle.top = '50px'
           this.scrollStyle.zIndex = 100
           this.scrollStyle.left = '0px'
-        }else{
+        } else {
           this.scrollStyle.position = 'static'
           this.scrollStyle.top = 0
           this.scrollStyle.zIndex = 0
@@ -245,17 +243,6 @@ export default {
           })
         })
       })
-    },
-
-    // 分享岗位
-    openShareDialog(pid) {
-      this.shareDialog = true
-      this.shareObj.jobseekerId = this.jobseekerId
-      this.shareObj.positionId = pid
-    },
-    // 分享岗位的点击事件
-    sharePosition() {
-      const temp = {  }
     },
     // 重置filterForm
     resetFilterForm() {

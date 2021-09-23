@@ -236,6 +236,8 @@
 <script>
 import waves from '@/directive/waves'
 import { medicalRevenue } from '@/api/report/report'
+// 对sessionStorage加密
+import { StorageClass } from '@/utils/session'
 export default {
   directives: { waves },
   data() {
@@ -250,7 +252,7 @@ export default {
     }
   },
   created() {
-    if (localStorage.getItem('role') !== 'admin') {
+    if (StorageClass.getSession('role').role !== 'admin') {
       this.$router.push({ name: 'Page401' })
     }
   },
@@ -261,7 +263,7 @@ export default {
     pickerDate() {
       const start_date = this.searchDate[0].trim().slice(0, 7)
       const end_date = this.searchDate[1].trim().slice(0, 7)
-      const obj = { role: localStorage.getItem('role'), start_date: start_date, end_date: end_date }
+      const obj = { role: StorageClass.getSession('role').role, start_date: start_date, end_date: end_date }
       this.listLoading = true
       medicalRevenue(obj).then(res => {
         const { items } = res
