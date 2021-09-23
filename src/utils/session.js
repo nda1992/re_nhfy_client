@@ -4,11 +4,7 @@ export const StorageClass = new class Session {
    * @param {any} data 转为base64数据
    */
   encrypt(data) {
-<<<<<<< HEAD
     const set = encodeURIComponent(data); const result = btoa(set)
-=======
-    let set = encodeURIComponent(data), result = btoa(set)
->>>>>>> 2fb94fe1b561fd941d866c6ba7bf6c32b3392d2c
     return result
   }
   /**
@@ -17,11 +13,7 @@ export const StorageClass = new class Session {
    */
   MyLocker(data) {
     try {
-<<<<<<< HEAD
       const jieMi = atob(data); const jieM = decodeURIComponent(jieMi)
-=======
-      let jieMi = atob(data), jieM = decodeURIComponent(jieMi)
->>>>>>> 2fb94fe1b561fd941d866c6ba7bf6c32b3392d2c
       return jieM
     } catch (e) {
       throw Error('解码出错')
@@ -70,11 +62,7 @@ export const StorageClass = new class Session {
    */
   getSession(key, Session) {
     this.ISKET(key)
-<<<<<<< HEAD
     const data = this.isSession(Session).getItem(this.encrypt(key))
-=======
-    let data = this.isSession(Session).getItem(this.encrypt(key))
->>>>>>> 2fb94fe1b561fd941d866c6ba7bf6c32b3392d2c
     if (data) {
       try {
         return JSON.parse(this.MyLocker(data))
@@ -91,11 +79,7 @@ export const StorageClass = new class Session {
   sessionClearAll(Session) {
     this.isSession(Session).clear()
   }
-<<<<<<< HEAD
 }()
-=======
-}
->>>>>>> 2fb94fe1b561fd941d866c6ba7bf6c32b3392d2c
 
 // let set = new  Session();
 // // set.setSession(123,{name:'张三',data:[1,2,3,4,5],msg:'终端设备是副科级多喝水广发卡见鬼十法卡的很发生过哈师大'})
