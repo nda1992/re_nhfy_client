@@ -1,5 +1,5 @@
 <template>
-<!-- 岗位管理 -->
+  <!-- 岗位管理 -->
   <div class="app-container">
     <div class="title">
       <el-tooltip class="item" effect="dark" content="按下回车键搜索" placement="bottom">
@@ -18,7 +18,7 @@
         border
         fit
         highlight-current-row
-        :default-sort = "{prop: 'createDate'}"
+        :default-sort="{prop: 'createDate'}"
         style="width: 100%;"
       >
         <!--可展开行-->
@@ -76,10 +76,10 @@
         <!--创建时间-->
         <el-table-column label="发布时间" sortable prop="createDate" align="center" min-width="10px" :show-overflow-tooltip="true">
           <template slot-scope="{row}">
-            <i class="el-icon-time" style="margin-right: 3px;"></i>
+            <i class="el-icon-time" style="margin-right: 3px;" />
             <span>{{ row.createDate }}</span>
           </template>
-        </el-table-column >
+        </el-table-column>
         <!--需求科室-->
         <el-table-column label="需求科室" prop="deptName" align="center" :show-overflow-tooltip="true" min-width="8px">
           <template slot-scope="{row}">
@@ -119,16 +119,17 @@
         <!--招聘状态-->
         <el-table-column label="招聘状态" prop="status" align="center" min-width="8px">
           <template slot-scope="{row}">
-            <el-tag :type="row.status | statusFilter" v-if="row.status==='在招'">
+            <el-tag v-if="row.status==='在招'" :type="row.status | statusFilter">
               {{ row.status }}
             </el-tag>
-            <el-popconfirm v-else
-               @onConfirm="handleStatus(row)"
-               confirm-button-text='确定'
-               cancel-button-text='取消'
-               icon="el-icon-info"
-               icon-color="red"
-               title="是否恢复为在招?"
+            <el-popconfirm
+              v-else
+              confirm-button-text="确定"
+              cancel-button-text="取消"
+              icon="el-icon-info"
+              icon-color="red"
+              title="是否恢复为在招?"
+              @onConfirm="handleStatus(row)"
             >
               <el-button slot="reference" type="danger" size="mini">{{ row.status }}</el-button>
             </el-popconfirm>
@@ -146,23 +147,22 @@
         <el-table-column label="更新状态" prop="Switch" align="center" min-width="16px">
           <template slot-scope="{row}">
             <el-switch
-              @change="handleSetStatus(row)"
-              :disabled="row.status==='已结束'"
               v-model="row.Switch"
+              :disabled="row.status==='已结束'"
               active-color="#13ce66"
               inactive-color="#ff4949"
               inactive-text="不通过"
               active-text="通过"
               style="font-size: 12px;"
-            >
-            </el-switch>
+              @change="handleSetStatus(row)"
+            />
           </template>
         </el-table-column>
         <!--操作-->
         <el-table-column label="操作" align="center" min-width="18px" class-name="small-padding fixed-width">
           <template slot-scope="{row,$index}">
-            <el-button type="primary" size="mini" @click="handleUpdate(row)" icon="el-icon-edit" :disabled="row.status==='已结束'">编辑</el-button>
-            <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="handleDelete(row,$index)" icon="el-icon-delete" :disabled="row.status==='已结束'">删除</el-button>
+            <el-button type="primary" size="mini" icon="el-icon-edit" :disabled="row.status==='已结束'" @click="handleUpdate(row)">编辑</el-button>
+            <el-button v-if="row.status!='deleted'" size="mini" type="danger" icon="el-icon-delete" :disabled="row.status==='已结束'" @click="handleDelete(row,$index)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>

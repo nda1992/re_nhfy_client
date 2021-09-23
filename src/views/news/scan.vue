@@ -10,7 +10,7 @@
       </div>
     </div>
     <div class="news-content">
-      <div v-html="newsItem.content"></div>
+      <div v-html="newsItem.content" />
     </div>
   </div>
 </template>
@@ -19,7 +19,7 @@
 import { ScanById } from '../../api/news/news'
 import moment from 'moment'
 export default {
-  name: 'scan',
+  name: 'Scan',
   data() {
     return {
       newsItem: null,

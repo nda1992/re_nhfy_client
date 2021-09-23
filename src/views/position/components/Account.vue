@@ -1,7 +1,7 @@
 <template>
   <div class="user-account">
     <div v-if="SendMessageList.length!==0">
-      <div class="post" v-for="(msg,index) in SendMessageList" :key="msg.id">
+      <div v-for="(msg,index) in SendMessageList" :key="msg.id" class="post">
         <div class="user-block">
           <img class="img-circle" :src="avatar">
           <span class="username text-muted">你回复的人是: {{ msg.username }} </span>
@@ -12,8 +12,9 @@
           title="你回复的消息是"
           width="400"
           trigger="hover"
-          :content="msg.replycontent">
-          <p style="color: #1f2d3d" slot="reference">{{ msg.content }}</p>
+          :content="msg.replycontent"
+        >
+          <p slot="reference" style="color: #1f2d3d">{{ msg.content }}</p>
         </el-popover>
         <ul class="list-inline">
           <li>
@@ -22,14 +23,14 @@
                 <span class="link-black text-sm">删除</span>
               </el-button>
             </el-popconfirm>
-            <span style="margin-left: 5px;color: #97a8be" v-if="msg.is_read">已读</span>
-            <span style="margin-left: 5px;color: #4455aa" v-else>未读</span>
+            <span v-if="msg.is_read" style="margin-left: 5px;color: #97a8be">已读</span>
+            <span v-else style="margin-left: 5px;color: #4455aa">未读</span>
           </li>
         </ul>
       </div>
       <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getAllSendMsg()" />
     </div>
-    <div class="nomessage" v-else>
+    <div v-else class="nomessage">
       <img src="../../../icons/imgs/NoMessage.png" height="380" width="350">
       <span>你还没有发送消息哦~</span>
     </div>

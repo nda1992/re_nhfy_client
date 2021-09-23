@@ -454,7 +454,7 @@ export const constantRoutes = [
         path: 'home',
         name: 'Home',
         component: () => import('@/views/wechat/index'),
-        meta: { title: '微信小程序管理', icon: 'wechat'}
+        meta: { title: '微信小程序管理', icon: 'wechat' }
       }
     ]
   },
@@ -507,7 +507,6 @@ export const constantRoutes = [
       }
     ]
   },
-
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }

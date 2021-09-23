@@ -2,7 +2,7 @@
   <div>
     <el-form ref="postForm" :model="postForm" label-width="100px">
       <el-form-item label="新闻类别">
-        <el-input placeholder="请输入新闻类别" v-model="postForm.name" :clearable="true"></el-input>
+        <el-input v-model="postForm.name" placeholder="请输入新闻类别" :clearable="true" />
       </el-form-item>
     </el-form>
     <div class="btn">

@@ -12,23 +12,24 @@
     </div>
     <div class="table-container">
       <el-table
-        @selection-change="handleSelectionChange"
-        :row-class-name="rowClassName"
         :key="tableKey"
         v-loading="listLoading"
+        :row-class-name="rowClassName"
         :data="searchList"
         border
+        ref="currentData"
         fit
         highlight-current-row
-        ref="currentData"
-        style="width: 100%;">
-        <el-table-column type="selection" width="55"></el-table-column>
+        style="width: 100%;"
+        @selection-change="handleSelectionChange"
+      >
+        <el-table-column type="selection" width="55" />
         <!--自增id-->
-        <el-table-column label="序号" align="center" prop="xh" min-width="3px"></el-table-column>
+        <el-table-column label="序号" align="center" prop="xh" min-width="3px" />
         <!--创建时间-->
         <el-table-column label="投递时间" prop="createdTime" align="center" min-width="8px" :show-overflow-tooltip="true">
           <template slot-scope="{row}">
-            <i class="el-icon-time" style="margin-right: 3px;"></i>
+            <i class="el-icon-time" style="margin-right: 3px;" />
             <span>{{ row.createdTime }}</span>
           </template>
         </el-table-column>
@@ -73,8 +74,8 @@
           <template slot-scope="{row}">
             <span>
               <el-tooltip class="item" effect="dark" content="点击查看简历" placement="bottom">
-                <a :href="row.attachmentUrl" v-if="row.attachmentUrl.split('/').slice(-1)[0].indexOf('pdf')!==-1" style="color: #409EFF">简历</a>
-                <el-button type="text" size="mini" @click="gotoResume(row.attachmentUrl)" v-else>简历</el-button>
+                <a v-if="row.attachmentUrl.split('/').slice(-1)[0].indexOf('pdf')!==-1" :href="row.attachmentUrl" style="color: #409EFF">简历</a>
+                <el-button v-else type="text" size="mini" @click="gotoResume(row.attachmentUrl)">简历</el-button>
               </el-tooltip>
             </span>
           </template>
@@ -91,15 +92,14 @@
         <el-table-column label="状态审核" prop="Switch" align="center" min-width="12px">
           <template slot-scope="{row}">
             <el-switch
-              :disabled="row.status==='求职者已确认'"
-              @change="handleSetStatus(row)"
               v-model="row.Switch"
+              :disabled="row.status==='求职者已确认'"
               active-color="#13ce66"
               inactive-color="#ff4949"
               inactive-text="不通过"
               active-text="通过"
-            >
-            </el-switch>
+              @change="handleSetStatus(row)"
+            />
           </template>
         </el-table-column>
         <!--操作-->
@@ -107,9 +107,12 @@
           <template slot-scope="{row,$index}">
             <el-button
               v-if="row.status!='deleted'"
-              size="mini" type="danger"
+              size="mini"
+              type="danger"
+              icon="el-icon-delete"
+              :disabled="row.status==='求职者已确认'"
               @click="handleDelete(row,$index)"
-              icon="el-icon-delete" :disabled="row.status==='求职者已确认'">删除</el-button>
+            >删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -117,19 +120,20 @@
     </div>
     <!--消息的dialog-->
     <el-dialog title="消息发送对话框" :visible.sync="showMsgBox">
-      <el-form ref="messageForm" :model="messageForm" label-position="left" label-width="20px" style="width: 700px;height: 120px" >
+      <el-form ref="messageForm" :model="messageForm" label-position="left" label-width="20px" style="width: 700px;height: 120px">
         <el-form-item prop="content">
           <el-input
-            width="120"
-            :rows="5"
             ref="username"
             v-model="messageForm.content"
+            width="120"
+            :rows="5"
             placeholder="请输入消息..."
             type="textarea"
-            @keyup.enter.native="sendMessage"/>
+            @keyup.enter.native="sendMessage"
+          />
         </el-form-item>
       </el-form>
-      <el-popover placement="bottom" width="500" height="100%" trigger="click" v-model="emojiShow" >
+      <el-popover v-model="emojiShow" placement="bottom" width="500" height="100%" trigger="click">
         <el-button slot="reference" style="transform: translateX(640px)">😀</el-button>
         <div class="browBox">
           <ul><li v-for="(item, index) in faceList" :key="index" @click="getBrow(index)">{{ item }}</li></ul>
@@ -148,7 +152,7 @@ import Pagination from '@/components/Pagination'
 import { getPost2PositionListByUid, setPositionStatus, deletePost2Position } from '@/api/recruit/position'
 import { sendMessage } from '@/api/recruit/position'
 export default {
-  name: 'postlist',
+  name: 'Postlist',
   components: { Pagination },
   filters: {
     statusFilter(status) {
@@ -288,7 +292,7 @@ export default {
       })
     },
     getBrow(index) {
-      for (let i in this.faceList) {
+      for (const i in this.faceList) {
         if (parseInt(index) === parseInt(i)) {
           this.getBrowString = this.faceList[index]
           this.messageForm.content += this.getBrowString

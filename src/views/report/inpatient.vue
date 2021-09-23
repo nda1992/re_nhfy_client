@@ -1,8 +1,6 @@
 <template>
-<!-- 住院数据报表 -->
-    <div class="">
-
-    </div>
+  <!-- 住院数据报表 -->
+  <div class="" />
 </template>
 <script>
 export default {

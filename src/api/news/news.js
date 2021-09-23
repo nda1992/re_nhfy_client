@@ -69,7 +69,6 @@ export function getDraftList(data) {
   })
 }
 
-
 // 根据新闻id获取草稿内容
 export function getDraftById(data) {
   return request({

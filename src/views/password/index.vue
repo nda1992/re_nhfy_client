@@ -1,34 +1,34 @@
 <template>
-<!-- 密码找回 -->
-    <div class="app-container">
-      <div class="title">
-        <h3>密码找回页面</h3>
-        <h3 @click="back">首页</h3>
-      </div>
-      <div class="input-form">
-        <el-form ref="passwdForm" :model="passwdForm" :rules="rules" auto-complete="on" label-position="left">
-          <el-form-item label="姓名" prop="username">
-            <el-input v-model="passwdForm.username" placeholder="姓名" ref="username" name="username" clearable />
-          </el-form-item>
-          <el-form-item label="职工号" prop="userCode">
-            <el-input v-model="passwdForm.userCode" placeholder="职工号" ref="userCode" name="userCode" clearable />
-          </el-form-item>
-          <el-form-item label="邮箱" prop="email">
-            <el-input v-model="passwdForm.email" placeholder="邮箱" ref="email" name="email" clearable />
-          </el-form-item>
-          <el-form-item label="新密码" prop="password">
-            <el-input v-model="passwdForm.password" placeholder="密码" type="password" clearable ref="password" name="password" />
-          </el-form-item>
-          <el-form-item label="再次输入新密码" prop="checkPassword">
-            <el-input v-model="passwdForm.checkPassword" placeholder="再次输入密码" type="password" clearable ref="checkPassword" name="checkPassword" />
-          </el-form-item>
-          <div class="btns">
-            <el-button @click="confirm" type="primary">确定</el-button>
-            <el-button type="info" @click="reset('passwdForm')">重置</el-button>
-          </div>
-        </el-form>
-      </div>
+  <!-- 密码找回 -->
+  <div class="app-container">
+    <div class="title">
+      <h3>密码找回页面</h3>
+      <h3 @click="back">首页</h3>
     </div>
+    <div class="input-form">
+      <el-form ref="passwdForm" :model="passwdForm" :rules="rules" auto-complete="on" label-position="left">
+        <el-form-item label="姓名" prop="username">
+          <el-input ref="username" v-model="passwdForm.username" placeholder="姓名" name="username" clearable />
+        </el-form-item>
+        <el-form-item label="职工号" prop="userCode">
+          <el-input ref="userCode" v-model="passwdForm.userCode" placeholder="职工号" name="userCode" clearable />
+        </el-form-item>
+        <el-form-item label="邮箱" prop="email">
+          <el-input ref="email" v-model="passwdForm.email" placeholder="邮箱" name="email" clearable />
+        </el-form-item>
+        <el-form-item label="新密码" prop="password">
+          <el-input ref="password" v-model="passwdForm.password" placeholder="密码" type="password" clearable name="password" />
+        </el-form-item>
+        <el-form-item label="再次输入新密码" prop="checkPassword">
+          <el-input ref="checkPassword" v-model="passwdForm.checkPassword" placeholder="再次输入密码" type="password" clearable name="checkPassword" />
+        </el-form-item>
+        <div class="btns">
+          <el-button type="primary" @click="confirm">确定</el-button>
+          <el-button type="info" @click="reset('passwdForm')">重置</el-button>
+        </div>
+      </el-form>
+    </div>
+  </div>
 </template>
 <script>
 import { updatePassword } from '@/api/user'

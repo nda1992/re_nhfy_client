@@ -63,7 +63,6 @@ export function handleCollect(data) {
   })
 }
 
-
 // 求职者投递简历
 export function postPosition(data) {
   return request({

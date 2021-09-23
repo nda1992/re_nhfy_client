@@ -12,35 +12,36 @@
       </template>
       <!-- 用户头像 -->
       <div class="avatar-container right-menu-item hover-effect">
-          <div class="avatar-wrapper">
-            <el-upload
-              :headers="{ token: token }"
-              :show-file-list="false"
-              :data="{ userCode: userCode, avatar: avatar }"
-              :action="upload_url"
-              :on-success="hadndleSuccessUploadFile">
-              <el-tooltip effect="dark" content="点击更换头像" placement="bottom-end">
-                <el-avatar shape="square" :size="40" :src="avatar" v-if="avatar" class="user-avatar"></el-avatar>
-              </el-tooltip>
-            </el-upload>
-          </div>
+        <div class="avatar-wrapper">
+          <el-upload
+            :headers="{ token: token }"
+            :show-file-list="false"
+            :data="{ userCode: userCode, avatar: avatar }"
+            :action="upload_url"
+            :on-success="hadndleSuccessUploadFile"
+          >
+            <el-tooltip effect="dark" content="点击更换头像" placement="bottom-end">
+              <el-avatar v-if="avatar" shape="square" :size="40" :src="avatar" class="user-avatar" />
+            </el-tooltip>
+          </el-upload>
+        </div>
       </div>
       <!-- 更多操作按钮 -->
       <div class="userinfo">
         <el-dropdown trigger="click">
-        <span class="el-dropdown-link">
-          更多操作<i class="el-icon-arrow-down el-icon--right"></i>
-        </span>
-        <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item icon="el-icon-user" @click.native="updateUserinfo">个人主页</el-dropdown-item>
-          <el-dropdown-item icon="el-icon-bell" @click.native="notice">消息
-            <el-badge class="mark" :value="msgNum" :hidden="msgNum===0"/>
-          </el-dropdown-item>
-          <el-dropdown-item icon="el-icon-warning-outline" @click.native="deleteUser">注销账号</el-dropdown-item>
-          <el-dropdown-item icon="el-icon-circle-close" @click.native="logout">退出系统</el-dropdown-item>
-        </el-dropdown-menu>
+          <span class="el-dropdown-link">
+            更多操作<i class="el-icon-arrow-down el-icon--right" />
+          </span>
+          <el-dropdown-menu slot="dropdown">
+            <el-dropdown-item icon="el-icon-user" @click.native="updateUserinfo">个人主页</el-dropdown-item>
+            <el-dropdown-item icon="el-icon-bell" @click.native="notice">消息
+              <el-badge class="mark" :value="msgNum" :hidden="msgNum===0" />
+            </el-dropdown-item>
+            <el-dropdown-item icon="el-icon-warning-outline" @click.native="deleteUser">注销账号</el-dropdown-item>
+            <el-dropdown-item icon="el-icon-circle-close" @click.native="logout">退出系统</el-dropdown-item>
+          </el-dropdown-menu>
         </el-dropdown>
-        </div>
+      </div>
     </div>
   </div>
 </template>

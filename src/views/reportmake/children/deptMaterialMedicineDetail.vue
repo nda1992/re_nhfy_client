@@ -1,20 +1,20 @@
 <template>
   <div class="app-container">
     <div class="title">
-      <el-date-picker v-model="searchDate" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd" clearable @change="pickerDate"></el-date-picker>
+      <el-date-picker v-model="searchDate" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd" clearable @change="pickerDate" />
       <el-select v-model="searchForm.Depttype" clearable placeholder="请选择">
-        <el-option v-for="(item, index) in MZorZYOptions" :key="item.id" :label="item.item" :value="item.item"></el-option>
+        <el-option v-for="(item, index) in MZorZYOptions" :key="item.id" :label="item.item" :value="item.item" />
       </el-select>
-      <el-radio-group v-model="searchForm.Catetype" @change="handleChange" style="display: flex;justify-content:space-around;width: 180px;">
+      <el-radio-group v-model="searchForm.Catetype" style="display: flex;justify-content:space-around;width: 180px;" @change="handleChange">
         <el-radio label="1" border size="medium">药品</el-radio>
         <el-radio label="2" border size="medium">耗材</el-radio>
       </el-radio-group>
-      <el-select clearable :loading="select_loading" v-model="searchForm.deptName" placeholder="请选择部门(不选则为全院)" width="20px" :remote-method="getRemoteDeptList" filterable default-first-option remote>
-        <el-option v-for="(item,index) in deptListOptions" :key="item+index" :label="item" :value="item"></el-option>
+      <el-select v-model="searchForm.deptName" clearable :loading="select_loading" placeholder="请选择部门(不选则为全院)" width="20px" :remote-method="getRemoteDeptList" filterable default-first-option remote>
+        <el-option v-for="(item,index) in deptListOptions" :key="item+index" :label="item" :value="item" />
       </el-select>
-      <el-button @click="search" type="primary" icon="el-icon-search">查询</el-button>
-      <el-button @click="handleDownload" type="success" icon="el-icon-download" :loading="downloadLoading">导出表格</el-button>
-<!--      <span style="color: #ff6666;font-size: 12px;">耗材查询时间约为120秒!</span>-->
+      <el-button type="primary" icon="el-icon-search" @click="search">查询</el-button>
+      <el-button type="success" icon="el-icon-download" :loading="downloadLoading" @click="handleDownload">导出表格</el-button>
+      <!--      <span style="color: #ff6666;font-size: 12px;">耗材查询时间约为120秒!</span>-->
     </div>
     <div class="table-container">
       <div class="header">
@@ -22,13 +22,14 @@
         <span class="sum">总金额: {{ sum }}</span>
       </div>
       <el-table
-        :data="showItems"
         v-loading="listLoading"
+        :data="showItems"
         border
         stripe
         fix
         highlight-current-row
-        style="width: 100%;">
+        style="width: 100%;"
+      >
         <el-table-column label="序号" prop="xh" align="center" width="70px">
           <template slot-scope="{row}">
             <span>{{ row.XH }}</span>
@@ -141,7 +142,7 @@ import { searchDept } from '@/api/news/news'
 import Pagination from '@/components/Pagination'
 import moment from 'moment'
 export default {
-  name: 'deptMaterialMedicineDetail',
+  name: 'DeptMaterialMedicineDetail',
   components: { Pagination },
   data() {
     return {

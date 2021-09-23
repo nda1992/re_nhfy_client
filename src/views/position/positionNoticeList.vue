@@ -3,8 +3,8 @@
     <div class="title">
       <span class="show-title">消息列表</span>
       <el-badge :value="activeTab==='activity'?Receivetotal:sendTotal" class="item" :hidden="(activeTab==='activity'&&Receivetotal===0)||(activeTab==='account'&&sendTotal===0)">
-        <span class="show-tips" @click="removeAllReceiveMsg" v-if="activeTab==='activity'">清空所有接收到的消息</span>
-        <span class="show-tips" @click="removeAllSendMsg" v-else>清空所有已发送的消息</span>
+        <span v-if="activeTab==='activity'" class="show-tips" @click="removeAllReceiveMsg">清空所有接收到的消息</span>
+        <span v-else class="show-tips" @click="removeAllSendMsg">清空所有已发送的消息</span>
       </el-badge>
     </div>
     <div>
@@ -12,42 +12,45 @@
         <el-tabs v-model="activeTab">
           <el-tab-pane label="已收到的消息列表" name="activity">
             <activity
-              :ReceiveMessageList="ReceiveMessageList"
+              :receive-message-list="ReceiveMessageList"
               :total="Receivetotal"
-              :listQuery="listQuery"
-              :showMsgBox="showMsgBox"
+              :list-query="listQuery"
+              :show-msg-box="showMsgBox"
               @getAllReceiveMegList="getAllReceiveMsgList"
               @receiveRemoveMsg="receiveRemoveMsg"
-              @HandlebulkSendMessageBox="HandlebulkSendMessageBox"/>
+              @HandlebulkSendMessageBox="HandlebulkSendMessageBox"
+            />
           </el-tab-pane>
           <el-tab-pane label="已发送的消息列表" name="account">
             <account
+              :content="content"
+              :send-message-list="SendMessageList"
+              :total="sendTotal"
+              :list-query="listQuery"
+              :avatar="avatar"
               @getAllSendMsg="getAllSendMsg"
               @removeSendMsg="removeSendMsg"
-              :content="content"
-              :SendMessageList="SendMessageList"
-              :total="sendTotal"
-              :listQuery="listQuery"
-              :avatar="avatar"/>
+            />
           </el-tab-pane>
         </el-tabs>
       </el-card>
     </div>
     <!--发送消息的dialog-->
     <el-dialog title="消息发送对话框" :visible.sync="showMsgBox">
-      <el-form ref="messageForm" :model="messageForm" label-position="left" label-width="20px" style="width: 700px;height: 120px" >
+      <el-form ref="messageForm" :model="messageForm" label-position="left" label-width="20px" style="width: 700px;height: 120px">
         <el-form-item prop="content">
           <el-input
-            width="120"
-            :rows="5"
             ref="username"
             v-model="messageForm.content"
+            width="120"
+            :rows="5"
             placeholder="请输入消息..."
             type="textarea"
-            @keyup.enter.native="sendMessage"/>
+            @keyup.enter.native="sendMessage"
+          />
         </el-form-item>
       </el-form>
-      <el-popover placement="bottom" width="500" height="100%" trigger="click" v-model="emojiShow" >
+      <el-popover v-model="emojiShow" placement="bottom" width="500" height="100%" trigger="click">
         <el-button slot="reference" style="transform: translateX(640px)">😀</el-button>
         <div class="browBox">
           <ul><li v-for="(item, index) in faceList" :key="index" @click="getBrow(index)">{{ item }}</li></ul>
@@ -212,7 +215,7 @@ export default {
       })
     },
     getBrow(index) {
-      for (let i in this.faceList) {
+      for (const i in this.faceList) {
         if (parseInt(index) === parseInt(i)) {
           this.getBrowString = this.faceList[index]
           this.messageForm.content += this.getBrowString

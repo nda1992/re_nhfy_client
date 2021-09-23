@@ -11,7 +11,6 @@ import './styles/element-variables.scss'
 import App from './App'
 import store from './store'
 import router from './router'
-
 import '@/icons' // icon
 import '@/permission' // permission control
 

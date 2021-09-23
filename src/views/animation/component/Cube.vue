@@ -1,5 +1,5 @@
 <template>
-  <div id="info"></div>
+  <div id="info" />
 </template>
 
 <script>
@@ -12,118 +12,104 @@ export default {
   },
   methods: {
     init() {
-      let container, camera, scene, renderer, effect;
+      let container, camera, scene, renderer, effect
 
-      const spheres = [];
+      const spheres = []
 
-      let mouseX = 0, mouseY = 0;
+      let mouseX = 0; let mouseY = 0
 
-      let windowHalfX = window.innerWidth / 2;
-      let windowHalfY = window.innerHeight / 2;
+      let windowHalfX = window.innerWidth / 2
+      let windowHalfY = window.innerHeight / 2
 
-      document.addEventListener( 'mousemove', onDocumentMouseMove );
+      document.addEventListener('mousemove', onDocumentMouseMove)
 
-      init();
-      animate();
+      init()
+      animate()
 
       function init() {
         const main = document.getElementById('info')
-        container = document.createElement( 'div' );
-        document.body.appendChild( container );
+        container = document.createElement('div')
+        document.body.appendChild(container)
         main.appendChild(container)
-        camera = new THREE.PerspectiveCamera( 60, 1200 / 600, 1, 100000 );
-        camera.position.z = 3200;
+        camera = new THREE.PerspectiveCamera(60, 1200 / 600, 1, 100000)
+        camera.position.z = 3200
 
-        scene = new THREE.Scene();
+        scene = new THREE.Scene()
         scene.background = new THREE.CubeTextureLoader()
-          .setPath( `${process.env.BASE_URL}images/` )
-          .load( [ 'px.jpg', 'nx.jpg', 'py.jpg', 'ny.jpg', 'pz.jpg', 'nz.jpg' ] );
+          .setPath(`${process.env.BASE_URL}images/`)
+          .load(['px.jpg', 'nx.jpg', 'py.jpg', 'ny.jpg', 'pz.jpg', 'nz.jpg'])
 
-        const geometry = new THREE.SphereGeometry( 100, 32, 16 );
+        const geometry = new THREE.SphereGeometry(100, 32, 16)
 
         const textureCube = new THREE.CubeTextureLoader()
-          .setPath( `${process.env.BASE_URL}images/` )
-          .load( [ 'px.jpg', 'nx.jpg', 'py.jpg', 'ny.jpg', 'pz.jpg', 'nz.jpg' ] );
-        textureCube.mapping = THREE.CubeRefractionMapping;
-      console.log(textureCube)
-        const material = new THREE.MeshBasicMaterial( { color: 0xffffff, envMap: textureCube, refractionRatio: 0.95 } );
+          .setPath(`${process.env.BASE_URL}images/`)
+          .load(['px.jpg', 'nx.jpg', 'py.jpg', 'ny.jpg', 'pz.jpg', 'nz.jpg'])
+        textureCube.mapping = THREE.CubeRefractionMapping
+        const material = new THREE.MeshBasicMaterial({ color: 0xffffff, envMap: textureCube, refractionRatio: 0.95 })
 
-        for ( let i = 0; i < 500; i ++ ) {
+        for (let i = 0; i < 500; i++) {
+          const mesh = new THREE.Mesh(geometry, material)
+          mesh.position.x = Math.random() * 10000 - 5000
+          mesh.position.y = Math.random() * 10000 - 5000
+          mesh.position.z = Math.random() * 10000 - 5000
+          mesh.scale.x = mesh.scale.y = mesh.scale.z = Math.random() * 3 + 1
+          scene.add(mesh)
 
-          const mesh = new THREE.Mesh( geometry, material );
-          mesh.position.x = Math.random() * 10000 - 5000;
-          mesh.position.y = Math.random() * 10000 - 5000;
-          mesh.position.z = Math.random() * 10000 - 5000;
-          mesh.scale.x = mesh.scale.y = mesh.scale.z = Math.random() * 3 + 1;
-          scene.add( mesh );
-
-          spheres.push( mesh );
-
+          spheres.push(mesh)
         }
 
         //
 
-        renderer = new THREE.WebGLRenderer();
-        renderer.setPixelRatio( window.devicePixelRatio );
-        container.appendChild( renderer.domElement );
+        renderer = new THREE.WebGLRenderer()
+        renderer.setPixelRatio(window.devicePixelRatio)
+        container.appendChild(renderer.domElement)
 
-        effect = new StereoEffect( renderer );
-        effect.setSize( 1300, 620 );
+        effect = new StereoEffect(renderer)
+        effect.setSize(1300, 620)
 
         //
 
-        window.addEventListener( 'resize', onWindowResize );
-
+        window.addEventListener('resize', onWindowResize)
       }
 
       function onWindowResize() {
+        windowHalfX = window.innerWidth / 2
+        windowHalfY = window.innerHeight / 2
 
-        windowHalfX = window.innerWidth / 2;
-        windowHalfY = window.innerHeight / 2;
+        camera.aspect = window.innerWidth / window.innerHeight
+        camera.updateProjectionMatrix()
 
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-
-        effect.setSize( window.innerWidth, window.innerHeight );
-
+        effect.setSize(window.innerWidth, window.innerHeight)
       }
 
-      function onDocumentMouseMove( event ) {
-
-        mouseX = ( event.clientX - windowHalfX ) * 10;
-        mouseY = ( event.clientY - windowHalfY ) * 10;
-
+      function onDocumentMouseMove(event) {
+        mouseX = (event.clientX - windowHalfX) * 10
+        mouseY = (event.clientY - windowHalfY) * 10
       }
 
       //
 
       function animate() {
+        requestAnimationFrame(animate)
 
-        requestAnimationFrame( animate );
-
-        render();
-
+        render()
       }
 
       function render() {
+        const timer = 0.0001 * Date.now()
 
-        const timer = 0.0001 * Date.now();
+        camera.position.x += (mouseX - camera.position.x) * 0.05
+        camera.position.y += (-mouseY - camera.position.y) * 0.05
+        camera.lookAt(scene.position)
 
-        camera.position.x += ( mouseX - camera.position.x ) * .05;
-        camera.position.y += ( - mouseY - camera.position.y ) * .05;
-        camera.lookAt( scene.position );
+        for (let i = 0, il = spheres.length; i < il; i++) {
+          const sphere = spheres[ i ]
 
-        for ( let i = 0, il = spheres.length; i < il; i ++ ) {
-
-          const sphere = spheres[ i ];
-
-          sphere.position.x = 5000 * Math.cos( timer + i );
-          sphere.position.y = 5000 * Math.sin( timer + i * 1.1 );
-
+          sphere.position.x = 5000 * Math.cos(timer + i)
+          sphere.position.y = 5000 * Math.sin(timer + i * 1.1)
         }
 
-        effect.render( scene, camera );
-
+        effect.render(scene, camera)
       }
     }
   }

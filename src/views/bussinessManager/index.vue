@@ -1,22 +1,22 @@
 <template>
-    <div></div>
+  <div />
 </template>
 
 <script>
-  export default {
-    name: 'index',
-    data() {
-      return {
-
-      }
-    },
-    mounted() {
-
-    },
-    methods: {
+export default {
+  name: 'Index',
+  data() {
+    return {
 
     }
+  },
+  mounted() {
+
+  },
+  methods: {
+
   }
+}
 </script>
 
 <style lang="scss" scoped>

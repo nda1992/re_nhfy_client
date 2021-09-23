@@ -1,15 +1,15 @@
 <template>
-    <!-- 报表查询主页 -->
-    <div class="app-container">
-      <el-card class="box-card">
-        <div slot="header" class="clearfix">
-          <span style="color:#ff6666;font-size: 20px">欢迎使用报表查询模块提供的相关功能</span>
-        </div>
-        <div v-for="(item,index) in data" :key="item.id" class="text">
-          <span :style="item.id===1?color1:color2">{{ item.content }}</span>
-        </div>
-      </el-card>
-    </div>
+  <!-- 报表查询主页 -->
+  <div class="app-container">
+    <el-card class="box-card">
+      <div slot="header" class="clearfix">
+        <span style="color:#ff6666;font-size: 20px">欢迎使用报表查询模块提供的相关功能</span>
+      </div>
+      <div v-for="(item,index) in data" :key="item.id" class="text">
+        <span :style="item.id===1?color1:color2">{{ item.content }}</span>
+      </div>
+    </el-card>
+  </div>
 </template>
 <script>
 export default {

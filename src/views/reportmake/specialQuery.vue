@@ -3,14 +3,14 @@
     <div class="title">
       <span style="font-size: 20px;color: #2b2f3a;font-weight: bold;">特殊查询</span>
       <el-dropdown>
-        <el-button type="primary">更多功能<i class="el-icon-arrow-down el-icon--right"></i></el-button>
-        <el-dropdown-menu slot="dropdown" >
-          <el-dropdown-item v-for="(item,index) in menuList" :key="item.id" @click.native="selected(item.id)">{{item.content}}</el-dropdown-item>
+        <el-button type="primary">更多功能<i class="el-icon-arrow-down el-icon--right" /></el-button>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item v-for="(item,index) in menuList" :key="item.id" @click.native="selected(item.id)">{{ item.content }}</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
-    <el-divider></el-divider>
-    <router-view></router-view>
+    <el-divider />
+    <router-view />
   </div>
 </template>
 <script>

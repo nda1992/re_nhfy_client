@@ -1,6 +1,6 @@
 <template>
   <!-- 住院数据分析 -->
-  <div class=""></div>
+  <div class="" />
 </template>
 <script>
 export default {

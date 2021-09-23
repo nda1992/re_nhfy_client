@@ -1,33 +1,35 @@
 <template>
   <div class="app-container">
     <div class="title">
-      <el-date-picker v-model="searchDate" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd" clearable @change="pickerDate"></el-date-picker>
-      <el-input style="width: 200px" placeholder="输入科室搜索" v-model="MZdeptname" clearable @keyup.enter.native="MZhandleFilter" :disabled="MZitemList.length===0?true:false" v-if="searchForm.type==='1'"></el-input>
-      <el-input style="width: 200px" placeholder="输入科室搜索" v-model="ZYdeptname" clearable @keyup.enter.native="ZYhandleFilter" :disabled="ZYitemList.length===0?true:false" v-else></el-input>
-      <el-radio-group v-model="searchForm.type" @change="selectChange" style="display: flex;justify-content:space-around;width: 200px;">
+      <el-date-picker v-model="searchDate" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd" clearable @change="pickerDate" />
+      <el-input v-if="searchForm.type==='1'" v-model="MZdeptname" style="width: 200px" placeholder="输入科室搜索" clearable :disabled="MZitemList.length===0?true:false" @keyup.enter.native="MZhandleFilter" />
+      <el-input v-else v-model="ZYdeptname" style="width: 200px" placeholder="输入科室搜索" clearable :disabled="ZYitemList.length===0?true:false" @keyup.enter.native="ZYhandleFilter" />
+      <el-radio-group v-model="searchForm.type" style="display: flex;justify-content:space-around;width: 200px;" @change="selectChange">
         <el-radio label="1" border size="medium">门诊</el-radio>
         <el-radio label="2" border size="medium">住院</el-radio>
       </el-radio-group>
-      <el-button @click="search" icon="el-icon-search" type="primary">查询</el-button>
-      <el-button @click="handleDownload" icon="el-icon-download" type="success">导出表格</el-button>
+      <el-button icon="el-icon-search" type="primary" @click="search">查询</el-button>
+      <el-button icon="el-icon-download" type="success" @click="handleDownload">导出表格</el-button>
       <div><span style="color: #ff6666;font-size: 12px;">表格中的住院手术费和护理费的显示有点问题，还在修复中!</span></div>
     </div>
     <div class="table-container">
       <div class="header">
-        <span style="margin-bottom: 10px;font-size: 22px;font-weight: bold" v-if="searchForm.type==='1'">门诊科室收入情况</span>
-        <span style="margin-bottom: 10px;font-size: 22px;font-weight: bold" v-else>住院科室收入情况</span>
-        <div class="sum" v-if="searchForm.type==='1'">门急诊总收入:{{mzsum}}</div>
-        <div class="sum" v-else>住院总收入:{{zysum}}</div>
+        <span v-if="searchForm.type==='1'" style="margin-bottom: 10px;font-size: 22px;font-weight: bold">门诊科室收入情况</span>
+        <span v-else style="margin-bottom: 10px;font-size: 22px;font-weight: bold">住院科室收入情况</span>
+        <div v-if="searchForm.type==='1'" class="sum">门急诊总收入:{{ mzsum }}</div>
+        <div v-else class="sum">住院总收入:{{ zysum }}</div>
       </div>
-      <el-table :key="tableKey"
-                border
-                v-loading="listLoading"
-                :data="searchForm.type==='1'?MZitemList:ZYitemList"
-                stripe
-                fit
-                highlight-current-row
-                style="width: 100%;"
-                :height="(MZitemList.length===0)&&(ZYitemList.length===0)?'auto':'600'">
+      <el-table
+        :key="tableKey"
+        v-loading="listLoading"
+        border
+        :data="searchForm.type==='1'?MZitemList:ZYitemList"
+        stripe
+        fit
+        highlight-current-row
+        style="width: 100%;"
+        :height="(MZitemList.length===0)&&(ZYitemList.length===0)?'auto':'600'"
+      >
         <!--序号-->
         <el-table-column label="序号" prop="xh" align="center" min-width="3px">
           <template slot-scope="{row}">
@@ -41,7 +43,7 @@
           </template>
         </el-table-column>
         <!--床位费-->
-        <el-table-column label="床位费" sortable :sort-method="sortByCWF" prop="床位费" align="center" min-width="6px" v-if="searchForm.type==='2'">
+        <el-table-column v-if="searchForm.type==='2'" label="床位费" sortable :sort-method="sortByCWF" prop="床位费" align="center" min-width="6px">
           <template slot-scope="{row}">
             <span>{{ row.床位费.toFixed(2) }}</span>
           </template>

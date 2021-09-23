@@ -1,12 +1,10 @@
 <template>
-<!-- 门诊数据报表 -->
-    <div class="">
-
-    </div>
+  <!-- 门诊数据报表 -->
+  <div class="" />
 </template>
 <script>
 export default {
-  data(){
+  data() {
     return {}
   },
   computed() {},

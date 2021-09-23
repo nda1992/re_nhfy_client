@@ -18,7 +18,7 @@
     </el-row>
     <el-dialog :visible.sync="dialogVisible" title="建议反馈">
       <el-form ref="dataForm" :model="temp" label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
-        <el-input v-model="temp.content" type="textarea" placeholder="请输入您需要反馈的建议"></el-input>
+        <el-input v-model="temp.content" type="textarea" placeholder="请输入您需要反馈的建议" />
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取消</el-button>

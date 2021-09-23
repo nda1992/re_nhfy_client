@@ -1,11 +1,11 @@
 <template>
-<!-- 报表定制首页 -->
+  <!-- 报表定制首页 -->
   <div class="app-container">
     <div class="title">
       <span style="font-size: 20px;font-weight: bold;color: #393f4c">日常需要报送的其他表格</span>
       <el-button type="primary" icon="el-icon-circle-plus-outline" @click="handlerCreate">添加表格</el-button>
     </div>
-    <el-divider></el-divider>
+    <el-divider />
     <div class="list-unstyled">
       <el-table
         :key="tableKey"
@@ -32,7 +32,7 @@
         <!--创建时间-->
         <el-table-column label="创建时间" prop="createdDate" min-width="10px" align="center">
           <template slot-scope="{row}">
-            <i class="el-icon-time" style="margin-right: 4px"></i>
+            <i class="el-icon-time" style="margin-right: 4px" />
             <span>{{ row.createdDate }}</span>
           </template>
         </el-table-column>
@@ -45,17 +45,17 @@
         <!--操作按钮-->
         <el-table-column label="操作" align="center" min-width="20px" class-name="small-padding fixed-width">
           <template slot-scope="{row,$index}">
-            <el-button type="primary" size="mini" @click="handleUpdate(row)" icon="el-icon-edit">编辑</el-button>
-            <el-button v-if="row.status!='deleted'" size="mini" type="danger" @click="handleDelete(row,$index)" icon="el-icon-delete">删除</el-button>
+            <el-button type="primary" size="mini" icon="el-icon-edit" @click="handleUpdate(row)">编辑</el-button>
+            <el-button v-if="row.status!='deleted'" size="mini" type="danger" icon="el-icon-delete" @click="handleDelete(row,$index)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
-<!--    添加表格对话框-->
+    <!--    添加表格对话框-->
     <el-dialog :visible.sync="dialogCreateVisible" title="定制表格名称">
       <el-form ref="dataForm" :rules="rules" :model="tableTitle" label-position="left" label-width="100px" style="width: 500px; margin-left:50px;">
-        <el-input v-model="tableTitle.title" clearable type="text" placeholder="请输入表格名称" style="margin-bottom: 20px;"></el-input>
-        <el-input v-model="tableTitle.desc" type="textarea" placeholder="请输入备注"></el-input>
+        <el-input v-model="tableTitle.title" clearable type="text" placeholder="请输入表格名称" style="margin-bottom: 20px;" />
+        <el-input v-model="tableTitle.desc" type="textarea" placeholder="请输入备注" />
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogCreateVisible = false">取消</el-button>

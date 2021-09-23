@@ -6,7 +6,7 @@
     <div class="tabs">
       <el-tabs v-model="activeName">
         <el-tab-pane label="新闻分类管理" name="first">
-          <NewsCategory @createData="createData"/>
+          <NewsCategory @createData="createData" />
         </el-tab-pane>
         <el-tab-pane label="发文作者和科室" name="second">发文作者和科室</el-tab-pane>
         <el-tab-pane label="招聘系统轮播图" name="third">
@@ -14,14 +14,15 @@
             <div style="color: #ff4949;font-size: 12px;margin-bottom: 10px;">(切换状态选择要播放的轮播图，最多6张)</div>
           </div>
           <ImgList
-            :imgList="imgList"
-            :srcList="srcList"
+            :img-list="imgList"
+            :src-list="srcList"
             :num="num"
             @handleDelete="handleDelete"
-            @handleSetStatus="handleSetStatus"/>
+            @handleSetStatus="handleSetStatus"
+          />
           <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getAllSwiperImgs" />
-          <el-divider></el-divider>
-          <UploadImg :userCode="userCode" @getAllSwiperImgs="getAllSwiperImgs"/>
+          <el-divider />
+          <UploadImg :user-code="userCode" @getAllSwiperImgs="getAllSwiperImgs" />
         </el-tab-pane>
       </el-tabs>
     </div>
@@ -36,7 +37,7 @@ import ImgList from './components/SwiperImgs/ImgList'
 import UploadImg from './components/SwiperImgs/UploadImg'
 import Pagination from '@/components/Pagination'
 export default {
-  name: 'manager',
+  name: 'Manager',
   components: {
     NewsCategory,
     ImgList,
@@ -58,9 +59,6 @@ export default {
       selectList: []
     }
   },
-  mounted() {
-    this.getAllSwiperImgs()
-  },
   computed: {
     username() {
       return localStorage.getItem('name')
@@ -68,6 +66,9 @@ export default {
     userCode() {
       return localStorage.getItem('userCode')
     }
+  },
+  mounted() {
+    this.getAllSwiperImgs()
   },
   methods: {
     createData(form) {

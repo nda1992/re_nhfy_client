@@ -1,15 +1,15 @@
 <template>
-<!--管理员消息管理页面-->
+  <!--管理员消息管理页面-->
   <div class="app-container">
     <div class="title">
       <span class="show-title">消息列表</span>
       <el-badge :value="activeTab==='activity'?Receivetotal:sendTotal" class="item" :hidden="(activeTab==='activity'&&Receivetotal===0)||(activeTab==='account'&&sendTotal===0)">
-        <span class="show-tips" @click="removeAllReceiveMsg" v-if="activeTab==='activity'">清空所有接收到的消息</span>
-        <span class="show-tips" @click="removeAllSendMsg" v-else>清空所有已发送的消息</span>
+        <span v-if="activeTab==='activity'" class="show-tips" @click="removeAllReceiveMsg">清空所有接收到的消息</span>
+        <span v-else class="show-tips" @click="removeAllSendMsg">清空所有已发送的消息</span>
       </el-badge>
       <el-tooltip class="item" effect="dark" content="按下回车键搜索" placement="bottom">
-        <el-input v-model="searchReceive" placeholder="搜索已收到的消息内容" class="search" prefix-icon="el-icon-search" v-if="activeTab==='activity'" @keyup.enter.native="searchReceiveMsg"></el-input>
-        <el-input v-model="searchSend" placeholder="搜索已发送的消息内容" class="search" prefix-icon="el-icon-search" v-else @keyup.enter.native="searchSendMsg"></el-input>
+        <el-input v-if="activeTab==='activity'" v-model="searchReceive" placeholder="搜索已收到的消息内容" class="search" prefix-icon="el-icon-search" @keyup.enter.native="searchReceiveMsg" />
+        <el-input v-else v-model="searchSend" placeholder="搜索已发送的消息内容" class="search" prefix-icon="el-icon-search" @keyup.enter.native="searchSendMsg" />
       </el-tooltip>
     </div>
     <div>
@@ -17,42 +17,45 @@
         <el-tabs v-model="activeTab">
           <el-tab-pane label="已收到的消息列表" name="activity">
             <ReceivePage
-              :ReceiveMessageList="ReceiveMessageList"
+              :receive-message-list="ReceiveMessageList"
               :total="Receivetotal"
-              :listQuery="listQuery"
-              :showMsgBox="showMsgBox"
+              :list-query="listQuery"
+              :show-msg-box="showMsgBox"
               @getAllReceiveMegList="getAllReceiveMsgList"
               @receiveRemoveMsg="receiveRemoveMsg"
-              @HandlebulkSendMessageBox="HandlebulkSendMessageBox"/>
+              @HandlebulkSendMessageBox="HandlebulkSendMessageBox"
+            />
           </el-tab-pane>
           <el-tab-pane label="已发送的消息列表" name="account">
             <SendPage
+              :content="content"
+              :send-message-list="SendMessageList"
+              :total="sendTotal"
+              :list-query="listQuery"
+              :avatar="adminAvatar"
               @getAllSendMsg="getAllSendMsg"
               @removeSendMsg="removeSendMsg"
-              :content="content"
-              :SendMessageList="SendMessageList"
-              :total="sendTotal"
-              :listQuery="listQuery"
-              :avatar="adminAvatar"/>
+            />
           </el-tab-pane>
         </el-tabs>
       </el-card>
     </div>
     <!--发送消息的dialog-->
     <el-dialog title="消息发送对话框" :visible.sync="showMsgBox">
-      <el-form ref="messageForm" :model="messageForm" label-position="left" label-width="20px" style="width: 700px;height: 120px" >
+      <el-form ref="messageForm" :model="messageForm" label-position="left" label-width="20px" style="width: 700px;height: 120px">
         <el-form-item prop="content">
           <el-input
-            width="120"
-            :rows="5"
             ref="username"
             v-model="messageForm.content"
+            width="120"
+            :rows="5"
             placeholder="请输入消息..."
             type="textarea"
-            @keyup.enter.native="sendMessage"/>
+            @keyup.enter.native="sendMessage"
+          />
         </el-form-item>
       </el-form>
-      <el-popover placement="bottom" width="500" height="100%" trigger="click" v-model="emojiShow" >
+      <el-popover v-model="emojiShow" placement="bottom" width="500" height="100%" trigger="click">
         <el-button slot="reference" style="transform: translateX(640px)">😀</el-button>
         <div class="browBox">
           <ul><li v-for="(item, index) in faceList" :key="index" @click="getBrow(index)">{{ item }}</li></ul>
@@ -109,16 +112,6 @@ export default {
       searchSend: ''
     }
   },
-  created() {
-    // 发送一次请求，更新消息为已读（is_read=1）
-    this.updateIsread()
-    // 获取所有接收到的通知
-    this.getAllReceiveMsgList()
-    // 获取所有已发送的通知
-    this.getAllSendMsg()
-    // 加载表情列表
-    this.loadEmojis()
-  },
   computed: {
     userCode() {
       return localStorage.getItem('userCode')
@@ -129,6 +122,16 @@ export default {
     avatar() {
       return ''
     }
+  },
+  created() {
+    // 发送一次请求，更新消息为已读（is_read=1）
+    this.updateIsread()
+    // 获取所有接收到的通知
+    this.getAllReceiveMsgList()
+    // 获取所有已发送的通知
+    this.getAllSendMsg()
+    // 加载表情列表
+    this.loadEmojis()
   },
   methods: {
     // 搜索内容

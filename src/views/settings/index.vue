@@ -1,8 +1,8 @@
 <template>
-    <!-- 系统设置首页 -->
-    <div class="settings-container">
-        <h2>系统人员列表</h2>
-    </div>
+  <!-- 系统设置首页 -->
+  <div class="settings-container">
+    <h2>系统人员列表</h2>
+  </div>
 </template>
 <script>
 export default {

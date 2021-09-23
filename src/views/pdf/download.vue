@@ -2,7 +2,7 @@
   <div>
     <div v-loading.fullscreen.lock="fullscreenLoading" class="main-article" element-loading-text="Efforts to generate PDF">
       <div ref="content" class="node-article-content" v-html="article" />
-      <div style="position: relative;bottom: 0;display: flex;justify-content: center"><el-button @click="back" type="primary">返回</el-button></div>
+      <div style="position: relative;bottom: 0;display: flex;justify-content: center"><el-button type="primary" @click="back">返回</el-button></div>
     </div>
   </div>
 </template>
@@ -26,7 +26,7 @@ export default {
       const filename = url.split('/').slice(-1)[0]
       const ext = path.extname(filename)
       if (ext === '.docx') {
-        getResumeFile({url: url}).then(res => {
+        getResumeFile({ url: url }).then(res => {
           this.article = res.html
           setTimeout(() => {
             this.fullscreenLoading = false

@@ -1,8 +1,8 @@
 <template>
-<!--求职者接收到的所有消息-->
+  <!--求职者接收到的所有消息-->
   <div class="user-activity">
     <div v-if="ReceiveMessageList.length!==0">
-      <div class="post" v-for="(msg,index) in ReceiveMessageList" :key="msg.id">
+      <div v-for="(msg,index) in ReceiveMessageList" :key="msg.id" class="post">
         <div class="user-block">
           <img class="img-circle" :src="msg.url">
           <span class="username text-muted">发送者是: {{ msg.username }} </span>
@@ -22,8 +22,8 @@
       </div>
       <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getAllReceiveMsgList()" />
     </div>
-    <div class="message" v-else>
-      <img src="../../../icons/imgs/NoMessage.png" alt="" height="380" width="350" />
+    <div v-else class="message">
+      <img src="../../../icons/imgs/NoMessage.png" alt="" height="380" width="350">
       <span>你还没有收到消息哦~</span>
     </div>
   </div>

@@ -17,28 +17,23 @@
         <div class="filter">
           <el-tooltip class="item" effect="dark" content="添加岗位筛选条件" placement="bottom">
             <div @click="openFilterDialog">
-              <svg-icon icon-class="filter"/>
+              <svg-icon icon-class="filter" />
               <span style="margin-left: 5px;">筛选</span>
             </div>
           </el-tooltip>
-          <el-button type="text" @click="clearFilter" v-show="isFilter">清除筛选</el-button>
+          <el-button v-show="isFilter" type="text" @click="clearFilter">清除筛选</el-button>
         </div>
 
       </div>
       <PositionCard
-        :positionInfo="position"
         v-for="(position,index) in positionList"
         :key="position.id"
+        :position-info="position"
         @gotoPosition="gotoPosition(position.id)"
         @gotoCollect="gotoCollect(position.id, position.isCollected)"
-        @openShareDialog="openShareDialog(position.id)"/>
+      />
       <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getPositionList()" />
     </div>
-    <!--分享岗位对话框-->
-    <el-dialog title="请选择分享的平台" :visible.sync="shareDialog">
-      <el-button>分享</el-button>
-    </el-dialog>
-    <!--条件筛选对话框-->
     <div>
       <el-dialog title="岗位条件筛选" :visible.sync="dialogFormVisible">
         <el-form ref="filterForm" :model="filterForm" label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
@@ -84,14 +79,13 @@
 
 <script>
 import PositionCard from '@/components/PositionCard/index'
-import wx from 'weixin-js-sdk'
 import { getPositionList, UserinfoDetail, postPosition, handleCollect, filterPositions } from '@/api/recruit/position'
 import { getSwiperImgs2Run } from '@/api/recruit/position'
 import Pagination from '@/components/Pagination'
 // 对sessionStorage加密
 import { StorageClass } from '@/utils/session'
 export default {
-  name: 'positionList',
+  name: 'PositionList',
   components: {
     PositionCard,
     Pagination
@@ -99,8 +93,6 @@ export default {
   data() {
     return {
       scrollStyle: { position: '', top: '', zIndex: '', left: '' },
-      // 分享岗位对话框
-      shareDialog: false,
       // 需要分享的岗位对象
       shareObj: { jobseekerId: undefined, positionId: undefined },
       // carouselImages: [
@@ -136,9 +128,14 @@ export default {
       typeOptions: ['不限', '事业编', '非事业编'],
       englishOptions: ['不限', '英语四级', '英语六级'],
       ageOptions: ['不限', '30岁及以下', '32岁及以下', '35岁及以下'],
-      degreeOptions: ['不限', '本科及以上' ,'硕士研究生及以上', '博士'],
+      degreeOptions: ['不限', '本科及以上', '硕士研究生及以上', '博士'],
       numOptions: ['不限', 1, 2, 3, 4, '4人以上'],
       deptNameOptions: []
+    }
+  },
+  computed: {
+    isLogin() {
+      return sessionStorage.getItem('isLogin')
     }
   },
   mounted() {
@@ -148,11 +145,6 @@ export default {
     this.getSwiperImgs()
     this.scroll()
   },
-  computed: {
-    isLogin() {
-      return sessionStorage.getItem('isLogin')
-    }
-  },
   methods: {
     getJobseekerId() {
       if (this.isLogin) {
@@ -160,14 +152,14 @@ export default {
       }
     },
     scroll() {
-      document.addEventListener('scroll',(event) => {
-        var scrollDistance = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-        if(scrollDistance>360) {
+      document.addEventListener('scroll', (event) => {
+        var scrollDistance = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+        if (scrollDistance > 360) {
           this.scrollStyle.position = 'fixed'
           this.scrollStyle.top = '50px'
           this.scrollStyle.zIndex = 100
           this.scrollStyle.left = '0px'
-        }else{
+        } else {
           this.scrollStyle.position = 'static'
           this.scrollStyle.top = 0
           this.scrollStyle.zIndex = 0
@@ -199,7 +191,7 @@ export default {
         this.listLoading = true
         this.positionList = res.positions
         const temp = res.positions.map(e => e.deptName)
-        this.deptNameOptions = ['不限', ...temp ]
+        this.deptNameOptions = ['不限', ...temp]
         this.total = res.total
         setTimeout(() => {
           this.listLoading = false
@@ -247,16 +239,6 @@ export default {
       })
     },
 
-    // 分享岗位
-    openShareDialog(pid) {
-      this.shareDialog = true
-      this.shareObj.jobseekerId = this.jobseekerId
-      this.shareObj.positionId = pid
-    },
-    // 分享岗位的点击事件
-    sharePosition() {
-      const temp = {  }
-    },
     // 重置filterForm
     resetFilterForm() {
       this.filterForm = {
@@ -277,7 +259,7 @@ export default {
       })
     },
     submitFilterForm() {
-      const temp = Object.assign({} ,this.filterForm, this.listQuery)
+      const temp = Object.assign({}, this.filterForm, this.listQuery)
       filterPositions(temp).then(res => {
         const { positions, total, msg } = res
         this.positionList = positions

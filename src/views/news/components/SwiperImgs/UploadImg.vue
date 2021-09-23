@@ -11,8 +11,9 @@
       :on-success="handleSuccessFile"
       :on-preview="handlePictureCardPreview"
       :on-remove="handleRemove"
-      :file-list="fileList">
-      <i class="el-icon-plus"></i>
+      :file-list="fileList"
+    >
+      <i class="el-icon-plus" />
     </el-upload>
     <el-dialog :visible.sync="dialogVisible">
       <img width="100%" :src="dialogImageUrl" alt="">

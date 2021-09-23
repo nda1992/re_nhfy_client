@@ -1,109 +1,109 @@
 <template>
-<!-- 用户注册 -->
+  <!-- 用户注册 -->
   <div class="register-container">
     <el-form ref="registerForm" :model="registerForm" :rules="registerRules" class="register-form" auto-complete="on" label-position="left">
       <div class="title-container">
-          <h3 class="title" style="letter-spacing:15px;">注册界面</h3>
+        <h3 class="title" style="letter-spacing:15px;">注册界面</h3>
       </div>
       <el-form-item prop="userCode">
-      <span class="svg-container">
-      <svg-icon icon-class="user" />
-      </span>
-      <el-input
-      ref="userCode"
-      v-model="registerForm.userCode"
-      placeholder="职工号"
-      name="userCode"
-      type="text"
-      tabindex="1"
-      auto-complete="on"
-      />
+        <span class="svg-container">
+          <svg-icon icon-class="user" />
+        </span>
+        <el-input
+          ref="userCode"
+          v-model="registerForm.userCode"
+          placeholder="职工号"
+          name="userCode"
+          type="text"
+          tabindex="1"
+          auto-complete="on"
+        />
       </el-form-item>
       <el-form-item prop="username">
-      <span class="svg-container">
-      <svg-icon icon-class="username" />
-      </span>
-      <el-input
-      ref="username"
-      v-model="registerForm.username"
-      placeholder="姓名"
-      name="username"
-      type="text"
-      tabindex="1"
-      auto-complete="on"
-      />
+        <span class="svg-container">
+          <svg-icon icon-class="username" />
+        </span>
+        <el-input
+          ref="username"
+          v-model="registerForm.username"
+          placeholder="姓名"
+          name="username"
+          type="text"
+          tabindex="1"
+          auto-complete="on"
+        />
       </el-form-item>
       <el-form-item prop="password">
-      <span class="svg-container">
-      <svg-icon icon-class="password" />
-      </span>
-      <el-input
-      ref="password"
-      v-model="registerForm.password"
-      placeholder="密码"
-      name="password"
-      :key="passwordType"
-      :type="passwordType"
-      tabindex="1"
-      auto-complete="on"
-      />
-      <span class="show-pwd" @click="showPwd">
-      <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
-      </span>
+        <span class="svg-container">
+          <svg-icon icon-class="password" />
+        </span>
+        <el-input
+          ref="password"
+          :key="passwordType"
+          v-model="registerForm.password"
+          placeholder="密码"
+          name="password"
+          :type="passwordType"
+          tabindex="1"
+          auto-complete="on"
+        />
+        <span class="show-pwd" @click="showPwd">
+          <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+        </span>
       </el-form-item>
       <el-form-item prop="checkPassword">
-      <span class="svg-container">
-      <svg-icon icon-class="password" />
-      </span>
-      <el-input
-      ref="checkPassword1"
-      v-model="registerForm.checkPassword"
-      placeholder="确认密码"
-      name="checkPassword"
-      :key="passwordType1"
-      :type="passwordType1"
-      tabindex="1"
-      auto-complete="on"
-      />
-      <span class="show-pwd" @click="showPwd1">
-      <svg-icon :icon-class="passwordType1 === 'password' ? 'eye' : 'eye-open'" />
-      </span>
+        <span class="svg-container">
+          <svg-icon icon-class="password" />
+        </span>
+        <el-input
+          ref="checkPassword1"
+          :key="passwordType1"
+          v-model="registerForm.checkPassword"
+          placeholder="确认密码"
+          name="checkPassword"
+          :type="passwordType1"
+          tabindex="1"
+          auto-complete="on"
+        />
+        <span class="show-pwd" @click="showPwd1">
+          <svg-icon :icon-class="passwordType1 === 'password' ? 'eye' : 'eye-open'" />
+        </span>
       </el-form-item>
       <el-form-item prop="email">
-      <span class="svg-container">
-      <svg-icon icon-class="email" />
-      </span>
-      <el-input
-      ref="email"
-      v-model="registerForm.email"
-      placeholder="邮箱"
-      name="email"
-      type="text"
-      tabindex="1"
-      auto-complete="on"
-      />
+        <span class="svg-container">
+          <svg-icon icon-class="email" />
+        </span>
+        <el-input
+          ref="email"
+          v-model="registerForm.email"
+          placeholder="邮箱"
+          name="email"
+          type="text"
+          tabindex="1"
+          auto-complete="on"
+        />
       </el-form-item>
       <el-form-item prop="regcode">
-      <span class="svg-container">
-      <svg-icon icon-class="regcode" />
-      </span>
-      <el-input
-      ref="regcode"
-      v-model="registerForm.regcode"
-      placeholder="注册码"
-      name="regcode"
-      type="text"
-      tabindex="1"
-      auto-complete="off"
-      />
+        <span class="svg-container">
+          <svg-icon icon-class="regcode" />
+        </span>
+        <el-input
+          ref="regcode"
+          v-model="registerForm.regcode"
+          placeholder="注册码"
+          name="regcode"
+          type="text"
+          tabindex="1"
+          auto-complete="off"
+        />
       </el-form-item>
       <el-form-item prop="deptName">
-      <span class="svg-container">
-      <svg-icon icon-class="deptname" />
-      </span>
-      <el-select :loading="select_loading" v-model="registerForm.deptName" placeholder="请选择部门" width="20px" :remote-method="getRemoteDeptList" filterable default-first-option remote>
-        <el-option v-for="(item,index) in deptListOptions" :key="item+index" :label="item" :value="item"></el-option>
-      </el-select>
+        <span class="svg-container">
+          <svg-icon icon-class="deptname" />
+        </span>
+        <el-select v-model="registerForm.deptName" :loading="select_loading" placeholder="请选择部门" width="20px" :remote-method="getRemoteDeptList" filterable default-first-option remote>
+          <el-option v-for="(item,index) in deptListOptions" :key="item+index" :label="item" :value="item" />
+        </el-select>
       </el-form-item>
       <div class="btns">
         <el-button :loading="loading" type="primary" style="width:50%;margin-bottom:30px;" @click.native.prevent="handleRegister">注册</el-button>

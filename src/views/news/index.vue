@@ -2,12 +2,12 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="searchVal" :placeholder="'按'+searchType+'搜索'" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter(searchType)" clearable/>
+      <el-input v-model="searchVal" :placeholder="'按'+searchType+'搜索'" style="width: 200px;" class="filter-item" clearable @keyup.enter.native="handleFilter(searchType)" />
       <el-select v-model="searchType" placeholder="请选择搜索类型" style="width: 150px" class="filter-item">
         <el-option v-for="item in typeItems" :key="item" :label="item" :value="item" />
       </el-select>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter(searchType)">搜索</el-button>
-      <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" @click="handleDownload" style="margin-left: 0">导出表格</el-button>
+      <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" style="margin-left: 0" @click="handleDownload">导出表格</el-button>
     </div>
     <el-table
       v-loading="listLoading"
@@ -17,7 +17,8 @@
       fit
       highlight-current-row
       style="width: 100%"
-      stripe>
+      stripe
+    >
       <el-table-column label="ID" prop="id" align="center" min-width="3px">
         <template slot-scope="{row}">
           <el-tooltip effect="dark" content="点击查看文章" placement="bottom">
@@ -34,7 +35,7 @@
       <!--发布时间-->
       <el-table-column label="发布时间" sortable prop="createTime" align="center" min-width="13px">
         <template slot-scope="{row}">
-          <i class="el-icon-time" style="margin-right: 3px;"></i>
+          <i class="el-icon-time" style="margin-right: 3px;" />
           <span>{{ row.createTime }}</span>
         </template>
       </el-table-column>
@@ -65,16 +66,17 @@
       <!--状态：发布未未审核，审核通过，审核未通过-->
       <el-table-column label="审核状态" prop="newsStatus" align="center" min-width="9px">
         <template slot-scope="{row}">
-          <el-tag :type="row.newsStatus | newsStatusFilter" v-if="row.newsStatus !== '草稿'">
+          <el-tag v-if="row.newsStatus !== '草稿'" :type="row.newsStatus | newsStatusFilter">
             {{ row.newsStatus }}
           </el-tag>
-          <el-popconfirm v-else
-            @onConfirm="handleStatus(row)"
-            confirm-button-text='确定'
-            cancel-button-text='取消'
+          <el-popconfirm
+            v-else
+            confirm-button-text="确定"
+            cancel-button-text="取消"
             icon="el-icon-info"
             icon-color="red"
             title="确定发布新闻吗?"
+            @onConfirm="handleStatus(row)"
           >
             <el-button slot="reference" :type="row.newsStatus | newsStatusFilter" size="mini" :disabled="role!=='admin'">{{ row.newsStatus }}</el-button>
           </el-popconfirm>
@@ -84,15 +86,14 @@
       <el-table-column label="更新状态" prop="newsStatus" align="center" min-width="15px">
         <template slot-scope="{row}">
           <el-switch
-            @change="handleSetStatus(row)"
-            :disabled="row.newsStatus === '草稿' || role !== 'admin'"
             v-model="row.Switch"
+            :disabled="row.newsStatus === '草稿' || role !== 'admin'"
             active-color="#13ce66"
             inactive-color="#ff4949"
             inactive-text="不通过"
             active-text="通过"
-            >
-          </el-switch>
+            @change="handleSetStatus(row)"
+          />
         </template>
       </el-table-column>
       <!--发布状态-->
@@ -109,7 +110,7 @@
           <router-link :to="'/news/edit/'+scope.row.id">
             <el-button type="primary" size="mini" icon="el-icon-edit">编辑</el-button>
           </router-link>
-          <el-button style="margin-left: 10px;" v-if="scope.row.status!='deleted'" size="mini" type="danger" @click="handleDelete(scope.row)" icon="el-icon-delete">删除</el-button>
+          <el-button v-if="scope.row.status!='deleted'" style="margin-left: 10px;" size="mini" type="danger" icon="el-icon-delete" @click="handleDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -264,7 +265,7 @@ export default {
     },
     // switch触发
     handleSetStatus(row) {
-      let temp = row
+      const temp = row
       temp.role = this.role
       // const flag = temp.Switch
       // switch=true：表示通过审核,switch=false:表示未通过审核
@@ -283,8 +284,8 @@ export default {
     handleDownload() {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['新闻标题', '新闻内容', '发布时间', '作者', '所属部门', '所属类别', '浏览次数','审核状态','发布状态']
-        const filterVal = ['新闻标题', '新闻内容', '发布时间', '作者', '所属部门', '所属类别', '浏览次数','审核状态','发布状态']
+        const tHeader = ['新闻标题', '新闻内容', '发布时间', '作者', '所属部门', '所属类别', '浏览次数', '审核状态', '发布状态']
+        const filterVal = ['新闻标题', '新闻内容', '发布时间', '作者', '所属部门', '所属类别', '浏览次数', '审核状态', '发布状态']
         const data = this.formatJson(filterVal)
         excel.export_json_to_excel({
           header: tHeader,
@@ -295,10 +296,10 @@ export default {
       })
     },
     formatJson(filterVal) {
-      let data = []
+      const data = []
       this.searchList.forEach(item => {
-        let temp = []
-        temp.push(item.title, item.content, item.createTime, item.userName, item.deptName, item.category,item.clickNum, item.newsStatus,item.status)
+        const temp = []
+        temp.push(item.title, item.content, item.createTime, item.userName, item.deptName, item.category, item.clickNum, item.newsStatus, item.status)
         data.push(temp)
       })
       return data

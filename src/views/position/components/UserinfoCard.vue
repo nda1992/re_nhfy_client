@@ -1,5 +1,5 @@
 <template>
-    <!--岗位收藏和投递列表-->
+  <!--岗位收藏和投递列表-->
   <el-card class="box-card">
     <div slot="header" class="clearfix">
       <span style="font-size: 16px;color: #000">{{ title }}（共{{ showList.length }}个）</span>
@@ -45,12 +45,13 @@
           </el-form>
         </template>
       </el-table-column>
-      <el-table-column label="序号" align="center" prop="xh" width="50"></el-table-column>
+      <el-table-column label="序号" align="center" prop="xh" width="50" />
       <el-table-column
         align="center"
         prop="positionName"
         label="岗位名称"
-        width="380">
+        width="380"
+      >
         <template slot-scope="{row}">
           <span>{{ row.positionName }}</span>
         </template>
@@ -59,9 +60,10 @@
         align="center"
         prop="createdTime"
         width="280"
-        :label="statusflag===1?'投递时间':'收藏时间'">
+        :label="statusflag===1?'投递时间':'收藏时间'"
+      >
         <template slot-scope="{row}">
-          <i class="el-icon-time" style="margin-right: 3px;"></i>
+          <i class="el-icon-time" style="margin-right: 3px;" />
           <span>{{ row.createdTime }}</span>
         </template>
       </el-table-column>
@@ -70,19 +72,21 @@
         align="center"
         prop="approveDate"
         width="280"
-        label="审核通过时间">
+        label="审核通过时间"
+      >
         <template slot-scope="{row}">
-          <i class="el-icon-time" style="margin-right: 3px;"></i>
+          <i class="el-icon-time" style="margin-right: 3px;" />
           <span v-if="row.approveDate!=='Invalid date'">{{ row.approveDate }}</span>
           <span v-else>-</span>
         </template>
       </el-table-column>
       <el-table-column
+        v-if="statusflag===2"
         align="center"
         prop="currentStatus"
         width="280"
         :label="statusTitle"
-        v-if="statusflag===2">
+      >
         <template slot-scope="{row}">
           <el-tag :type="row.currentStatus | statusFilter">
             {{ row.currentStatus }}
@@ -90,23 +94,24 @@
         </template>
       </el-table-column>
       <el-table-column
+        v-if="statusflag===1"
         align="center"
         prop="Handlestatus"
         :label="statusTitle"
         width="280"
-        v-if="statusflag===1">
+      >
         <template slot-scope="{row}">
-          <el-tag :type="row.status | HandlestatusFilter" v-if="row.status==='未审核'||row.status==='审核未通过'||row.status==='已确认'">
+          <el-tag v-if="row.status==='未审核'||row.status==='审核未通过'||row.status==='已确认'" :type="row.status | HandlestatusFilter">
             {{ row.status }}
           </el-tag>
           <el-popconfirm
-             v-else
-             @onConfirm="handleConfirm(row)"
-             confirm-button-text='确定'
-             cancel-button-text='取消'
-             icon="el-icon-info"
-             icon-color="red"
-             title="是否确认参加考试?"
+            v-else
+            confirm-button-text="确定"
+            cancel-button-text="取消"
+            icon="el-icon-info"
+            icon-color="red"
+            title="是否确认参加考试?"
+            @onConfirm="handleConfirm(row)"
           >
             <el-button slot="reference" type="primary" size="mini">{{ row.status }}</el-button>
           </el-popconfirm>
@@ -114,14 +119,14 @@
       </el-table-column>
       <el-table-column align="center" label="操作">
         <template slot-scope="{row,$index}">
-          <el-button @click="HandleCollect(row.isCollected,row.id)" type="warning" size="mini" v-if="statusflag===2&&row.isCollected">取消收藏</el-button>
-          <el-button @click="HandleCollectpost(row.id)" type="primary" size="mini" v-if="statusflag===2&&row.isCollected" :disabled="row.isPosted===1">投递简历</el-button>
-          <el-button @click="HandleCancelPost(row)" type="danger" size="mini" v-if="statusflag===1" :disabled="row.status==='已确认'">取消投递</el-button>
+          <el-button v-if="statusflag===2&&row.isCollected" type="warning" size="mini" icon="el-icon-star-on" @click="HandleCollect(row.isCollected,row.id)">取消收藏</el-button>
+          <el-button v-if="statusflag===2&&row.isCollected" type="primary" size="mini" :disabled="row.isPosted===1" icon="el-icon-s-promotion" @click="HandleCollectpost(row.id)">投递简历</el-button>
+          <el-button v-if="statusflag===1" type="danger" size="mini" :disabled="row.status==='已确认'" @click="HandleCancelPost(row)">取消投递</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getPostedPosition()" v-if="statusflag===1" />
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getPostedPosition()" v-if="statusflag===2" />
+    <pagination v-show="total>0" v-if="statusflag===1" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getPostedPosition()" />
+    <pagination v-show="total>0" v-if="statusflag===2" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getPostedPosition()" />
   </el-card>
 </template>
 

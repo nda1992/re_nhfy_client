@@ -1,68 +1,68 @@
 <template>
-    <!-- 新闻发布页面 -->
-    <div class="createPost-container">
-      <el-form ref="postForm" :model="postForm" :rules="rules" class="form-container">
-        <sticky :z-index="10" :class-name="'sub-navbar '+postForm.status">
-          <div class="stick">
-            <PlatformDropdown v-model="postForm.platforms"/>
-            <el-button v-loading="loading" style="margin-left: 10px" type="success" @click="submitForm" icon="el-icon-s-promotion" plain>发布</el-button>
-            <el-button v-loading="loading" type="warning" @click="draftForm" icon="el-icon-document-checked" plain>存为草稿</el-button>
-            <el-autocomplete
-              clearable
-              prefix-icon="el-icon-folder-opened"
-              v-model="state"
-              style="margin-left:10px;width: 150px"
-              :fetch-suggestions="querySearchAsync"
-              :placeholder="'草稿箱'+'('+draftNums+')'"
-              @select="handleSelect"
-            ></el-autocomplete>
-          </div>
-        </sticky>
-        <div class="createPost-main-container">
-          <el-row>
-            <Warning/>
-            <el-col :span="24">
-              <el-form-item style="margin-bottom: 40px;" prop="title" name="name" required>
-                <MDinput v-model="postForm.title" :maxlength="100">新闻标题</MDinput>
-              </el-form-item>
-              <div class="postInfo-container">
-                <el-row>
-                  <el-col :span="6">
-                    <el-form-item label-width="40px" label="作者" class="postInfo-container-item">
-                      <el-select :loading="select_loading" v-model="postForm.author" :remote-method="getRemoteUserList" filterable default-first-option remote placeholder="搜索作者">
-                        <el-option v-for="(item,index) in userListOptions" :key="item+index" :label="item" :value="item" />
-                      </el-select>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="6">
-                    <el-form-item label-width="90px" label="发布时间" class="postInfo-container-item">
-                      <el-date-picker v-model="postForm.display_time" type="datetime" format="yyyy-MM-dd HH:mm:ss" placeholder="请选择时间" />
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="6">
-                    <el-form-item label-width="90px" label="新闻类别" class="postInfo-container-item">
-                      <el-select :loading="select_loading" v-model="postForm.category" :remote-method="getRemoteCategoryList" filterable default-first-option remote placeholder="搜索新闻类别">
-                        <el-option v-for="(item,index) in categoryListOptions" :key="item+index" :label="item" :value="item"></el-option>
-                      </el-select>
-                    </el-form-item>
-                  </el-col>
-                  <el-col :span="6">
-                    <el-form-item label-width="90px" label="所属部门" class="postInfo-container-item">
-                      <el-select :loading="select_loading" v-model="postForm.deptName" :remote-method="getRemoteDeptList" filterable default-first-option remote placeholder="搜索部门">
-                        <el-option v-for="(item,index) in deptListOptions" :key="item+index" :label="item" :value="item"></el-option>
-                      </el-select>
-                    </el-form-item>
-                  </el-col>
-                </el-row>
-              </div>
-            </el-col>
-          </el-row>
-          <el-form-item prop="content" style="margin-bottom: 30px;">
-            <Tinymce ref="editor" v-model="postForm.content" :height="400" />
-          </el-form-item>
+  <!-- 新闻发布页面 -->
+  <div class="createPost-container">
+    <el-form ref="postForm" :model="postForm" :rules="rules" class="form-container">
+      <sticky :z-index="10" :class-name="'sub-navbar '+postForm.status">
+        <div class="stick">
+          <PlatformDropdown v-model="postForm.platforms" />
+          <el-button v-loading="loading" style="margin-left: 10px" type="success" icon="el-icon-s-promotion" plain @click="submitForm">发布</el-button>
+          <el-button v-loading="loading" type="warning" icon="el-icon-document-checked" plain @click="draftForm">存为草稿</el-button>
+          <el-autocomplete
+            v-model="state"
+            clearable
+            prefix-icon="el-icon-folder-opened"
+            style="margin-left:10px;width: 150px"
+            :fetch-suggestions="querySearchAsync"
+            :placeholder="'草稿箱'+'('+draftNums+')'"
+            @select="handleSelect"
+          />
         </div>
-      </el-form>
-    </div>
+      </sticky>
+      <div class="createPost-main-container">
+        <el-row>
+          <Warning />
+          <el-col :span="24">
+            <el-form-item style="margin-bottom: 40px;" prop="title" name="name" required>
+              <MDinput v-model="postForm.title" :maxlength="100">新闻标题</MDinput>
+            </el-form-item>
+            <div class="postInfo-container">
+              <el-row>
+                <el-col :span="6">
+                  <el-form-item label-width="40px" label="作者" class="postInfo-container-item">
+                    <el-select v-model="postForm.author" :loading="select_loading" :remote-method="getRemoteUserList" filterable default-first-option remote placeholder="搜索作者">
+                      <el-option v-for="(item,index) in userListOptions" :key="item+index" :label="item" :value="item" />
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="6">
+                  <el-form-item label-width="90px" label="发布时间" class="postInfo-container-item">
+                    <el-date-picker v-model="postForm.display_time" type="datetime" format="yyyy-MM-dd HH:mm:ss" placeholder="请选择时间" />
+                  </el-form-item>
+                </el-col>
+                <el-col :span="6">
+                  <el-form-item label-width="90px" label="新闻类别" class="postInfo-container-item">
+                    <el-select v-model="postForm.category" :loading="select_loading" :remote-method="getRemoteCategoryList" filterable default-first-option remote placeholder="搜索新闻类别">
+                      <el-option v-for="(item,index) in categoryListOptions" :key="item+index" :label="item" :value="item" />
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+                <el-col :span="6">
+                  <el-form-item label-width="90px" label="所属部门" class="postInfo-container-item">
+                    <el-select v-model="postForm.deptName" :loading="select_loading" :remote-method="getRemoteDeptList" filterable default-first-option remote placeholder="搜索部门">
+                      <el-option v-for="(item,index) in deptListOptions" :key="item+index" :label="item" :value="item" />
+                    </el-select>
+                  </el-form-item>
+                </el-col>
+              </el-row>
+            </div>
+          </el-col>
+        </el-row>
+        <el-form-item prop="content" style="margin-bottom: 30px;">
+          <Tinymce ref="editor" v-model="postForm.content" :height="400" />
+        </el-form-item>
+      </div>
+    </el-form>
+  </div>
 </template>
 <script>
 import { searchUser, searchCategory, searchDept, releaseNews, saveDraft, getDraftList, getDraftById } from '@/api/news/news'

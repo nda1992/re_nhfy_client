@@ -1,6 +1,6 @@
 <template>
-<!-- 数据分析首页 -->
-    <div class=""></div>
+  <!-- 数据分析首页 -->
+  <div class="" />
 </template>
 <script>
 export default {

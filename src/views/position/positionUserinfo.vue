@@ -1,5 +1,5 @@
 <template>
-    <!--求职者个人中心页-->
+  <!--求职者个人中心页-->
   <div class="userinfo-container">
     <div class="title">
       <h2>个人主页</h2>
@@ -11,31 +11,32 @@
     <div class="userinfo-main">
       <div class="basic">
         <div class="avatar">
-          <el-avatar shape="square" :size="100" :src="avatar" fit="fill" style="height: 100px;width: 100%;!important;"></el-avatar>
+          <el-avatar shape="square" :size="100" :src="avatar" fit="fill" style="height: 100px;width: 100%;!important;" />
         </div>
         <div class="username">姓名：{{ jobseekerUsername }}</div>
         <div class="phone">手机号：{{ phone }}</div>
         <div class="email">邮箱：{{ email }}</div>
         <div class="edit">
           <el-tooltip class="item" effect="dark" content="编辑基本信息" placement="bottom">
-            <el-button type="primary" icon="el-icon-edit" circle size="mini" @click="HandleupdateBasicUserinfo"></el-button>
+            <el-button type="primary" icon="el-icon-edit" circle size="mini" @click="HandleupdateBasicUserinfo" />
           </el-tooltip>
         </div>
       </div>
       <!--岗位收藏列表-->
       <div class="collected">
         <UserinfoCard
-          :statusTitle="positionStatus"
+          :status-title="positionStatus"
           :statusflag="2"
           :total="collectedTotal"
-          :getPostedPosition="getPost2PositionListByUid"
-          :showList="collectedList"
+          :get-posted-position="getPost2PositionListByUid"
+          :show-list="collectedList"
           @HandleCollect="HandleCollect"
-          @HandleCollectpost="HandleCollectpost"></UserinfoCard>
+          @HandleCollectpost="HandleCollectpost"
+        />
       </div>
       <!--岗位投递列表-->
       <div class="posted">
-        <UserinfoCard  :total="postedTotal" :listQuery="listQuery" :getPostedPosition="getPost2PositionListByUid" :showList="postedList" :title="Posttitle" :statusTitle="resumeStatus" :statusflag="1" @HandleCancelPost="HandleCancelPost" @handleConfirm="handleConfirm"></UserinfoCard>
+        <UserinfoCard :total="postedTotal" :list-query="listQuery" :get-posted-position="getPost2PositionListByUid" :show-list="postedList" :title="Posttitle" :status-title="resumeStatus" :statusflag="1" @HandleCancelPost="HandleCancelPost" @handleConfirm="handleConfirm" />
       </div>
     </div>
     <!--完善用户信息的对话框-->
@@ -43,37 +44,37 @@
       <el-form ref="dataForm" :model="registerForm" :rules="registerRules" auto-complete="on" label-position="left" label-width="120px" style="width: 500px; margin-left:50px;">
         <el-form-item prop="sex" label="性别">
           <el-select v-model="registerForm.sex" placeholder="请选择性别" width="20px" clearable>
-            <el-option v-for="(item,index) in sexOptions" :key="item+index" :label="item.value" :value="item.key"></el-option>
+            <el-option v-for="(item,index) in sexOptions" :key="item+index" :label="item.value" :value="item.key" />
           </el-select>
         </el-form-item>
         <el-form-item prop="age" label="年龄">
           <el-select v-model="registerForm.age" placeholder="请选择年龄" width="20px" clearable>
-            <el-option v-for="(item,index) in ageOptions" :key="item+index" :label="item" :value="item"></el-option>
+            <el-option v-for="(item,index) in ageOptions" :key="item+index" :label="item" :value="item" />
           </el-select>
         </el-form-item>
         <el-form-item label="民族" class="postInfo-container-item" prop="nation">
-          <el-select :loading="select_loading" v-model="registerForm.nation" :remote-method="getnationList" filterable clearable default-first-option remote placeholder="请输入民族">
+          <el-select v-model="registerForm.nation" :loading="select_loading" :remote-method="getnationList" filterable clearable default-first-option remote placeholder="请输入民族">
             <el-option v-for="(item,index) in nationListOptions" :key="item+index" :label="item" :value="item" />
           </el-select>
         </el-form-item>
         <el-form-item prop="degree" label="学历">
           <el-select v-model="registerForm.degree" placeholder="请选择学历" width="20px" clearable>
-            <el-option v-for="(item,index) in degreeOptions" :key="item+index" :label="item" :value="item"></el-option>
+            <el-option v-for="(item,index) in degreeOptions" :key="item+index" :label="item" :value="item" />
           </el-select>
         </el-form-item>
         <el-form-item label="毕业学校" class="postInfo-container-item" prop="school">
-          <el-select :loading="select_school_loading" v-model="registerForm.school" :remote-method="getSchoolList" filterable clearable default-first-option remote placeholder="输入最高学历毕业学校">
+          <el-select v-model="registerForm.school" :loading="select_school_loading" :remote-method="getSchoolList" filterable clearable default-first-option remote placeholder="输入最高学历毕业学校">
             <el-option v-for="(item,index) in schoolOptions" :key="item+index" :label="item" :value="item" />
           </el-select>
         </el-form-item>
         <el-form-item prop="birthday" label="出生日期">
           <el-date-picker
-            clearable
             v-model="registerForm.birthday"
+            clearable
             align="right"
             type="date"
-            placeholder="选择出生日期">
-          </el-date-picker>
+            placeholder="选择出生日期"
+          />
         </el-form-item>
         <el-form-item label="所在城市" class="postInfo-container-item" prop="address">
           <el-select v-model="registerForm.address" :remote-method="getcitiesList" filterable clearable default-first-option remote placeholder="请输入所在城市">
@@ -81,16 +82,16 @@
           </el-select>
         </el-form-item>
         <el-form-item prop="professional" label="专业名称">
-          <el-input ref="professional" v-model="registerForm.professional" placeholder="专业名称" name="professional" type="text" tabindex="1" auto-complete="on" clearable/>
+          <el-input ref="professional" v-model="registerForm.professional" placeholder="专业名称" name="professional" type="text" tabindex="1" auto-complete="on" clearable />
         </el-form-item>
         <el-form-item prop="undergraduateTime" label="毕业时间">
           <el-date-picker
-            clearable
             v-model="registerForm.undergraduateTime"
+            clearable
             align="right"
             type="date"
-            placeholder="选择毕业时间">
-          </el-date-picker>
+            placeholder="选择毕业时间"
+          />
         </el-form-item>
         <el-form-item prop="faceimgUrl" label="证件照">
           <el-upload
@@ -100,9 +101,10 @@
             :show-file-list="false"
             :before-upload="handlebeforeUploadAvatar"
             :on-success="handleSuccessAvatar"
-            :on-remove="handleRemoveAvatar">
+            :on-remove="handleRemoveAvatar"
+          >
             <img v-if="registerForm.faceimgUrl" :src="registerForm.faceimgUrl" class="avatar" style="width: 88px;height: 93px">
-            <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+            <i v-else class="el-icon-plus avatar-uploader-icon" />
           </el-upload>
           <el-dialog :visible.sync="showdialogVisible">
             <img width="100%" :src="registerForm.faceimgUrl" alt="">
@@ -110,8 +112,8 @@
         </el-form-item>
         <el-form-item prop="attachmentUrl" label="附件简历">
           <el-upload
-            accept=".docx, .pdf"
             ref="upload"
+            accept=".docx, .pdf"
             :action="fileUpload_url"
             :data="queryFile"
             :limit="1"
@@ -119,7 +121,8 @@
             :on-remove="handleRemoveFile"
             :before-upload="handlebeforeUploadFile"
             :on-exceed="handleExceed"
-            :file-list="fileList">
+            :file-list="fileList"
+          >
             <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
             <div slot="tip" class="el-upload__tip">只能上传docx或pdf文件，且不超过3MB</div>
           </el-upload>
@@ -134,13 +137,13 @@
     <el-dialog title="基本信息更新" :visible.sync="BaiscdialogVisible">
       <el-form ref="basicForm" :model="basicForm" label-position="left" label-width="120px" style="width: 500px; margin-left:50px;">
         <el-form-item prop="username" label="真实姓名">
-          <el-input ref="username" v-model="basicForm.username" placeholder="真实姓名" name="username" type="text" tabindex="1" auto-complete="on" clearable/>
+          <el-input ref="username" v-model="basicForm.username" placeholder="真实姓名" name="username" type="text" tabindex="1" auto-complete="on" clearable />
         </el-form-item>
         <el-form-item prop="phone" label="手机号">
-          <el-input ref="phone" v-model="basicForm.phone" placeholder="手机号" name="phone" type="text" tabindex="1" auto-complete="on" clearable/>
+          <el-input ref="phone" v-model="basicForm.phone" placeholder="手机号" name="phone" type="text" tabindex="1" auto-complete="on" clearable />
         </el-form-item>
         <el-form-item prop="email" label="邮箱">
-          <el-input ref="email" v-model="basicForm.email" placeholder="邮箱" name="email" type="text" tabindex="1" auto-complete="on" clearable/>
+          <el-input ref="email" v-model="basicForm.email" placeholder="邮箱" name="email" type="text" tabindex="1" auto-complete="on" clearable />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -350,7 +353,7 @@ export default {
     },
     // 更新详细信息前的设置
     HandleupdateUserinfo() {
-      this.registerForm = Object.assign({},this.userinfo)
+      this.registerForm = Object.assign({}, this.userinfo)
       this.dialogVisible = true
       this.$nextTick(() => {
         this.$refs['dataForm'].clearValidate()

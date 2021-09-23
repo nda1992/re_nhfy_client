@@ -1,6 +1,6 @@
 <template>
-<!-- 会议室管理 -->
-  <div class="app-container"></div>
+  <!-- 会议室管理 -->
+  <div class="app-container" />
 </template>
 <script>
 export default {

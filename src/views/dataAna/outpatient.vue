@@ -1,13 +1,11 @@
 <template>
-<!-- 门诊数据分析 -->
-    <div class="">
-
-    </div>
+  <!-- 门诊数据分析 -->
+  <div class="" />
 </template>
 <script>
 export default {
-  data(){
-      return {}
+  data() {
+    return {}
   },
   computed() {},
   methods: {}

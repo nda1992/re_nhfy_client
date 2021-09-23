@@ -1,15 +1,15 @@
 <template>
-<!-- 医院管理首页 -->
-    <div class="home-container">
-        <el-card class="box-card" shadow="hover">
-          <div slot="header" class="clearfix">
-            <span style="color:#000;letter-spacing:1px;font-size: 18px;">欢迎使用医院管理板块提供的相关功能</span>
-          </div>
-          <div v-for="(item,index) in items" :key="item.id" class="item">
-            {{item.content}}
-          </div>
-        </el-card>
-    </div>
+  <!-- 医院管理首页 -->
+  <div class="home-container">
+    <el-card class="box-card" shadow="hover">
+      <div slot="header" class="clearfix">
+        <span style="color:#000;letter-spacing:1px;font-size: 18px;">欢迎使用医院管理板块提供的相关功能</span>
+      </div>
+      <div v-for="(item,index) in items" :key="item.id" class="item">
+        {{ item.content }}
+      </div>
+    </el-card>
+  </div>
 </template>
 <script>
 export default {

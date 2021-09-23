@@ -1,14 +1,32 @@
 <template>
   <!--I like these animations-->
   <div class="app-container">
-    <Cube />
+    <el-tabs v-model="activeName">
+      <el-tab-pane label="You Like" name="first">
+        <Cube />
+      </el-tab-pane>
+      <el-tab-pane label="I Like" name="second">
+        <Random />
+      </el-tab-pane>
+      <el-tab-pane label="He Like" name="third">
+        <Change />
+      </el-tab-pane>
+    </el-tabs>
+
   </div>
 </template>
 
 <script>
 import Cube from './component/Cube'
+import Random from './component/Random'
+import Change from './component/Change'
 export default {
-  name: 'index',
-  components: { Cube },
+  name: 'Index',
+  components: { Cube, Random, Change },
+  data() {
+    return {
+      activeName: 'first'
+    }
+  }
 }
 </script>

@@ -1,11 +1,11 @@
 <template>
-<!--门诊和住院药占比-->
+  <!--门诊和住院药占比-->
   <div class="app-container">
     <div class="title">
-      <el-date-picker v-model="searchDate" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd" clearable @change="pickerDate"></el-date-picker>
-      <el-input placeholder="请输入科室名称搜索" style="width: 200px" clearable v-model="deptname" @keyup.enter.native="handleFilter" :disabled="showItems.length===0?true:false"></el-input>
-      <el-button @click="search" icon="el-icon-search" type="primary">查询</el-button>
-      <el-button @click="handleDownload" icon="el-icon-download" type="success" :disabled="showItems.length===0">导出表格</el-button>
+      <el-date-picker v-model="searchDate" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd" clearable @change="pickerDate" />
+      <el-input v-model="deptname" placeholder="请输入科室名称搜索" style="width: 200px" clearable :disabled="showItems.length===0?true:false" @keyup.enter.native="handleFilter" />
+      <el-button icon="el-icon-search" type="primary" @click="search">查询</el-button>
+      <el-button icon="el-icon-download" type="success" :disabled="showItems.length===0" @click="handleDownload">导出表格</el-button>
     </div>
     <div class="table-container">
       <div class="header">
@@ -14,14 +14,14 @@
       </div>
       <el-table
         :key="tableKey"
+        v-loading="listLoading"
         border
         stripe
         fix
         highlight-current-row
-        v-loading="listLoading"
         :height="showItems.length===0?'auto':'600'"
         :data="showItems"
-        >
+      >
         <el-table-column label="序号" prop="xh" align="center" min-width="5px">
           <template slot-scope="{row}">
             <span>{{ row.xh }}</span>
@@ -37,7 +37,7 @@
             <span>{{ row.科室 }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="药占比"  sortable :sort-method="soryByYZB" prop="药占比" align="center" min-width="11px">
+        <el-table-column label="药占比" sortable :sort-method="soryByYZB" prop="药占比" align="center" min-width="11px">
           <template slot-scope="{row}">
             <span>{{ Math.floor((row.药占比)*100)/100 }}</span>
           </template>
@@ -111,7 +111,7 @@
 import { deptMedicientProportion } from '@/api/QueryTheam/revenue/revenue'
 import moment from 'moment'
 export default {
-  name: 'deptMaterialProportion',
+  name: 'DeptMaterialProportion',
   data() {
     return {
       tableKey: 0,

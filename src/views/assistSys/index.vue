@@ -1,15 +1,15 @@
 <template>
-<!-- 辅助系统首页 -->
-    <div class="app-container">
-      <el-card class="box-card">
-        <div slot="header" class="clearfix">
-          <span style="font-size: 22px;font-weight: bold">计划或已开发完成的系统</span>
-        </div>
-        <div v-for="(item, index) in systems" :key="item.id" class="text item">
-          <span @click="gotoSystem(id)" class="content">{{ item.content }}</span>
-        </div>
-      </el-card>
-    </div>
+  <!-- 辅助系统首页 -->
+  <div class="app-container">
+    <el-card class="box-card">
+      <div slot="header" class="clearfix">
+        <span style="font-size: 22px;font-weight: bold">计划或已开发完成的系统</span>
+      </div>
+      <div v-for="(item, index) in systems" :key="item.id" class="text item">
+        <span class="content" @click="gotoSystem(id)">{{ item.content }}</span>
+      </div>
+    </el-card>
+  </div>
 </template>
 <script>
 export default {

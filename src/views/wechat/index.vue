@@ -1,8 +1,6 @@
 <template>
-<!-- 微信小程序管理首页 -->
-    <div class="">
-
-    </div>
+  <!-- 微信小程序管理首页 -->
+  <div class="" />
 </template>
 <script>
 export default {

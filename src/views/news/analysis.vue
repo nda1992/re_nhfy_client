@@ -1,13 +1,11 @@
 <template>
-    <!-- 发文可视化分析 -->
-    <div class="">
-
-    </div>
+  <!-- 发文可视化分析 -->
+  <div class="" />
 </template>
 <script>
 export default {
   data() {
-    return{}
+    return {}
   },
   computed() {},
   methods: {}

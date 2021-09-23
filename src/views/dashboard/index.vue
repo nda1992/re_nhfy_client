@@ -9,12 +9,12 @@
 import { mapGetters } from 'vuex'
 export default {
   name: 'Dashboard',
-  mounted() {
-  },
   computed: {
     name() {
       return localStorage.getItem('name')
     }
+  },
+  mounted() {
   }
 }
 </script>
