@@ -122,6 +122,8 @@
 import waves from '@/directive/waves'
 import Pagination from '@/components/Pagination'
 import { deleteNewsById, getnewsList, updateNewsStatus, releaseNews } from '@/api/news/news'
+// 对sessionStorage加密
+import { StorageClass } from '@/utils/session'
 const defaultForm = {
   loginuserCode: '',
   author: '',
@@ -167,7 +169,7 @@ export default {
       listQuery: {
         page: 1,
         limit: 10,
-        role: localStorage.getItem('role')
+        role: StorageClass.getSession('role').role
       },
       total: 0,
       listLoading: false,
@@ -182,11 +184,11 @@ export default {
   },
   computed: {
     role() {
-      return localStorage.getItem('role')
+      return StorageClass.getSession('role').role
     }
   },
   mounted() {
-    if (localStorage.getItem('role') !== 'admin') {
+    if (StorageClass.getSession('role').role !== 'admin') {
       this.$router.push({ name: 'Page401' })
     }
     this.getNewsList()

@@ -53,6 +53,8 @@ import Hamburger from '@/components/Hamburger'
 import Screenfull from '@/components/Screenfull'
 import { getReceiveMsg } from '@/api/recruit/position'
 import { ADMIN_AVATAR_UPLOAD } from '@/utils/urlConfig'
+// 对sessionStorage加密
+import { StorageClass } from '@/utils/session'
 export default {
   components: {
     Breadcrumb,
@@ -61,20 +63,21 @@ export default {
   },
   data() {
     return {
-      avatar: localStorage.getItem('avatar'),
+      avatar: StorageClass.getSession('avatar').avatar,
       msgNum: 0,
       upload_url: ADMIN_AVATAR_UPLOAD
     }
   },
   computed: {
     token() {
-      return localStorage.getItem('token')
+      // return localStorage.getItem('token')
+      return StorageClass.getSession('token').token
     },
     userCode() {
-      return localStorage.getItem('userCode')
+      return StorageClass.getSession('userCode').userCode
     },
     name() {
-      return localStorage.getItem('name')
+      return StorageClass.getSession('name').name
     },
     ...mapGetters(['sidebar', 'device', 'name'])
   },
@@ -118,28 +121,11 @@ export default {
       const formdata = new FormData()
       formdata.append('file', file)
     },
-    // beforeUploadFile(file) {
-    //   const formdata = new FormData()
-    //   formdata.append('file', file)
-    //   formdata.append('userCode', localStorage.getItem('userCode'))
-    //   formdata.append('avatar', localStorage.getItem('avatar'))
-    //   axios.post('http://localhost:3000/users/uploadAvatar', formdata, { headers: { token: localStorage.getItem('token'), uuid: uuid() }}).then(res => {
-    //     const { data } = res
-    //     if (data.code === 200) {
-    //       this.avatar = data.avatar
-    //       localStorage.setItem('avatar', data.avatar)
-    //       this.$store.dispatch('/user/uploadavatar')
-    //       this.$message.success(data.msg)
-    //     } else {
-    //       this.$message.success('头像上传失败')
-    //     }
-    //   })
-    // },
     // 头像上传成功
     hadndleSuccessUploadFile(file) {
       const { avatar, msg } = file
       this.$message.success(msg)
-      localStorage.setItem('avatar', avatar)
+      StorageClass.setSession('avatar', { avatar: avatar })
     }
   }
 }

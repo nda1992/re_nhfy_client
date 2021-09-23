@@ -27,6 +27,8 @@
 
 <script>
 import { NEWS_IMAGES_UPLOAD } from '@/utils/urlConfig'
+// 对sessionStorage加密
+import { StorageClass } from '@/utils/session'
 export default {
   name: 'EditorSlideUpload',
   props: {
@@ -45,7 +47,7 @@ export default {
   },
   computed: {
     token() {
-      return localStorage.getItem('token')
+      return StorageClass.getSession('token').token
     }
   },
   methods: {

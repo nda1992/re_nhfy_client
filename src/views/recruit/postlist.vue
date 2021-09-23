@@ -151,6 +151,8 @@
 import Pagination from '@/components/Pagination'
 import { getPost2PositionListByUid, setPositionStatus, deletePost2Position } from '@/api/recruit/position'
 import { sendMessage } from '@/api/recruit/position'
+// 对sessionStorage加密
+import { StorageClass } from '@/utils/session'
 export default {
   name: 'Postlist',
   components: { Pagination },
@@ -170,7 +172,7 @@ export default {
       listQuery: {
         page: 1,
         limit: 10,
-        role: localStorage.getItem('role')
+        role: StorageClass.getSession('role').role
       },
       total: 0,
       tableKey: 0,

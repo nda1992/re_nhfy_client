@@ -1,4 +1,4 @@
-import { positionLogin, getPositionList } from '@/api/recruit/position'
+import { positionLogin } from '@/api/recruit/position'
 // 对sessionStorage加密
 import { StorageClass } from '@/utils/session'
 // 求职者的状态管理

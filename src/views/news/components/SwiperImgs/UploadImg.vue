@@ -62,15 +62,6 @@ export default {
       this.fileList.push({ name: 'image', url: file.url })
       this.$emit('getAllSwiperImgs')
     }
-    // uploadFilesList(file) {
-    //   const fd = new FormData()
-    //   fd.append('file', file.file)
-    //   uploadSwiper(fd).then(res => {
-    //     const { msg, files } = res
-    //     this.$message.success(msg)
-    //     this.fileList.push({ name: 'image', url: files.url })
-    //   })
-    // }
   }
 }
 </script>

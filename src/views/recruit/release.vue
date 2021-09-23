@@ -229,6 +229,8 @@
 import Pagination from '@/components/Pagination'
 import { createPosition, updatePosition, getAllPositionList, updatepositionStatus, deletePosition, recoverpositionStatus } from '@/api/recruit/recruit'
 import { searchDept } from '@/api/news/news'
+// 对sessionStorage加密
+import { StorageClass } from '@/utils/session'
 export default {
   components: { Pagination },
   filters: {
@@ -272,7 +274,7 @@ export default {
       listQuery: {
         page: 1,
         limit: 10,
-        role: localStorage.getItem('role')
+        role: StorageClass.getSession('role').role
       },
       listLoading: false,
       total: 0,

@@ -30,8 +30,12 @@
         :key="position.id"
         :position-info="position"
         @gotoPosition="gotoPosition(position.id)"
+<<<<<<< HEAD
         @gotoCollect="gotoCollect(position.id, position.isCollected)"
       />
+=======
+        @gotoCollect="gotoCollect(position.id, position.isCollected)" />
+>>>>>>> 2fb94fe1b561fd941d866c6ba7bf6c32b3392d2c
       <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getPositionList()" />
     </div>
     <div>
@@ -153,7 +157,11 @@ export default {
     },
     scroll() {
       document.addEventListener('scroll', (event) => {
+<<<<<<< HEAD
         var scrollDistance = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+=======
+        var scrollDistance = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+>>>>>>> 2fb94fe1b561fd941d866c6ba7bf6c32b3392d2c
         if (scrollDistance > 360) {
           this.scrollStyle.position = 'fixed'
           this.scrollStyle.top = '50px'
@@ -238,7 +246,10 @@ export default {
         })
       })
     },
+<<<<<<< HEAD
 
+=======
+>>>>>>> 2fb94fe1b561fd941d866c6ba7bf6c32b3392d2c
     // 重置filterForm
     resetFilterForm() {
       this.filterForm = {

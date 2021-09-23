@@ -31,6 +31,8 @@
 <script>
 import errGif from '@/assets/401_images/401.gif'
 import { createAdvice } from '@/api/report/report'
+// 对sessionStorage加密
+import { StorageClass } from '@/utils/session'
 export default {
   name: 'Page401',
   data() {
@@ -60,7 +62,7 @@ export default {
       })
     },
     createData() {
-      this.temp.userCode = localStorage.getItem('userCode')
+      this.temp.userCode = StorageClass.getSession('userCode').userCode
       if (this.temp.content === '') {
         this.$message.error('提交的反馈不能为空')
         return

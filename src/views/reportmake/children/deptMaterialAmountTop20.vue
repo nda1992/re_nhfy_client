@@ -77,6 +77,8 @@
 import moment from 'moment'
 import Pagination from '@/components/Pagination'
 import { getdeptMaterialAmountTop20 } from '@/api/reportmake/reportmake'
+// 对sessionStorage加密
+import { StorageClass } from '@/utils/session'
 export default {
   name: 'DeptMaterialAmountTop20',
   components: { Pagination },
@@ -86,7 +88,7 @@ export default {
       listQuery: {
         page: 1,
         limit: 10,
-        role: localStorage.getItem('role')
+        role: StorageClass.getSession('role').role
       },
       tableKey: 0,
       searchDate: '',

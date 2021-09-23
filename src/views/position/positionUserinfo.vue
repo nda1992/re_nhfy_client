@@ -173,7 +173,7 @@ export default {
       listQuery: {
         page: 1,
         limit: 10,
-        role: localStorage.getItem('role')
+        role: StorageClass.getSession('role').role
       },
       collectedTotal: 0,
       collectedList: [],
