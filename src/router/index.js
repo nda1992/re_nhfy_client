@@ -507,10 +507,6 @@ export const constantRoutes = [
       }
     ]
   },
-<<<<<<< HEAD
-
-=======
->>>>>>> 2fb94fe1b561fd941d866c6ba7bf6c32b3392d2c
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
