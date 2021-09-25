@@ -74,6 +74,9 @@ export default {
         height: 50px;
       }
       .svg{
+        &:hover{
+          cursor: pointer;
+        }
         position: absolute;
         right: 100px;
         .title{
@@ -92,7 +95,7 @@ export default {
           position: absolute;
           z-index: 10;
           top: 35px;
-          right: -55px;
+          right: -10px;
           img{
             margin: 0 auto;
           }
