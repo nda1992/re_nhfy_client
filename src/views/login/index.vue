@@ -54,7 +54,9 @@
     </el-form>
 
     <div class="footer">
-      <el-button type="text" @click="gotoPosition">招贤纳士,欢迎投递</el-button>
+      <div style="display: inline-block">更多链接:</div>
+      <el-button type="text" @click="gotoPosition">职位招聘</el-button>
+      <el-button type="text" @click="gotoOfficialWebsite">医院官网</el-button>
     </div>
   </div>
 </template>
@@ -126,6 +128,10 @@ export default {
     // 跳转到position页面
     gotoPosition() {
       this.$router.push({ path: '/position' })
+    },
+    // 跳转到官方网站
+    gotoOfficialWebsite() {
+      this.$router.push({ path: '/nhfy' })
     }
   }
 }
@@ -267,7 +273,12 @@ $light_gray:#eee;
     position: relative;
     bottom: 0;
     margin-top: 20px;
-    left: 47%;
+    left: 44%;
+    div{
+      color: #99a9bf;
+      font-size: 14px;
+      padding-right: 8px;
+    }
     .el-button{
       color: #99a9bf;
       &:hover{

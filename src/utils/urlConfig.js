@@ -13,6 +13,7 @@ export const JOBSEEKER_RESUME_UPLOAD = 'http://localhost:3000/position/uploadFil
 // 轮播图上传
 export const SWIPER_IMAGES_UPLOAD = 'http://localhost:3000/recruit/uploadSwiper'
 
+
 // 头像和文件下载
 // 管理员头像下载
 export const ADMIN_AVATAR_DOWNLOAD = ''
@@ -26,3 +27,9 @@ export const JOBSEEKER_AVATAR_DOWNLOAD = ''
 export const JOBSEEKER_RESUME_DOWNLOAD = ''
 // 轮播图下载
 export const SWIPER_IMAGES_DOWNLOAD = ''
+
+// 官网头部图片下载
+export const BACKGROUND_IMAGE_DOWNLOAD = 'http://localhost:3000/background/main-bgi.png'
+// 公众号二维码
+export const QRCODE_DOWNLOAD = 'http://localhost:3000/background/qrcode.jpg'
+

@@ -7,6 +7,8 @@ Vue.use(Router)
 import Layout from '@/layout'
 /* Position */
 import Position from '@/views/position/index'
+/* Website */
+import Website from '@/views/website/index'
 /**
  * Note: sub-menu only appear when route children.length >= 1
  * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
@@ -61,7 +63,22 @@ export const constantRoutes = [
     component: () => import('@/views/error-page/404'),
     hidden: true
   },
-  // 在招聘模块相关页面
+  // 医院官网相关页面
+  {
+    path: '/nhfy',
+    component: Website,
+    redirect: '/nhfy/home',
+    children: [
+      // 首页
+      {
+        path: 'home',
+        name: 'Home',
+        component: () => import('@/views/website/MainContainer'),
+        hidden: true
+      }
+    ]
+  },
+  // 招聘模块相关页面
   {
     path: '/position',
     component: Position,

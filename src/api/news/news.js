@@ -100,3 +100,12 @@ export function searchDept(data) {
     params: data
   })
 }
+
+// 上传官网菜单
+export function submitMenu(data) {
+  return request({
+    url: '/news/submitMenu',
+    method: 'post',
+    data
+  })
+}

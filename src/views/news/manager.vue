@@ -8,7 +8,9 @@
         <el-tab-pane label="新闻分类管理" name="first">
           <NewsCategory @createData="createData" />
         </el-tab-pane>
-        <el-tab-pane label="发文作者和科室" name="second">发文作者和科室</el-tab-pane>
+        <el-tab-pane label="官网菜单管理" name="second">
+          <Menu @submit="submit"/>
+        </el-tab-pane>
         <el-tab-pane label="招聘系统轮播图" name="third">
           <div class="swiper-header">
             <div style="color: #ff4949;font-size: 12px;margin-bottom: 10px;">(切换状态选择要播放的轮播图，最多6张)</div>
@@ -30,12 +32,13 @@
 </template>
 
 <script>
-import { createCategory } from '@/api/news/news'
+import { createCategory, submitMenu } from '@/api/news/news'
 import { getAllSwiperImgs, deleteImgById, SetSwiperStatus } from '@/api/recruit/recruit'
 import NewsCategory from './components/Category/NewsCategory'
 import ImgList from './components/SwiperImgs/ImgList'
 import UploadImg from './components/SwiperImgs/UploadImg'
 import Pagination from '@/components/Pagination'
+import Menu from './components/Menus/Menu'
 // 对sessionStorage加密
 import { StorageClass } from '@/utils/session'
 export default {
@@ -44,7 +47,8 @@ export default {
     NewsCategory,
     ImgList,
     UploadImg,
-    Pagination
+    Pagination,
+    Menu
   },
   data() {
     return {
@@ -53,7 +57,7 @@ export default {
         limit: 10,
         page: 1
       },
-      activeName: 'third',
+      activeName: 'second',
       // 轮播图的数量
       num: 0,
       imgList: [],
@@ -131,6 +135,12 @@ export default {
           duration: 2000
         })
         this.getAllSwiperImgs()
+      })
+    },
+    submit(menuForm) {
+      submitMenu(menuForm).then(res => {
+        const { msg } = res
+        this.$message.success(msg)
       })
     }
   }
