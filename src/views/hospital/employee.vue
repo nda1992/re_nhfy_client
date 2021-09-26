@@ -1,15 +1,75 @@
 <template>
   <!-- 医院管理--人员管理 -->
   <div class="app-container">
-    <h3>系统人员管理</h3>
+    <div class="title">
+      <div><span>系统人员管理</span></div>
+      <el-tooltip content="按回车键搜索" placement="bottom">
+        <el-input v-model="searchVal" :placeholder="'按'+searchType+'搜索'" style="width: 180px;" class="filter-item" clearable @keyup.enter.native="handleFilter(searchType)" />
+      </el-tooltip>
+      <el-select v-model="searchType" placeholder="请选择搜索类型" style="width: 150px;" class="filter-item">
+        <el-option v-for="item in typeItems" :key="item" :value="item" />
+      </el-select>
+    </div>
+    <div>
+      <el-table :key="tableKey" v-loading="listLoading" :data="searchList" border fit highlight-current-row style="width: 100%;">
+        <el-table-column label="工号" prop="userCode" align="center" min-width="7px">
+          <template slot-scope="{row}">
+            <span>{{ row.userCode }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="姓名" prop="username" align="center" min-width="7px">
+          <template slot-scope="{row}">
+            <span>{{ row.username }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="科室名称" prop="deptName" align="center" min-width="10px">
+          <template slot-scope="{row}">
+            <span>{{ row.deptName }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="邮箱" prop="email" align="center" min-width="10px">
+          <template slot-scope="{row}">
+            <span>{{ row.email }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="用户状态" prop="status" align="center" min-width="7px">
+          <template slot-scope="{row}">
+            <el-tag :type="row.status | statusFilter">
+              {{ row.status }}
+            </el-tag>
+          </template>
+        </el-table-column>
+        <el-table-column label="创建时间" prop="createDate" align="center" min-width="12px">
+          <template slot-scope="{row}">
+            <i class="el-icon-time" style="margin-right: 3px;" />
+            <span>{{ row.createDate }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="更新状态" prop="Switch" align="center" min-width="11px">
+          <template slot-scope="{row}">
+            <el-switch :disabled="row.status==='已注销'" @change="handleSetStatus(row)" v-model="row.Switch" active-color="#13ce66" inactive-color="#ff4949" inactive-text="不通过" active-text="通过"/>
+          </template>
+        </el-table-column>
+        <el-table-column label="操作" align="center" min-width="24px" class-name="small-padding fixed-width">
+          <template slot-scope="{row, $index}">
+            <el-button type="primary" size="mini" @click="HandleUpdate(row)" icon="el-icon-edit" v-if="row.status!=='已注销'">编辑</el-button>
+            <el-button v-if="row.status!=='已注销'" type="danger" size="mini" @click="handleDelete(row, $index)" icon="el-icon-delete">删除</el-button>
+            <el-button v-if="row.status==='已注销'" @click="HandlerRecoverUser(row)" type="success" size="mini">恢复用户</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getAllEmployees()" />
+    </div>
   </div>
 </template>
 <script>
 import waves from '@/directive/waves'
 import { StorageClass } from '@/utils/session'
-import { getAllEmployees, updateUserStatus, deleteUser } from '@/api/hospital/employee'
+import { getAllEmployees, updateUserStatus, deleteUser, recoverUser } from '@/api/hospital/employee'
+import Pagination from '@/components/Pagination'
 export default {
   directives: { waves },
+  components: { Pagination },
   filters: {
     statusFilter(status) {
       const statusMap = {
@@ -96,6 +156,20 @@ export default {
             message: msg,
             type: 'success'
           })
+        })
+      })
+    },
+    // 恢复用户
+    HandlerRecoverUser(row) {
+      this.$confirm('是否恢复该用户?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning' }).then(() => {
+        const temp = Object.assign({}, { id: row.id, role: this.role })
+        recoverUser(temp).then(res => {
+          const { msg } = res
+          this.$message.success(msg)
+          this.getAllEmployees()
         })
       })
     }

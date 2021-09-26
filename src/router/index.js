@@ -274,7 +274,23 @@ export const constantRoutes = [
         path: 'basic',
         name: 'Basic',
         component: () => import('@/views/report/basic'),
-        meta: { title: '常规报表查询', icon: 'el-icon-notebook-1' }
+        meta: { title: '常规报表查询', icon: 'el-icon-notebook-1' },
+        children: [
+          {
+            path: 'dc_accountQuery',
+            name: 'Dc_accountQuery',
+            component: () => import('@/views/report/children/dc_accountQuery'),
+            meta: { title: 'dc_account表的查询' },
+            hidden: true
+          },
+          {
+            path: 'basicMedicineAndMaterial',
+            name: 'BasicMedicineAndMaterial',
+            component: () => import('@/views/report/children/basicMedicineAndMaterial'),
+            meta: { title: 'basic表的查询' },
+            hidden: true
+          }
+        ]
       },
       // 门诊报表查询
       {

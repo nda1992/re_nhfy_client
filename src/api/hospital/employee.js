@@ -26,3 +26,12 @@ export function deleteUser(listQuery) {
     params: listQuery
   })
 }
+
+// 恢复用户
+export function recoverUser(listQuery) {
+  return request({
+    url: '/employee/recoverUser',
+    method: 'get',
+    params: listQuery
+  })
+}
