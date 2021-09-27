@@ -151,6 +151,7 @@ export default {
         this.jobseekerId = StorageClass.getSession('jobseekerId').jobseekerId
       }
     },
+    // 滚动鼠标实现固定定位
     scroll() {
       document.addEventListener('scroll', (event) => {
         var scrollDistance = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop

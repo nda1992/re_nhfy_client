@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div><el-backtop :bottom="100" /></div>
-    <div>
+    <div class="header">
       <Header :MenuList="MenuList"/>
     </div>
     <div>
@@ -52,7 +52,7 @@ export default {
   .app-container{
     height: 100%;
     width: 100%;
-    background: #a6c8b2;
+    background: #fff;
     padding: 0;
   }
 </style>
