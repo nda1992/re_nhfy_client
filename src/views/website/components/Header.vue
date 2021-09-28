@@ -10,7 +10,7 @@
         </div>
       </div>
     </div>
-    <div>
+    <div :style="scrollStyle">
       <el-menu
         router
         :default-active="activeIndex1"
@@ -43,13 +43,34 @@ export default {
   },
   data() {
     return {
+      // 固定定位样式
+      scrollStyle: { position: '', top: '', zIndex: '', left: '', width: '100%' },
       activeIndex1: '1',
       img_url: BACKGROUND_IMAGE_DOWNLOAD,
       qrcode_url: QRCODE_DOWNLOAD,
       active: false
     }
   },
+  mounted() {
+    this.scroll()
+  },
   methods: {
+    scroll() {
+      document.addEventListener('scroll', (event) => {
+        var scrollDistance = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+        if (scrollDistance > 50) {
+          this.scrollStyle.position = 'fixed'
+          this.scrollStyle.top = '0px'
+          this.scrollStyle.zIndex = 100
+          this.scrollStyle.left = '0px'
+        } else {
+          this.scrollStyle.position = 'static'
+          this.scrollStyle.top = 0
+          this.scrollStyle.zIndex = 0
+          this.scrollStyle.left = 0
+        }
+      })
+    },
     // 鼠标移入触发
     mouseOver() {
       this.active = true
