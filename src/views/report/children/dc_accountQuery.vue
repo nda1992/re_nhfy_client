@@ -6,12 +6,12 @@
       <div style="color:#FF6600;font-size: 12px">注意：所选月份在数据库中没有数据时，表格中将不显示！</div>
     </div>
     <div>
-      <div v-if="searchDate!==''" style="font-size: 18px;margin-bottom: 10px;font-weight: bold">南华大学附属第一医院{{ searchDate[0].slice(0,7) }}~{{ searchDate[1].slice(0,7) }}医疗收入情况表</div>
+      <div v-if="searchDate!==''" style="font-size: 18px;margin-top: 10px;font-weight: bold">南华大学附属第一医院{{ searchDate[0].slice(0,7) }}~{{ searchDate[1].slice(0,7) }}医疗收入情况表</div>
       <el-table
         :key="tableKey"
         v-loading="listLoading"
         :data="items"
-        :height="items.length===0?'auto':'750'"
+        :height="items.length===0?'auto':'650'"
         stripe
         border
         fit
@@ -287,13 +287,15 @@ export default {
 
 <style lang="scss" scoped>
   .app-container{
+    padding-top: 0;
     .title{
-      width: 950px;
+      width: 850px;
       display: flex;
-      justify-content: space-around;
+      justify-content: space-between;
       align-items: center;
     }
     .el-table{
+      margin-top: 10px;
       font-size: .01em;
       &:hover{
         box-shadow: 0 0 20px #e8ecef;
