@@ -34,7 +34,7 @@
             </el-tooltip>
           </template>
         </el-table-column>
-        <el-table-column label="是否为轮播图" prop="Switch" align="center" width="120">
+        <el-table-column label="招聘系统轮播图" prop="Switch" align="center" width="120">
           <template slot-scope="{row}">
             <el-switch
               v-model="row.Switch"
@@ -65,17 +65,9 @@
 </template>
 
 <script>
-import Pagination from '@/components/Pagination'
 export default {
   name: 'ImgList',
-  components: { Pagination },
   props: {
-    imgList: {
-      type: Array,
-      default: () => {
-        return []
-      }
-    },
     srcList: {
       type: Array,
       default: () => {
