@@ -1,5 +1,5 @@
 <template>
-  <!--政策法规-->
+  <!--人事招聘-->
   <div>
     <div>
       <showNewsCard
@@ -17,7 +17,7 @@
 import showNewsCard from './showNewsCard'
 import { getAllNewsByCategory } from '@/api/website/getnews'
 export default {
-  name: 'PolicyLaw',
+  name: 'Recruit',
   components: {
     showNewsCard
   },
@@ -29,14 +29,14 @@ export default {
       },
       total: 0,
       itemsList: [],
-      category: '政策法规'
+      category: '人事招聘'
     }
   },
   mounted(){
     this.getAllNews()
   },
   methods:{
-    // 获取‘政策法规’下的所有新闻
+    // 获取‘人事招聘’下的所有新闻
     getAllNews(){
       const temp = Object.assign({}, this.listQuery, { category: this.category })
       getAllNewsByCategory(temp).then(res => {
@@ -51,7 +51,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

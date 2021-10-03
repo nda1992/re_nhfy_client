@@ -1,8 +1,8 @@
 <template>
-  <div class="imglist-main">
+  <div class="redio-main">
     <div>
       <el-table
-        :data="imgList"
+        :data="videoList"
         border
         stripe
         fit
@@ -17,23 +17,34 @@
             <span>{{ row.userCode }}</span>
           </template>
         </el-table-column>
+        <el-table-column label="部门" prop="deptName" align="center" width="120">
+          <template slot-scope="{row}">
+            <span>{{ row.deptName }}</span>
+          </template>
+        </el-table-column>
         <el-table-column label="上传时间" sortable prop="createdDate" align="center" width="200">
           <template slot-scope="{row}">
             <i class="el-icon-time" style="margin-right: 3px" />
             <span>{{ row.createdDate }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="略缩图" prop="url" align="center" min-width="80px">
+        <el-table-column label="视频封面" prop="url" align="center" min-width="50px">
           <template slot-scope="{row}">
-            <el-tooltip class="item" effect="dark" content="点击查看大图" placement="bottom">
-              <el-image
-                style="width: 100px; height: 50px"
-                :src="row.url"
-              />
+            <el-tooltip class="item" effect="dark" content="点击观看视频" placement="bottom">
+              <img
+              v-show='row.cover'
+              :src="row.cover"
+              @click="openVideoPlayerVisible(row)"
+              id='scanVideo' />
             </el-tooltip>
           </template>
         </el-table-column>
-        <el-table-column label="招聘系统轮播图" prop="Switch" align="center" width="120">
+        <el-table-column label="视频标题" prop="title" align="center" width="300">
+          <template slot-scope="{row}">
+            <span>{{ row.title }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="是否展示视频" prop="Switch" align="center" width="120">
           <template slot-scope="{row}">
             <el-switch
               v-model="row.Switch"
@@ -42,20 +53,14 @@
               inactive-color="#ff4949"
               inactive-text="否"
               active-text="是"
-              @change="handleSetStatus(row)"
+              @change="handleSetVideoStatus(row)"
             />
-          </template>
-        </el-table-column>
-        <el-table-column label="下载图片" prop="url" align="center" width="200">
-          <template slot-scope="{row}">
-            <i class="el-icon-download" style="margin-right: 3px" />
-            <span><a :href="row.url" style="color: #409EFF">下载图片</a></span>
           </template>
         </el-table-column>
         <!--操作按钮-->
         <el-table-column label="操作" align="center" width="100" class-name="small-padding fixed-width">
-          <template slot-scope="{row,$index}">
-            <el-button v-if="row.status!='deleted'" size="mini" type="danger" icon="el-icon-delete" @click="handleDelete(row,$index)">删除</el-button>
+          <template slot-scope="{row}">
+            <el-button v-if="row.status!='deleted'" size="mini" type="danger" icon="el-icon-delete" @click="handleDeleteVideo(row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -65,15 +70,15 @@
 
 <script>
 export default {
-  name: 'ImgList',
+  name: 'VideoList',
   props: {
-    imgList: {
+    videoList: {
       type: Array,
       default: () => {
         return []
       }
     },
-    // 轮播图的数量，最多限制为7张
+    // 展示视频的数量，最多4个
     num: {
       type: Number,
       default: () => {
@@ -85,12 +90,27 @@ export default {
     rowClassName({ row, rowIndex }) {
       row.xh = rowIndex + 1
     },
-    handleDelete(row) {
-      this.$emit('handleDelete', row)
+    handleDeleteVideo(row) {
+      this.$emit('handleDeleteVideo', row)
     },
-    handleSetStatus(row) {
-      this.$emit('handleSetStatus', row)
+    handleSetVideoStatus(row) {
+      this.$emit('handleSetVideoStatus', row)
+    },
+    // 打开视频播放器
+    openVideoPlayerVisible(row) {
+      this.$emit('openVideoPlayerVisible', row)
     }
   }
 }
 </script>
+<style  scoped>
+  #scanVideo {
+    height: 60px;
+    width: 90px;
+    cursor: pointer;
+    border-radius: 6px;
+  }
+  #scanVideo:hover{
+    color:blue; 
+  }
+</style>

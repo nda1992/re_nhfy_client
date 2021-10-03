@@ -1,7 +1,13 @@
 <template>
   <!--就医指南-->
   <div class="main">
-    <Cube v-for="(item, index) in MenuList" :key="item.id" :icon="item.icon" :content="item.content" />
+    <Cube
+    v-for="item in MenuList"
+    :key="item.id"
+    :icon="item.icon"
+    :content="item.content.name"
+    :index="item.content.index"
+    @gotoTargePage='gotoTargePage' />
   </div>
 </template>
 
@@ -28,10 +34,15 @@ export default {
       getMenusByParent().then(res => {
         const { items } = res
         let temp = {}
-        this.content = items.filter(e => this.icons.includes(e))
+        // 取icons和items的交集
+        this.content = items.filter(e => {
+          if (this.icons.includes(e.name)) {
+            return e
+          }
+        })
         for (let i in this.icons) {
           for (let j in this.content) {
-            if (this.content[j] === this.icons[i]) {
+            if (this.content[j].name === this.icons[i]) {
               temp = { id: parseInt(i)+1, icon: this.icons[i], content: this.content[j] }
               break
             }
@@ -39,8 +50,11 @@ export default {
           this.MenuList.push(temp)
           temp = {}
         }
-        this.MenuList.push({ id:15, icon: '服务热线', content: '服务热线' })
+        this.MenuList.push({ id:15, icon: '服务热线', content: { name: '服务热线', index:'/jyzn/fwrx' } })
       })
+    },
+    gotoTargePage(index) {
+      this.$router.push({path: `content/${index.index}`})
     }
   }
 }

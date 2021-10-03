@@ -5,23 +5,25 @@
       <Header :MenuList="MenuList"/>
     </div>
     <div>
-      <div>
-        <transition name="fade-transform" mode="out-in">
-          <router-view :key="key" />
-        </transition>
-      </div>
+      <transition name="fade-transform" mode="out-in">
+        <router-view :key="key" />
+      </transition>
     </div>
-    <div></div>
+    <div class='footer'>
+      <Footer />
+    </div>
   </div>
 </template>
 
 <script>
 import Header from './components/Header'
+import Footer from './components/Footer'
 import { getMenusList } from '@/api/website/website'
 export default {
   name: 'index',
   components: {
-    Header
+    Header,
+    Footer
   },
   data() {
     return {
@@ -50,9 +52,17 @@ export default {
 
 <style lang="scss" scoped>
   .app-container{
-    height: 100%;
+    min-height: 100%;
     width: 100%;
     background: #fff;
     padding: 0;
+    display: flex;
+    flex-direction: column;
+    .footer {
+      background: #3b7960;
+      color: #fff;
+      width: 100%;
+      margin-top: auto;
+    }
   }
 </style>

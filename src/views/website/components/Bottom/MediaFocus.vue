@@ -1,5 +1,5 @@
 <template>
-  <!--政策法规-->
+  <!--媒体聚焦-->
   <div>
     <div>
       <showNewsCard
@@ -8,35 +8,34 @@
       :newsList='itemsList'
       :getAllNews='getAllNews'
       :listQuery="listQuery"
-      :total='total'/>
+      :total='total' />
     </div>
   </div>
 </template>
 
 <script>
-import showNewsCard from './showNewsCard'
+import showNewsCard from '../Center/showNewsCard'
 import { getAllNewsByCategory } from '@/api/website/getnews'
 export default {
-  name: 'PolicyLaw',
-  components: {
-    showNewsCard
-  },
+    components: {
+        showNewsCard
+    },
   data() {
     return {
       listQuery: {
-        limit: 10,
+        limit: 5,
         page: 1
       },
       total: 0,
       itemsList: [],
-      category: '政策法规'
+      category: '媒体聚焦'
     }
   },
   mounted(){
     this.getAllNews()
   },
   methods:{
-    // 获取‘政策法规’下的所有新闻
+    // 获取‘院务公开’下的所有新闻
     getAllNews(){
       const temp = Object.assign({}, this.listQuery, { category: this.category })
       getAllNewsByCategory(temp).then(res => {
@@ -51,7 +50,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

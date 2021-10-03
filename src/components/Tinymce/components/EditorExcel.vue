@@ -4,7 +4,7 @@
     <el-dialog :visible.sync="dialogVisible">
       <el-upload
         ref="upload"
-        accept=".xls,.xlsx,.doc,.docx"
+        accept=".xls,.xlsx,.doc,.docx,.pdf"
         class="upload-demo"
         :action="upload_url"
         :headers="tempToken"
@@ -20,7 +20,7 @@
             <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
             <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
           </div>
-          <div slot="tip" class="el-upload__tip">只能上传xls、xlsx、doc、docx文件，且不超过10MB</div>
+          <div slot="tip" class="el-upload__tip">只能上传xls、xlsx、doc、docx、pdf文件，且不超过10MB</div>
         </div>
       </el-upload>
       <div class="confirm-btn">
@@ -33,13 +33,14 @@
 
 <script>
 import { NEWS_ATTACHMENT_UPLOAD } from '@/utils/urlConfig'
+import { StorageClass } from '@/utils/session'
 export default {
   name: 'EditorExcel',
   props: {
     // 请求头带上token
     tempToken: {
       type: Object,
-      default: () => { return { token: localStorage.getItem('token') } }
+      default: () => { return { token: StorageClass.getSession('token').token } }
     }
   },
   data() {

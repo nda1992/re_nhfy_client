@@ -1,7 +1,7 @@
 <template>
   <div class="header-main">
     <div class="header-img">
-      <img :src="img_url" alt="">
+      <img :src="img_url" alt="" @click="gohome">
       <div class="svg" @mouseover="mouseOver" @mouseleave="mouseLeave">
         <span class="title">微信公众号</span>
         <svg-icon icon-class="nhfy-wechat" style="width: 30px;height: 30px"/>
@@ -19,7 +19,7 @@
         background-color="#3b7960"
         text-color="#fff"
         active-text-color="#edd3a1">
-        <el-menu-item index="1">首页</el-menu-item>
+        <el-menu-item index="/nhfy/home">首页</el-menu-item>
         <el-submenu :index="item.parent.index" v-for="(item, index) in MenuList" :key="item.id">
           <template slot="title">{{ item.parent.name }}</template>
           <el-menu-item :index="subitem.index" v-for="(subitem, subindex) in item.children" :key="subindex">{{ subitem.name }}</el-menu-item>
@@ -45,7 +45,7 @@ export default {
     return {
       // 固定定位样式
       scrollStyle: { position: '', top: '', zIndex: '', left: '', width: '100%' },
-      activeIndex1: '1',
+      activeIndex1: '/nhfy/home',
       img_url: BACKGROUND_IMAGE_DOWNLOAD,
       qrcode_url: QRCODE_DOWNLOAD,
       active: false
@@ -78,6 +78,10 @@ export default {
     mouseLeave() {
       this.active = false
     },
+    // 回到首页
+    gohome() {
+      this.$router.push({ path: '/nhfy/home' })
+    }
   }
 }
 </script>
@@ -93,6 +97,9 @@ export default {
       img{
         width: 300px;
         height: 50px;
+        &:hover{
+          cursor: pointer;
+        }
       }
       .svg{
         &:hover{

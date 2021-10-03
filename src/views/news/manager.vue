@@ -16,16 +16,48 @@
             <div style="color: #ff4949;font-size: 12px;margin-bottom: 10px;">(切换状态选择要播放的轮播图，最多6张)</div>
           </div>
           <ImgList
-            :img-list="imgList"
-            :src-list="srcList"
+            :imgList="imgList"
             :num="num"
             @handleDelete="handleDelete"
             @handleSetStatus="handleSetStatus"
           />
-          <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getAllSwiperImgs" />
+          <pagination
+          v-show="total>0"
+          :total="total"
+          :page.sync="listQuery.page"
+          :limit.sync="listQuery.limit"
+          @pagination="getAllSwiperImgs" />
           <el-divider />
-          <UploadImg :user-code="userCode" @getAllSwiperImgs="getAllSwiperImgs" />
+          <UploadImg
+          :user-code="userCode"
+          @getAllSwiperImgs="getAllSwiperImgs" />
         </el-tab-pane>
+        <el-tab-pane label="官网视频" name="fourth">
+          <div class="video-header">
+            <div style="color: #ff4949;font-size: 12px;margin-bottom: 10px;">(切换状态选择在官网中要展示的视频，最多4个)</div>
+          </div>
+          <VideoList
+          :videoList='videoList'
+          :num='videoNum'
+          @handleSetVideoStatus='handleSetVideoStatus'
+          @handleDeleteVideo='handleDeleteVideo'
+          @openVideoPlayerVisible='openVideoPlayerVisible'/>
+          <pagination
+          v-show="videoTotal>0"
+          :total="videoTotal"
+          :page.sync="listQuery.page"
+          :limit.sync="listQuery.limit"
+          @pagination="getAllVideosList" />
+          <UploadVideo 
+          :userCode='userCode'
+          :deptName='deptName'
+          @getAllVideosList='getAllVideosList'/>
+        </el-tab-pane>
+        <div>
+          <VideoPlay
+          :openDialogvisible='openDialogvisible'
+          :video='videoConfig' />
+        </div>
       </el-tabs>
     </div>
   </div>
@@ -34,12 +66,15 @@
 <script>
 import { createCategory, submitMenu } from '@/api/news/news'
 import { getAllSwiperImgs, deleteImgById, SetSwiperStatus } from '@/api/recruit/recruit'
+import { getAllVideos, deleteVideoById, SetVideoStatus } from '@/api/website/website'
+import Pagination from '@/components/Pagination'
+import VideoPlay from '@/components/VideoPlayer/index'
 import NewsCategory from './components/Category/NewsCategory'
 import ImgList from './components/SwiperImgs/ImgList'
 import UploadImg from './components/SwiperImgs/UploadImg'
-import Pagination from '@/components/Pagination'
 import Menu from './components/Menus/Menu'
-// 对sessionStorage加密
+import VideoList from './components/Video/VideoList'
+import UploadVideo from './components/Video/UploadVideo'
 import { StorageClass } from '@/utils/session'
 export default {
   name: 'Manager',
@@ -48,7 +83,10 @@ export default {
     ImgList,
     UploadImg,
     Pagination,
-    Menu
+    Menu,
+    VideoList,
+    UploadVideo,
+    VideoPlay
   },
   data() {
     return {
@@ -57,12 +95,16 @@ export default {
         limit: 10,
         page: 1
       },
-      activeName: 'second',
+      videoTotal: 0,
+      activeName: 'fourth',
       // 轮播图的数量
       num: 0,
       imgList: [],
-      srcList: [],
-      selectList: []
+      // 视频相关的变量
+      videoNum: 0,
+      videoList: [],
+      openDialogvisible: false,
+      videoConfig: undefined
     }
   },
   computed: {
@@ -71,10 +113,13 @@ export default {
     },
     userCode() {
       return StorageClass.getSession('userCode').userCode
+    },
+    deptName() {
+      return StorageClass.getSession('deptName').deptName
     }
   },
   mounted() {
-    this.getAllSwiperImgs()
+    this.getAllVideosList()
   },
   methods: {
     createData(form) {
@@ -102,11 +147,10 @@ export default {
         this.imgList = files
         this.total = total
         this.num = num
-        this.srcList = this.imgList.map(e => e.url)
       })
     },
     handleDelete(row) {
-      this.$confirm('是否删除?', '提示', {
+      this.$confirm('是否删除图片?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -142,12 +186,57 @@ export default {
         const { msg } = res
         this.$message.success(msg)
       })
+    },
+    // 获取某个管理员上传的所有视频列表
+    getAllVideosList() {
+      const temp = Object.assign({}, { userCode: this.userCode }, this.listQuery)
+      getAllVideos(temp).then(res => {
+        const { items, total, num } = res
+        this.videoList = items
+        this.videoNum = num
+        this.videoTotal = total
+      }) 
+    },
+    handleSetVideoStatus(row) {
+      const temp = Object.assign({}, { Switch: row.Switch, id: row.id })
+      SetVideoStatus(temp).then(res => {
+        const { msg } = res
+        this.$notify({
+          title: 'Success',
+          message: msg,
+          type: 'success',
+          duration: 2000
+        })
+        this.getAllVideosList()
+      })
+    },
+    // 删除视频
+    handleDeleteVideo(row) {
+      this.$confirm('是否删除视频?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deleteVideoById({ id: row.id, url: row.url }).then(res => {
+          const { msg } = res
+          this.$notify({
+            title: 'Success',
+            message: msg,
+            type: 'success',
+            duration: 2000
+          })
+          this.getAllVideosList()
+        })
+      })
+    },
+    // 打开播放视频对话框
+    openVideoPlayerVisible(row) {
+      this.videoConfig = {
+        url: row.url,
+        title: row.title
+      }
+      this.openDialogvisible = true
     }
   }
 }
 </script>
-<style lang="scss" scoped>
-  .app-container{
-
-  }
-</style>

@@ -1,7 +1,7 @@
 <template>
   <!--就医指南图标组件-->
   <div class="cube-main">
-    <div class="cube">
+    <div class="cube" @click="gotoTargePage(index)">
       <div>
         <svg-icon :icon-class="icon" style="width: 50px;height: 50px"/>
       </div>
@@ -24,9 +24,21 @@ export default {
       default: () => {
         return ''
       }
+    },
+    index: {
+      type: String,
+      default: () => {
+        return ''
+      }
     }
   },
-  name: 'Cube'
+  name: 'Cube',
+  methods: {
+    gotoTargePage(index) {
+      const temp = { index: index }
+      this.$emit('gotoTargePage', temp)
+    }
+  }
 }
 </script>
 
