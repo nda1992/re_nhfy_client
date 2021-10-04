@@ -1,7 +1,7 @@
 <template>
     <!--医生详细信息的dialog-->
     <div>
-      <el-dialog :visible.sync="openVisible" title="医生个人详细信息">
+      <el-dialog :visible.sync="dialog" title="医生个人详细信息" @close='closeDialog'>
         <div class="main">
           <div class="basic">
             <img :src="doctorItem.avatar" />
@@ -37,6 +37,21 @@ export default {
       default: () => {
         return {}
       }
+    }
+  },
+  data() {
+    return {
+      dialog: this.openVisible
+    }
+  },
+  watch: {
+    openVisible(newVal, oldVal) {
+      this.dialog = newVal
+    }
+  },
+  methods: {
+    closeDialog() {
+      this.$emit('closeDialog')
     }
   }
 }

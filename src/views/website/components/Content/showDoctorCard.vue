@@ -54,26 +54,27 @@ export default {
 <style lang="scss" scoped>
   .main {
     padding: 4px;
-    height: 90px;
-    width: 260px;
+    height: 100px;
+    width: 275px;
     border-radius: 6px;
     border: 1px solid #EBEEF5;
     display: flex;
-    justify-content: space-around;
+    justify-content: start;
     align-items: center;
     &:hover {
       box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
       cursor: pointer;
     }
     img {
-      border:1px dashed #C0C4CC;
+      border:1px dashed #EBEEF5;
       width: 75px;
       height: 75px;
-      border-radius: 50%;
+      border-radius: 9px;
     }
     .desc {
+      margin-left: 10px;
       height: 100%;
-      font-size: 16px;
+      font-size: 14px;
       color: #909399;
       display: flex;
       flex-direction: column;

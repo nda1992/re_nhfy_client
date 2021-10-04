@@ -6,7 +6,8 @@
     :total='total'
     :doctorList='list'
     @getAllExpertList='getAllExpertList'
-    @openDialog='openDialog' />
+    @openDialog='openDialog'
+    @closeDialog='closeDialog' />
 
     <!--医生详细信息-->
     <doctorDetail
@@ -58,6 +59,9 @@ export default {
     openDialog(id) {
       this.visible = true
       this.getDoctorDetailById(id)
+    },
+    closeDialog() {
+      this.visible = false
     }
   }
 }

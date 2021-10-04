@@ -10,7 +10,8 @@
         :username='item.username'
         :deptName='item.deptName'
         :jobTitle='item.jobTitle'
-        @openDialog='openDialog' />
+        @openDialog='openDialog'
+        @closeDialog='closeDialog' />
       </div>
 
       <div class='page'>
@@ -63,8 +64,10 @@ export default {
       this.$emit('getAllExpertList')
     },
     openDialog(id) {
-      console.log(id)
       this.$emit('openDialog', id)
+    },
+    closeDialog() {
+      this.$emit('closeDialog')
     }
   }
 }
@@ -72,14 +75,15 @@ export default {
 <style lang="scss" scoped>
   .main {
     .card {
-      height: 415px;
+      height: 450px;
       display: flex;
       justify-content: space-between;
       flex-wrap: wrap;
     }
     .page {
-      margin: 15px;
-      padding: 0;
+      .pagination-container {
+        padding: 0;
+      }
     }
   }
 </style>

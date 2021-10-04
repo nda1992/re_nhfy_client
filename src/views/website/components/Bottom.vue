@@ -50,7 +50,6 @@ export default {
       })
     },
     openDialog(item) {
-      console.log(item)
       this.videoConfig = {
           title: item.title,
           url: item.url

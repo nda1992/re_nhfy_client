@@ -31,7 +31,7 @@ export default {
   methods: {
     // 获取所有的轮播图片
     getSwiperImgs() {
-      getSwiperImgs2Run({}).then(res => {
+      getSwiperImgs2Run({ swiperFlag: 'website' }).then(res => {
         const { swipers } = res
         this.carouselImages = swipers.map(e => e.url)
       })

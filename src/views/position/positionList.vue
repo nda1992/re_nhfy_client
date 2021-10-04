@@ -26,7 +26,7 @@
 
       </div>
       <PositionCard
-        v-for="(position, index) in positionList"
+        v-for="(position) in positionList"
         :key="position.id"
         :position-info="position"
         @gotoPosition="gotoPosition(position.id)"
@@ -170,7 +170,7 @@ export default {
     },
     // 获取所有的轮播图片
     getSwiperImgs() {
-      getSwiperImgs2Run({}).then(res => {
+      getSwiperImgs2Run({ swiperFlag: 'recruit' }).then(res => {
         const { swipers } = res
         this.carouselImages = swipers.map(e => e.url)
       })

@@ -11,15 +11,18 @@
         <el-tab-pane label="官网菜单管理" name="second">
           <Menu @submit="submit"/>
         </el-tab-pane>
-        <el-tab-pane label="招聘系统轮播图" name="third">
+        <el-tab-pane label="招聘网站轮播图" name="third">
           <div class="swiper-header">
-            <div style="color: #ff4949;font-size: 12px;margin-bottom: 10px;">(切换状态选择要播放的轮播图，最多6张)</div>
+            <div style="color: #ff4949;font-size: 12px;margin-bottom: 10px;">(切换状态选择要播放的轮播图，招聘网站和官网都是最多5张)</div>
           </div>
           <ImgList
-            :imgList="imgList"
-            :num="num"
-            @handleDelete="handleDelete"
-            @handleSetStatus="handleSetStatus"
+            :imgList='imgList'
+            :srcList='srcList'
+            :num='num'
+            :websiteNum='websiteNum'
+            @handleDelete='handleDelete'
+            @handleSetStatus='handleSetStatus'
+            @handleSetWebsiteStatus='handleSetWebsiteStatus'
           />
           <pagination
           v-show="total>0"
@@ -32,6 +35,7 @@
           :user-code="userCode"
           @getAllSwiperImgs="getAllSwiperImgs" />
         </el-tab-pane>
+
         <el-tab-pane label="官网视频" name="fourth">
           <div class="video-header">
             <div style="color: #ff4949;font-size: 12px;margin-bottom: 10px;">(切换状态选择在官网中要展示的视频，最多4个)</div>
@@ -41,7 +45,8 @@
           :num='videoNum'
           @handleSetVideoStatus='handleSetVideoStatus'
           @handleDeleteVideo='handleDeleteVideo'
-          @openVideoPlayerVisible='openVideoPlayerVisible'/>
+          @openVideoPlayerVisible='openVideoPlayerVisible' />
+
           <pagination
           v-show="videoTotal>0"
           :total="videoTotal"
@@ -53,10 +58,12 @@
           :deptName='deptName'
           @getAllVideosList='getAllVideosList'/>
         </el-tab-pane>
+
         <div>
           <VideoPlay
           :openDialogvisible='openDialogvisible'
-          :video='videoConfig' />
+          :video='videoConfig'
+          @closeDialog='closeDialog' />
         </div>
       </el-tabs>
     </div>
@@ -65,7 +72,7 @@
 
 <script>
 import { createCategory, submitMenu } from '@/api/news/news'
-import { getAllSwiperImgs, deleteImgById, SetSwiperStatus } from '@/api/recruit/recruit'
+import { getAllSwiperImgs, deleteImgById, SetSwiperStatus, SetWebsiteSwiperStatus } from '@/api/recruit/recruit'
 import { getAllVideos, deleteVideoById, SetVideoStatus } from '@/api/website/website'
 import Pagination from '@/components/Pagination'
 import VideoPlay from '@/components/VideoPlayer/index'
@@ -95,10 +102,13 @@ export default {
         limit: 10,
         page: 1
       },
+      // 查看大图
+      srcList: [],
       videoTotal: 0,
       activeName: 'fourth',
       // 轮播图的数量
       num: 0,
+      websiteNum: 0,
       imgList: [],
       // 视频相关的变量
       videoNum: 0,
@@ -120,6 +130,7 @@ export default {
   },
   mounted() {
     this.getAllVideosList()
+    this.getAllSwiperImgs()
   },
   methods: {
     createData(form) {
@@ -143,10 +154,12 @@ export default {
     getAllSwiperImgs() {
       const temp = Object.assign({}, { userCode: this.userCode }, this.listQuery)
       getAllSwiperImgs(temp).then(res => {
-        const { files, total, num } = res
+        const { files, total, num, websiteNum } = res
         this.imgList = files
+        this.srcList = files.map(e=>e.url)
         this.total = total
         this.num = num
+        this.websiteNum = websiteNum
       })
     },
     handleDelete(row) {
@@ -167,6 +180,7 @@ export default {
         })
       })
     },
+
     // 根据switch的值来更新status的状态，status=1：是轮播图，status=0：不是轮播图
     handleSetStatus(row) {
       const temp = Object.assign({}, { Switch: row.Switch, id: row.id })
@@ -181,12 +195,29 @@ export default {
         this.getAllSwiperImgs()
       })
     },
+
+    // 根据switch的值来更新status的状态，websiteStatus=1：是轮播图，websiteStatus=0：不是轮播图
+    handleSetWebsiteStatus(row) {
+      const temp = Object.assign({}, { websiteSwitch: row.websiteSwitch, id: row.id })
+      SetWebsiteSwiperStatus(temp).then(res => {
+        const { msg } = res
+        this.$notify({
+          title: 'Success',
+          message: msg,
+          type: 'success',
+          duration: 2000
+        })
+        this.getAllSwiperImgs()
+      })
+    },
+
     submit(menuForm) {
       submitMenu(menuForm).then(res => {
         const { msg } = res
         this.$message.success(msg)
       })
     },
+
     // 获取某个管理员上传的所有视频列表
     getAllVideosList() {
       const temp = Object.assign({}, { userCode: this.userCode }, this.listQuery)
@@ -197,6 +228,7 @@ export default {
         this.videoTotal = total
       }) 
     },
+
     handleSetVideoStatus(row) {
       const temp = Object.assign({}, { Switch: row.Switch, id: row.id })
       SetVideoStatus(temp).then(res => {
@@ -210,6 +242,7 @@ export default {
         this.getAllVideosList()
       })
     },
+
     // 删除视频
     handleDeleteVideo(row) {
       this.$confirm('是否删除视频?', '提示', {
@@ -229,6 +262,7 @@ export default {
         })
       })
     },
+
     // 打开播放视频对话框
     openVideoPlayerVisible(row) {
       this.videoConfig = {
@@ -236,6 +270,10 @@ export default {
         title: row.title
       }
       this.openDialogvisible = true
+    },
+    // 关闭dialog
+    closeDialog() {
+      this.openDialogvisible = false
     }
   }
 }

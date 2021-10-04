@@ -1,8 +1,8 @@
 <template>
   <div class="main">
     <div class="tabs">
-      <el-row :gutter='20'>
-        <el-col :span='18' :md="18">
+      <el-row :gutter='10'>
+        <el-col :span='19' :md="19">
           <el-tabs v-model="activeName">
             <el-tab-pane label="就医指南" name="first">
               <HospitalGuide />
@@ -15,7 +15,7 @@
             </el-tab-pane>
           </el-tabs>
         </el-col>
-        <el-col :span='6' :md="6">
+        <el-col :span='5' :md="5">
           <div class="right">
             <div class="title">南华大学附属第一医院欢迎您~</div>
             <dropdown-menu class="document-btn" :items="articleList" title="医院概况" />
@@ -58,13 +58,18 @@ export default {
     font-size: 18px !important;
   }
   /deep/.el-tabs{
-    width: 810px;
+    width: 870px;
+  }
+  #pane-first {
+    width: 95%;
   }
   #pane-second {
+    width: 100%;
     display: flex;
     justify-content: center;
   }
   #pane-third {
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -78,10 +83,9 @@ export default {
     .tabs{
       display: flex;
       justify-content: center;
-      position: relative;
       .right {
         .title{
-          margin-left: 35px;
+          margin-left: 14px;
           font-size: 16px;
         }
         .document-btn {

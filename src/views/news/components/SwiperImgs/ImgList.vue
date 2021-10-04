@@ -40,6 +40,7 @@
               <el-image
                 style="width: 100px; height: 50px; border-radius: 5px"
                 :src="row.url"
+                :preview-src-list='srcList'
               />
             </el-tooltip>
           </template>
@@ -48,12 +49,25 @@
           <template slot-scope="{ row }">
             <el-switch
               v-model="row.Switch"
-              :disabled="num > 5 && row.Switch !== true"
+              :disabled="num > 4 && row.Switch !== true"
               active-color="#13ce66"
               inactive-color="#ff4949"
               inactive-text="否"
               active-text="是"
               @change="handleSetStatus(row)"
+            />
+          </template>
+        </el-table-column>
+        <el-table-column label="官网轮播图" prop="websiteSwitch" align="center" width="120">
+          <template slot-scope="{ row }">
+            <el-switch
+              v-model="row.websiteSwitch"
+              :disabled="websiteNum > 4 && row.websiteSwitch !== true"
+              active-color="#13ce66"
+              inactive-color="#ff4949"
+              inactive-text="否"
+              active-text="是"
+              @change="handleSetWebsiteStatus(row)"
             />
           </template>
         </el-table-column>
@@ -93,27 +107,44 @@ export default {
     imgList: {
       type: Array,
       default: () => {
-        return [];
-      },
+        return []
+      }
+    },
+    srcList: {
+      type: Array,
+      default: () => {
+        return []
+      }
     },
     // 轮播图的数量，最多限制为7张
     num: {
       type: Number,
       default: () => {
-        return 0;
-      },
+        return 0
+      }
     },
+    websiteNum: {
+      type: Number,
+      default: () => {
+        return 0
+      }
+    }
   },
   methods: {
     rowClassName({ row, rowIndex }) {
-      row.xh = rowIndex + 1;
+      row.xh = rowIndex + 1
     },
     handleDelete(row) {
-      this.$emit("handleDelete", row);
+      this.$emit("handleDelete", row)
     },
+    // 更改招聘网站轮播图状态
     handleSetStatus(row) {
-      this.$emit("handleSetStatus", row);
+      this.$emit("handleSetStatus", row)
     },
-  },
+    // 更改官网轮播图状态
+    handleSetWebsiteStatus(row) {
+      this.$emit('handleSetWebsiteStatus', row)
+    }
+  }
 };
 </script>
