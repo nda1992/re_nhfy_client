@@ -1,13 +1,13 @@
 <template>
   <!--展示中间部分不同tab下的所有新闻内容-->
   <div class="main">
-    <el-card class="box-card">
+    <el-card class="box-card" shadow="hover">
         <div slot="header" class="clearfix">
             <span>{{ category }}</span>
         </div>
         <div v-for="(item, index) in newsList" :key="index" class="news">
             <div class="item">
-            <span class="time">{{ item.createTime }}</span>
+            <span class="time">[{{ item.createTime }}]</span>
             <span @click="getNewsById(item.id)" class="title">{{ item.title }}</span>
             <span style='margin-right:8px;color:#C0C4CC'>|</span>
             <span>({{ item.deptName }})</span>

@@ -1,21 +1,27 @@
 <template>
   <div class="main">
     <div class="tabs">
-      <el-tabs v-model="activeName">
-        <el-tab-pane label="就医指南" name="first">
-          <HospitalGuide />
-        </el-tab-pane>
-        <el-tab-pane label="学科荟萃" name="second">
-          <SubjectAssemble />
-        </el-tab-pane>
-        <el-tab-pane label="专家介绍" name="third">
-          <ExpertDesc />
-        </el-tab-pane>
-      </el-tabs>
-      <div class="right">
-        <div class="title">南华大学附属第一医院欢迎您~</div>
-        <dropdown-menu class="document-btn" :items="articleList" title="医院概况" />
-      </div>
+      <el-row :gutter='20'>
+        <el-col :span='18' :md="18">
+          <el-tabs v-model="activeName">
+            <el-tab-pane label="就医指南" name="first">
+              <HospitalGuide />
+            </el-tab-pane>
+            <el-tab-pane label="学科荟萃" name="second">
+              <SubjectAssemble />
+            </el-tab-pane>
+            <el-tab-pane label="专家介绍" name="third">
+              <ExpertDesc />
+            </el-tab-pane>
+          </el-tabs>
+        </el-col>
+        <el-col :span='6' :md="6">
+          <div class="right">
+            <div class="title">南华大学附属第一医院欢迎您~</div>
+            <dropdown-menu class="document-btn" :items="articleList" title="医院概况" />
+          </div>
+        </el-col>
+      </el-row>
     </div>
   </div>
 </template>
@@ -54,6 +60,16 @@ export default {
   /deep/.el-tabs{
     width: 810px;
   }
+  #pane-second {
+    display: flex;
+    justify-content: center;
+  }
+  #pane-third {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 520px;
+  }
 </style>
 <style lang="scss" scoped>
   .main{
@@ -63,19 +79,12 @@ export default {
       display: flex;
       justify-content: center;
       position: relative;
-      left: -200px;
       .right {
         .title{
-          position: absolute;
-          top: 5px;
-          right: -100px;
-          margin-left: 15px;
+          margin-left: 35px;
           font-size: 16px;
         }
         .document-btn {
-          position: absolute;
-          right: -130px;
-          top: 25px;
           flex-shrink: 0;
           display: block;
           cursor: pointer;

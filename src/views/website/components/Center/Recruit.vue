@@ -1,15 +1,17 @@
 <template>
   <!--人事招聘-->
   <div>
-    <div>
-      <showNewsCard
-      @getNewsById='getNewsById'
-      :category='category'
-      :newsList='itemsList'
-      :getAllNews='getAllNews'
-      :listQuery="listQuery"
-      :total='total'/>
-    </div>
+    <el-row>
+      <el-col :span='24' :md='24'>
+        <showNewsCard
+        @getNewsById='getNewsById'
+        :category='category'
+        :newsList='itemsList'
+        :getAllNews='getAllNews'
+        :listQuery="listQuery"
+        :total='total'/>
+      </el-col>
+    </el-row>
   </div>
 </template>
 

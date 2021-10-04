@@ -14,8 +14,14 @@ export const JOBSEEKER_RESUME_UPLOAD = 'http://localhost:3000/position/uploadFil
 export const SWIPER_IMAGES_UPLOAD = 'http://localhost:3000/recruit/uploadSwiper'
     // 视频上传
 export const VIDEO_UPLOAD = 'http://localhost:3000/website/uploadVideo'
-
+    // 视频封面上传
 export const VIDEO_COVER_UPLOAD = 'http://localhost:3000/website/uploadCover'
+
+// 医生照片上传
+export const DOCTOR_AVATAR_UPLOAD = 'http://localhost:3000/websitemanager/uploadAvatar'
+
+// 常用网站图片
+export const USUALLY_WEBSITE_IMG = 'http://localhost:3000/websitemanager/uploadImg'
 
 // 头像和文件下载
 // 管理员头像下载

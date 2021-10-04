@@ -13,7 +13,7 @@
                 <span>邮编：421001</span>
             </div>
             <div class="line3">
-                <span>技术支持:火星科技</span>
+                <span>技术支持：火星科技(电话： 18980808200)</span>
                 <span>©Copyright</span>
                 <span @click="openDialog">意见反馈</span>
             </div>

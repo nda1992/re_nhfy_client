@@ -1,7 +1,7 @@
 <template>
     <!--视频中心-->
     <div class="main">
-        <el-card class="box-card">
+        <el-card class="box-card" shadow="hover">
             <div slot="header" class="clearfix">
                 <span>{{ category }}</span>
             </div>

@@ -1,14 +1,18 @@
 <template>
   <div class="swiper-main">
-    <div class="post">
-      <div class="user-images">
-        <el-carousel :interval="6000" type="card" height="320px">
-          <el-carousel-item v-for="item in carouselImages" :key="item">
-            <img :src="item" class="image">
-          </el-carousel-item>
-        </el-carousel>
-      </div>
-    </div>
+    <el-row>
+      <el-col :span="24" :md="24">
+        <div class="post">
+          <div class="user-images">
+            <el-carousel :interval="6000" type="card" height="320px">
+              <el-carousel-item v-for="item in carouselImages" :key="item">
+                <img :src="item" class="image">
+              </el-carousel-item>
+            </el-carousel>
+          </div>
+        </div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 

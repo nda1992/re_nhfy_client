@@ -49,3 +49,30 @@ export function getVideoListByStatus() {
         method: 'get'
     })
 }
+
+// 获取学科荟萃信息
+export function getSubjectAssembleList(data) {
+    return request({
+        url: '/website/getSubjectAssembleList',
+        method: 'get',
+        params: data
+    })
+}
+
+// 获取所有的医生（grade=专家）的列表
+export function getAllExpertList(data) {
+    return request({
+        url: '/website/getAllExpertList',
+        method: 'get',
+        params: data
+    })
+}
+
+// 根据id获取医生详细信息
+export function getDoctorDetailById(data) {
+    return request({
+        url: '/website/getDoctorDetailById',
+        method: 'get',
+        params: data
+    })
+}
