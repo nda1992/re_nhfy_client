@@ -1,22 +1,24 @@
 <template>
-    <!--常用网站-->
-    <div class="main">
-      <div>
-        <websiteList
-        :category='category'
-        :items='showlessList'
-        :total='total'
-        @openDialog='openDialog' />
-      </div>
-      <el-dialog :visible.sync="dialog" title="全部常用网站列表">
-        <websiteList
-        :category='category'
-        :items='pageList'
-        :total='total'
-        :showmore='showmore'
-        @getAllUsuallyWebsite='getAllUsuallyWebsite'/>
-      </el-dialog>
+  <!--常用网站-->
+  <div class="main">
+    <div>
+      <websiteList
+        :category="category"
+        :items="showlessList"
+        :total="total"
+        @openDialog="openDialog"
+      />
     </div>
+    <el-dialog :visible.sync="dialog" title="全部常用网站列表">
+      <websiteList
+        :category="category"
+        :items="pageList"
+        :total="total"
+        :showmore="showmore"
+        @getAllUsuallyWebsite="getAllUsuallyWebsite"
+      />
+    </el-dialog>
+  </div>
 </template>
 
 <script>
@@ -51,7 +53,7 @@ export default {
         // dialog中显示分页数据
         this.pageList = lessItems
         // 只显示4条,超出4条，显示在"更多"
-        this.showlessList = allItems.slice(0,4)
+        this.showlessList = allItems.slice(0, 4)
         this.total = total
       })
     },
@@ -79,10 +81,10 @@ export default {
         display: flex;
         align-items: center;
         img {
-        margin-right: 10px;
-        width: 45px;
-        height: 45px;
-        border-radius: 5px;
+          margin-right: 10px;
+          width: 45px;
+          height: 45px;
+          border-radius: 5px;
         }
       }
     }

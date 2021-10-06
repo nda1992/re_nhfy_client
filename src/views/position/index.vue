@@ -23,13 +23,34 @@
     </div>
     <!--底部-->
     <Footer />
-    <el-dialog title="用户登录" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="loginRules" :model="Logintemp" label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
+    <el-dialog
+      title="用户登录"
+      :visible.sync="dialogFormVisible"
+      custom-class="loginDialog"
+    >
+      <el-form
+        ref="dataForm"
+        :rules="loginRules"
+        :model="Logintemp"
+        label-position="left"
+        label-width="100px"
+        class="login"
+      >
         <el-form-item label="账号" prop="account">
-          <el-input v-model="Logintemp.account" placeholder="请使用手机号或邮箱登录" clearable />
+          <el-input
+            v-model="Logintemp.account"
+            placeholder="请使用手机号或邮箱登录"
+            clearable
+          />
         </el-form-item>
         <el-form-item label="密码" prop="password">
-          <el-input v-model="Logintemp.password" placeholder="请输入密码" name="password" type="password" clearable />
+          <el-input
+            v-model="Logintemp.password"
+            placeholder="请输入密码"
+            name="password"
+            type="password"
+            clearable
+          />
         </el-form-item>
       </el-form>
       <div class="passwd" @click="HandleupdatePasswd">忘记密码?</div>
@@ -38,22 +59,79 @@
         <el-button type="primary" @click="Login">确定</el-button>
       </div>
     </el-dialog>
-    <el-dialog title="用户注册" :visible.sync="dialogRegisterFormVisible">
-      <el-form ref="RegisterdataForm" :rules="registerRules" :model="registerTemp" label-position="left" label-width="120px" style="width: 500px; margin-left:50px;">
+    <el-dialog
+      title="用户注册"
+      :visible.sync="dialogRegisterFormVisible"
+      custom-class="registerDialog"
+    >
+      <el-form
+        ref="RegisterdataForm"
+        :rules="registerRules"
+        :model="registerTemp"
+        label-position="left"
+        label-width="120px"
+        class="register"
+        style="width:400px;margin:0 auto;"
+      >
         <el-form-item prop="username" label="真实姓名">
-          <el-input ref="username" v-model="registerTemp.username" placeholder="真实姓名" name="username" type="text" tabindex="1" auto-complete="on" clearable />
+          <el-input
+            ref="username"
+            v-model="registerTemp.username"
+            placeholder="真实姓名"
+            name="username"
+            type="text"
+            tabindex="1"
+            auto-complete="on"
+            clearable
+          />
         </el-form-item>
         <el-form-item prop="password" label="密码">
-          <el-input ref="password" v-model="registerTemp.password" placeholder="密码" name="password" type="password" tabindex="1" auto-complete="on" clearable />
+          <el-input
+            ref="password"
+            v-model="registerTemp.password"
+            placeholder="密码"
+            name="password"
+            type="password"
+            tabindex="1"
+            auto-complete="on"
+            clearable
+          />
         </el-form-item>
         <el-form-item prop="checkPassword" label="再次输入密码">
-          <el-input ref="checkPassword" v-model="registerTemp.checkPassword" placeholder="再次输入密码" name="checkPassword" type="password" tabindex="1" auto-complete="on" clearable />
+          <el-input
+            ref="checkPassword"
+            v-model="registerTemp.checkPassword"
+            placeholder="再次输入密码"
+            name="checkPassword"
+            type="password"
+            tabindex="1"
+            auto-complete="on"
+            clearable
+          />
         </el-form-item>
         <el-form-item prop="phone" label="手机号">
-          <el-input ref="phone" v-model="registerTemp.phone" placeholder="手机号" name="phone" type="text" tabindex="1" auto-complete="on" clearable />
+          <el-input
+            ref="phone"
+            v-model="registerTemp.phone"
+            placeholder="手机号"
+            name="phone"
+            type="text"
+            tabindex="1"
+            auto-complete="on"
+            clearable
+          />
         </el-form-item>
         <el-form-item prop="email" label="邮箱">
-          <el-input ref="email" v-model="registerTemp.email" placeholder="邮箱" name="email" type="text" tabindex="1" auto-complete="on" clearable />
+          <el-input
+            ref="email"
+            v-model="registerTemp.email"
+            placeholder="邮箱"
+            name="email"
+            type="text"
+            tabindex="1"
+            auto-complete="on"
+            clearable
+          />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -61,16 +139,54 @@
         <el-button type="primary" @click="Register">确定</el-button>
       </div>
     </el-dialog>
-    <el-dialog title="密码找回" :visible.sync="PasswdVisible">
-      <el-form ref="PasswdForm" :rules="PasswdRules" :model="PasswdForm" label-position="left" label-width="120px" style="width: 500px; margin-left:50px;">
+    <el-dialog
+      title="密码找回"
+      :visible.sync="PasswdVisible"
+      custom-class="passwdDialog"
+    >
+      <el-form
+        ref="PasswdForm"
+        :rules="PasswdRules"
+        :model="PasswdForm"
+        label-position="left"
+        label-width="120px"
+        class="passwd"
+      >
         <el-form-item prop="phone" label="手机号">
-          <el-input ref="phone" v-model="PasswdForm.phone" placeholder="按手机号找回" name="phone" type="text" tabindex="1" auto-complete="on" clearable />
+          <el-input
+            ref="phone"
+            v-model="PasswdForm.phone"
+            placeholder="按手机号找回"
+            name="phone"
+            type="text"
+            tabindex="1"
+            auto-complete="on"
+            clearable
+          />
         </el-form-item>
         <el-form-item prop="password" label="新密码">
-          <el-input ref="password" v-model="PasswdForm.password" placeholder="密码" name="password" type="password" tabindex="1" auto-complete="on" clearable />
+          <el-input
+            ref="password"
+            v-model="PasswdForm.password"
+            placeholder="密码"
+            name="password"
+            type="password"
+            tabindex="1"
+            auto-complete="on"
+            clearable
+          />
         </el-form-item>
         <el-form-item prop="checkPassword" label="再次确认新密码">
-          <el-input ref="checkPassword" v-model="PasswdForm.checkPassword" placeholder="再次输入密码" name="checkPassword" type="password" tabindex="1" auto-complete="on" clearable />
+          <el-input
+            ref="checkPassword"
+            v-model="PasswdForm.checkPassword"
+            placeholder="再次输入密码"
+            name="checkPassword"
+            type="password"
+            tabindex="1"
+            auto-complete="on"
+            clearable
+          />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -165,7 +281,10 @@ export default {
         password: ''
       },
       loginRules: {
-        account: [{ required: true, message: '请输入邮箱', trigger: 'blur' }, { validator: checkEmail, trigger: 'blur' }],
+        account: [
+          { required: true, message: '请输入邮箱', trigger: 'blur' },
+          { validator: checkEmail, trigger: 'blur' }
+        ],
         password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
       },
       registerTemp: {
@@ -176,19 +295,47 @@ export default {
         email: ''
       },
       registerRules: {
-        username: [{ required: true, message: '请输入真实姓名', trigger: 'blur' }, { min: 2, max: 4, message: '名字长度在2到4个字符', trigger: 'blur' }],
-        password: [{ validator: validatePass, trigger: 'blur' }, { min: 5, max: 10, message: '长度在5到10个字符', trigger: 'blur' }, { required: true, message: '请输入密码', trigger: 'blur' }],
-        checkPassword: [{ required: true, message: '请再次输入密码', trigger: 'blur' }, { validator: validatePass2, trigger: 'blur' }, { min: 5, max: 10, message: '长度在5到10个字符', trigger: 'blur' }],
-        phone: [{ required: true, message: '请输入手机号', trigger: 'blur' }, { min: 11, max: 11, message: '手机号长度为11位', trigger: 'blur' }],
-        email: [{ required: true, message: '请输入邮箱', trigger: 'blur' }, { validator: checkEmail, trigger: 'blur' }]
+        username: [
+          { required: true, message: '请输入真实姓名', trigger: 'blur' },
+          { min: 2, max: 4, message: '名字长度在2到4个字符', trigger: 'blur' }
+        ],
+        password: [
+          { validator: validatePass, trigger: 'blur' },
+          { min: 5, max: 10, message: '长度在5到10个字符', trigger: 'blur' },
+          { required: true, message: '请输入密码', trigger: 'blur' }
+        ],
+        checkPassword: [
+          { required: true, message: '请再次输入密码', trigger: 'blur' },
+          { validator: validatePass2, trigger: 'blur' },
+          { min: 5, max: 10, message: '长度在5到10个字符', trigger: 'blur' }
+        ],
+        phone: [
+          { required: true, message: '请输入手机号', trigger: 'blur' },
+          { min: 11, max: 11, message: '手机号长度为11位', trigger: 'blur' }
+        ],
+        email: [
+          { required: true, message: '请输入邮箱', trigger: 'blur' },
+          { validator: checkEmail, trigger: 'blur' }
+        ]
       },
       // 修改密码dialog
       PasswdVisible: false,
       PasswdForm: { phone: '', password: '', checkPassword: '' },
       PasswdRules: {
-        password: [{ validator: validatePass3, trigger: 'blur' }, { min: 5, max: 10, message: '长度在5到10个字符', trigger: 'blur' }, { required: true, message: '请输入密码', trigger: 'blur' }],
-        checkPassword: [{ required: true, message: '请再次输入密码', trigger: 'blur' }, { validator: validatePass4, trigger: 'blur' }, { min: 5, max: 10, message: '长度在5到10个字符', trigger: 'blur' }],
-        phone: [{ required: true, message: '请输入手机号', trigger: 'blur' }, { min: 11, max: 11, message: '手机号长度为11位', trigger: 'blur' }]
+        password: [
+          { validator: validatePass3, trigger: 'blur' },
+          { min: 5, max: 10, message: '长度在5到10个字符', trigger: 'blur' },
+          { required: true, message: '请输入密码', trigger: 'blur' }
+        ],
+        checkPassword: [
+          { required: true, message: '请再次输入密码', trigger: 'blur' },
+          { validator: validatePass4, trigger: 'blur' },
+          { min: 5, max: 10, message: '长度在5到10个字符', trigger: 'blur' }
+        ],
+        phone: [
+          { required: true, message: '请输入手机号', trigger: 'blur' },
+          { min: 11, max: 11, message: '手机号长度为11位', trigger: 'blur' }
+        ]
       },
       // 后端返回的用户信息
       userinfo: {},
@@ -232,13 +379,14 @@ export default {
     },
     // 用户注册
     Register() {
-      this.$refs['RegisterdataForm'].validate((valid) => {
+      this.$refs['RegisterdataForm'].validate(valid => {
         if (valid) {
           this.$confirm('是否注册?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
-            type: 'warning' }).then(() => {
-            positionRegister(this.registerTemp).then((res) => {
+            type: 'warning'
+          }).then(() => {
+            positionRegister(this.registerTemp).then(res => {
               const { msg } = res
               this.dialogRegisterFormVisible = false
               this.$notify({
@@ -267,7 +415,9 @@ export default {
     },
     getUsername() {
       if (this.isLogin) {
-        this.username = StorageClass.getSession('jobseekerUsername').jobseekerUsername
+        this.username = StorageClass.getSession(
+          'jobseekerUsername'
+        ).jobseekerUsername
       }
     },
     getJobseekerId() {
@@ -276,20 +426,22 @@ export default {
       }
     },
     Login() {
-      this.$refs['dataForm'].validate((valid) => {
+      this.$refs['dataForm'].validate(valid => {
         if (valid) {
-          this.$store.dispatch('position/positionLogin', this.Logintemp).then(res => {
-            const { msg } = res
-            this.dialogFormVisible = false
-            this.isLogin = !this.isLogin
-            this.$notify({
-              title: 'Success',
-              message: msg,
-              type: 'success',
-              duration: 2000
+          this.$store
+            .dispatch('position/positionLogin', this.Logintemp)
+            .then(res => {
+              const { msg } = res
+              this.dialogFormVisible = false
+              this.isLogin = !this.isLogin
+              this.$notify({
+                title: 'Success',
+                message: msg,
+                type: 'success',
+                duration: 2000
+              })
+              window.location.reload()
             })
-            window.location.reload()
-          })
         }
       })
     },
@@ -328,7 +480,9 @@ export default {
       if (this.jobseekerId === {}) {
         return
       }
-      const temp = Object.assign({}, this.listQuery, { receive_id: this.jobseekerId })
+      const temp = Object.assign({}, this.listQuery, {
+        receive_id: this.jobseekerId
+      })
       getReceiveMsg(temp).then(res => {
         const { no_read_num } = res
         this.msgNum = no_read_num
@@ -352,12 +506,13 @@ export default {
     },
     // 密码更新
     updatePasswd() {
-      this.$refs['PasswdForm'].validate((valid) => {
+      this.$refs['PasswdForm'].validate(valid => {
         if (valid) {
           this.$confirm('是否更新密码?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
-            type: 'warning' }).then(() => {
+            type: 'warning'
+          }).then(() => {
             updatePasswd(this.PasswdForm).then(res => {
               const { msg } = res
               this.$message.success(msg)
@@ -375,20 +530,31 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .app-container{
-    position: relative;
-    padding: 0;
-    min-height: 100%;
-    margin: 0;
-    .el-dialog{
-      .passwd{
-        width: 420px;
-        margin: 0 auto;
-        &:hover{
-          cursor: pointer;
-          color: #409EFF;
-        }
+.app-container {
+  position: relative;
+  padding: 0;
+  min-height: 100%;
+  margin: 0;
+  .el-dialog {
+    .passwd {
+      float: left;
+      &:hover {
+        cursor: pointer;
+        color: #409eff;
       }
     }
   }
+}
+.registerDialog,
+.loginDialog,
+.passwdDialog {
+  width: 350px;
+  height: 330px;
+  .login,
+  .rigister,
+  .passwd {
+    width: 100%;
+    height: 100%;
+  }
+}
 </style>

@@ -2,14 +2,14 @@
   <div class="app-container">
     <div><el-backtop :bottom="100" /></div>
     <div class="header">
-      <Header :MenuList="MenuList"/>
+      <Header :MenuList="MenuList" />
     </div>
     <div>
       <transition name="fade-transform" mode="out-in">
         <router-view :key="key" />
       </transition>
     </div>
-    <div class='footer'>
+    <div class="footer">
       <Footer />
     </div>
   </div>
@@ -51,18 +51,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .app-container{
-    min-height: 100%;
+.app-container {
+  min-height: 100%;
+  width: 100%;
+  background: #fff;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  .footer {
+    background: #3b7960;
+    color: #fff;
     width: 100%;
-    background: #fff;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    .footer {
-      background: #3b7960;
-      color: #fff;
-      width: 100%;
-      margin-top: auto;
-    }
+    margin-top: auto;
   }
+}
 </style>

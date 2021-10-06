@@ -17,44 +17,82 @@
         highlight-current-row
         style="width: 100%"
       >
-      <el-table-column
+        <el-table-column
           label="序号"
           align="center"
           prop="xh"
           width="50"
         ></el-table-column>
-        <el-table-column label="发布者工号" prop="userCode" align="center" min-width="7px">
+        <el-table-column
+          label="发布者工号"
+          prop="userCode"
+          align="center"
+          min-width="7px"
+        >
           <template slot-scope="{ row }">
             <span>{{ row.userCode }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="所属科室" prop="deptName" align="center" min-width="7px">
+        <el-table-column
+          label="所属科室"
+          prop="deptName"
+          align="center"
+          min-width="7px"
+        >
           <template slot-scope="{ row }">
             <span>{{ row.deptName }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="标题" prop="title" align="center" min-width="12px">
+        <el-table-column
+          label="标题"
+          prop="title"
+          align="center"
+          min-width="12px"
+        >
           <template slot-scope="{ row }">
-            <span class="link-type" @click="handleUpdate(row)">{{ row.title }}</span>
+            <span class="link-type" @click="handleUpdate(row)">{{
+              row.title
+            }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="网站链接" prop="url" align="center" min-width="12px" show-overflow-tooltip>
+        <el-table-column
+          label="网站链接"
+          prop="url"
+          align="center"
+          min-width="12px"
+          show-overflow-tooltip
+        >
           <template slot-scope="{ row }">
             <a :href="row.url" target="_blank">{{ row.url }}</a>
           </template>
         </el-table-column>
-        <el-table-column label="图片" prop="img" align="center" min-width="10px">
+        <el-table-column
+          label="图片"
+          prop="img"
+          align="center"
+          min-width="10px"
+        >
           <template slot-scope="{ row }">
-            <img :src="row.img" style="width:50px;height:50px;"/>
+            <img :src="row.img" style="width:50px;height:50px;" />
           </template>
         </el-table-column>
-        <el-table-column label="创建时间" prop="createTime" align="center" min-width="12px">
+        <el-table-column
+          label="创建时间"
+          prop="createTime"
+          align="center"
+          min-width="12px"
+        >
           <template slot-scope="{ row }">
             <i class="el-icon-time" style="margin-right:3px"></i>
             <span>{{ row.createTime }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="当前状态" prop="status" align="center" min-width="7px">
+        <el-table-column
+          label="当前状态"
+          prop="status"
+          align="center"
+          min-width="7px"
+        >
           <template slot-scope="{ row }">
             <el-tag :type="row.status | HandlestatusFilter">
               <span>{{ row.status }}</span>
@@ -113,7 +151,11 @@
         label-width="100px"
         style="width: 400px; margin-left: 50px"
       >
-        <el-form-item label="所属科室" class="postInfo-container-item" prop="deptName">
+        <el-form-item
+          label="所属科室"
+          class="postInfo-container-item"
+          prop="deptName"
+        >
           <el-select
             v-model="temp.deptName"
             :loading="select_loading"
@@ -163,11 +205,17 @@
   </div>
 </template>
 <script>
-import Pagination from "@/components/Pagination"
-import { searchDept } from "@/api/news/news"
-import { StorageClass } from '@/utils/session'
-import { getAllUsuallyWebsite, addUsuallyWebsite, updateUsuallyWebsite, deleteUsualleWebsiteById, recoverUsualleWebsiteById } from "@/api/websitemanager/manager"
-import { USUALLY_WEBSITE_IMG } from '@/utils/urlConfig'
+import Pagination from "@/components/Pagination";
+import { searchDept } from "@/api/news/news";
+import { StorageClass } from "@/utils/session";
+import {
+  getAllUsuallyWebsite,
+  addUsuallyWebsite,
+  updateUsuallyWebsite,
+  deleteUsualleWebsiteById,
+  recoverUsualleWebsiteById
+} from "@/api/websitemanager/manager";
+import { USUALLY_WEBSITE_IMG_UPLOAD } from "@/utils/urlConfig";
 export default {
   components: {
     Pagination
@@ -176,7 +224,7 @@ export default {
     HandlestatusFilter(status) {
       const statusMap = {
         正常: "success",
-        已删除: "danger",
+        已删除: "danger"
       };
       return statusMap[status];
     }
@@ -186,37 +234,39 @@ export default {
       total: 0,
       listQuery: {
         limit: 10,
-        page: 1,
+        page: 1
       },
       list: null,
       temp: {
         userCode: StorageClass.getSession("userCode").userCode,
-        deptName: '',
-        title: '',
-        url: '',
-        img: ''
+        deptName: "",
+        title: "",
+        url: "",
+        img: ""
       },
       rules: {
-        deptName:[{ required: true, message: '请输入科室名称', trigger: 'blur' }],
-        title: [{ required: true, message: '请输入标题', trigger: 'blur' }],
-        url: [{ required: true, message: '请输入网站链接', trigger: 'blur' }],
-        img: [{ required: true, message: '请上传图片', trigger: 'blur' }]
+        deptName: [
+          { required: true, message: "请输入科室名称", trigger: "blur" }
+        ],
+        title: [{ required: true, message: "请输入标题", trigger: "blur" }],
+        url: [{ required: true, message: "请输入网站链接", trigger: "blur" }],
+        img: [{ required: true, message: "请上传图片", trigger: "blur" }]
       },
       // dialog
       dialogStatus: "",
       textMap: {
         update: "更新医生信息",
-        create: "添加医生信息",
+        create: "添加医生信息"
       },
       select_loading: false,
       deptNameListOptions: [],
       dialogFormVisible: false,
-      upload_url: USUALLY_WEBSITE_IMG,
-      imageUrl: "",
+      upload_url: USUALLY_WEBSITE_IMG_UPLOAD,
+      imageUrl: ""
     };
   },
   mounted() {
-    this.getAllUsuallyWebsite()
+    this.getAllUsuallyWebsite();
   },
   methods: {
     rowClassName({ row, rowIndex }) {
@@ -225,20 +275,20 @@ export default {
     // 查询全部常用网站
     getAllUsuallyWebsite() {
       const temp = Object.assign({}, this.listQuery, { website: "manager" });
-      getAllUsuallyWebsite(temp).then((res) => {
+      getAllUsuallyWebsite(temp).then(res => {
         const { items, total } = res;
-        this.total = total
-        this.list = items
+        this.total = total;
+        this.list = items;
       });
     },
     resetTemp() {
       this.temp = {
-        userCode: StorageClass.getSession('userCode').userCode,
-        deptName: '',
-        title: '',
-        url: '',
-        img: ''
-      }
+        userCode: StorageClass.getSession("userCode").userCode,
+        deptName: "",
+        title: "",
+        url: "",
+        img: ""
+      };
     },
 
     handleCreate() {
@@ -253,29 +303,29 @@ export default {
 
     // 添加常用网站
     createData() {
-      this.$refs["dataForm"].validate((valid) => {
+      this.$refs["dataForm"].validate(valid => {
         if (valid) {
           this.$confirm("是否添加?", "提示", {
             confirmButtonText: "确定",
             cancelButtonText: "取消",
-            type: "warning",
+            type: "warning"
           }).then(() => {
-            addUsuallyWebsite(this.temp).then((res) => {
-              const { msg } = res
-              this.getAllUsuallyWebsite()
-              this.dialogFormVisible = false
+            addUsuallyWebsite(this.temp).then(res => {
+              const { msg } = res;
+              this.getAllUsuallyWebsite();
+              this.dialogFormVisible = false;
               this.$notify({
                 title: "Success",
                 message: msg,
                 type: "success",
-                duration: 2000,
+                duration: 2000
               });
             });
           });
         }
       });
     },
-    
+
     handleUpdate(row) {
       this.imageUrl = row.img;
       this.temp = Object.assign({}, row);
@@ -287,15 +337,15 @@ export default {
     },
 
     updateData() {
-      this.$refs["dataForm"].validate((valid) => {
+      this.$refs["dataForm"].validate(valid => {
         if (valid) {
           this.$confirm("是否更新?", "提示", {
             confirmButtonText: "确定",
             cancelButtonText: "取消",
-            type: "warning",
+            type: "warning"
           }).then(() => {
             const tempData = Object.assign({}, this.temp);
-            updateUsuallyWebsite(tempData).then((res) => {
+            updateUsuallyWebsite(tempData).then(res => {
               const { msg } = res;
               this.getAllUsuallyWebsite();
               this.dialogFormVisible = false;
@@ -303,7 +353,7 @@ export default {
                 title: "Success",
                 message: msg,
                 type: "success",
-                duration: 2000,
+                duration: 2000
               });
             });
           });
@@ -315,16 +365,16 @@ export default {
       this.$confirm("是否删除?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning",
+        type: "warning"
       }).then(() => {
         const temp = { id: row.id };
         deleteUsualleWebsiteById(temp).then(() => {
-          this.getAllUsuallyWebsite()
+          this.getAllUsuallyWebsite();
           this.$notify({
             title: "Success",
             message: "删除成功",
             type: "success",
-            duration: 2000,
+            duration: 2000
           });
         });
       });
@@ -334,16 +384,16 @@ export default {
       this.$confirm("是否恢复医生信息?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning",
+        type: "warning"
       }).then(() => {
         const temp = { id: row.id };
         recoverUsualleWebsiteById(temp).then(() => {
-          this.getAllUsuallyWebsite()
+          this.getAllUsuallyWebsite();
           this.$notify({
             title: "Success",
             message: "恢复成功",
             type: "success",
-            duration: 2000,
+            duration: 2000
           });
         });
       });
@@ -360,14 +410,14 @@ export default {
     // 远程搜索部门
     getRemoteDeptList(query) {
       this.select_loading = true;
-      searchDept(query).then((response) => {
+      searchDept(query).then(response => {
         const { items } = response;
         if (!items) return;
-        this.deptNameListOptions = items.map((v) => v.name);
+        this.deptNameListOptions = items.map(v => v.name);
       });
       this.select_loading = false;
     }
-  },
+  }
 };
 </script>
 <style scoped>
@@ -396,7 +446,6 @@ export default {
   height: 100px;
   display: block;
 }
-
 </style>
 <style lang="scss" scoped>
 .main {

@@ -1,12 +1,18 @@
 <template>
-    <!--视频播放-->
-    <div>
-        <el-dialog :visible.sync="dialog" :title='video.title' @close='closeDialog'>
-            <div id='dialog-height'>
-              <video :src="video.url" id='video' controls="controls"></video>
-            </div>
-        </el-dialog>
-    </div>
+  <!--视频播放-->
+  <div>
+    <el-dialog
+      :visible.sync="dialog"
+      :title="video.title"
+      @close="closeDialog"
+      custom-class="videoDialog"
+      :append-to-body="true"
+    >
+      <div id="dialog-height">
+        <video :src="video.url" id="video" controls="controls"></video>
+      </div>
+    </el-dialog>
+  </div>
 </template>
 <script>
 export default {
@@ -45,12 +51,13 @@ export default {
 }
 </script>
 <style scoped>
-  #dialog-height {
-    width: 640px;
-    height: 360px;
-  }
-  #video {
-      height:100%;
-      width:100%;
-  }
+.videoDialog {
+  width: 640px;
+  height: 360px;
+}
+
+#video {
+  height: 100%;
+  width: 100%;
+}
 </style>

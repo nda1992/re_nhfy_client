@@ -1,12 +1,12 @@
 <template>
   <div class="header-main">
     <div class="header-img">
-      <img :src="img_url" alt="" @click="gohome">
+      <img :src="img_url" alt="" @click="gohome" />
       <div class="svg" @mouseover="mouseOver" @mouseleave="mouseLeave">
         <span class="title">微信公众号</span>
-        <svg-icon icon-class="nhfy-wechat" style="width: 30px;height: 30px"/>
+        <svg-icon icon-class="nhfy-wechat" style="width: 30px;height: 30px" />
         <div class="wechat-img" v-show="active">
-          <img :src="qrcode_url" style="width: 100px;height: 100px">
+          <img :src="qrcode_url" style="width: 100px;height: 100px" />
         </div>
       </div>
     </div>
@@ -18,11 +18,21 @@
         mode="horizontal"
         background-color="#3b7960"
         text-color="#fff"
-        active-text-color="#edd3a1">
+        active-text-color="#edd3a1"
+      >
         <el-menu-item index="/nhfy/home">首页</el-menu-item>
-        <el-submenu :index="item.parent.index" v-for="(item, index) in MenuList" :key="item.id">
+        <el-submenu
+          :index="item.parent.index"
+          v-for="(item, index) in MenuList"
+          :key="item.id"
+        >
           <template slot="title">{{ item.parent.name }}</template>
-          <el-menu-item :index="subitem.index" v-for="(subitem, subindex) in item.children" :key="subindex">{{ subitem.name }}</el-menu-item>
+          <el-menu-item
+            :index="subitem.index"
+            v-for="(subitem, subindex) in item.children"
+            :key="subindex"
+            >{{ subitem.name }}</el-menu-item
+          >
         </el-submenu>
       </el-menu>
     </div>
@@ -44,7 +54,13 @@ export default {
   data() {
     return {
       // 固定定位样式
-      scrollStyle: { position: '', top: '', zIndex: '', left: '', width: '100%' },
+      scrollStyle: {
+        position: '',
+        top: '',
+        zIndex: '',
+        left: '',
+        width: '100%'
+      },
       activeIndex1: '/nhfy/home',
       img_url: BACKGROUND_IMAGE_DOWNLOAD,
       qrcode_url: QRCODE_DOWNLOAD,
@@ -56,8 +72,11 @@ export default {
   },
   methods: {
     scroll() {
-      document.addEventListener('scroll', (event) => {
-        var scrollDistance = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+      document.addEventListener('scroll', event => {
+        var scrollDistance =
+          window.pageYOffset ||
+          document.documentElement.scrollTop ||
+          document.body.scrollTop
         if (scrollDistance > 50) {
           this.scrollStyle.position = 'fixed'
           this.scrollStyle.top = '0px'
@@ -87,48 +106,48 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .header-main{
-    background: #ffffff;
-    position: relative;
-    .header-img{
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      img{
-        width: 300px;
-        height: 50px;
-        &:hover{
-          cursor: pointer;
-        }
+.header-main {
+  background: #ffffff;
+  position: relative;
+  .header-img {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    img {
+      width: 300px;
+      height: 50px;
+      &:hover {
+        cursor: pointer;
       }
-      .svg{
-        &:hover{
-          cursor: pointer;
-        }
+    }
+    .svg {
+      &:hover {
+        cursor: pointer;
+      }
+      position: absolute;
+      right: 100px;
+      .title {
+        position: relative;
+        top: -8px;
+        margin-right: 10px;
+        font-size: 14px;
+      }
+      .wechat-img {
+        width: 125px;
+        height: 125px;
+        border: 1px solid #99a9bf;
+        background: #ffffff;
+        border-radius: 5px;
+        padding: 10px;
         position: absolute;
-        right: 100px;
-        .title{
-          position: relative;
-          top: -8px;
-          margin-right: 10px;
-          font-size: 14px;
-        }
-        .wechat-img{
-          width: 125px;
-          height: 125px;
-          border: 1px solid #99a9bf;
-          background: #ffffff;
-          border-radius: 5px;
-          padding: 10px;
-          position: absolute;
-          z-index: 10;
-          top: 35px;
-          right: -10px;
-          img{
-            margin: 0 auto;
-          }
+        z-index: 10;
+        top: 35px;
+        right: -10px;
+        img {
+          margin: 0 auto;
         }
       }
     }
   }
+}
 </style>

@@ -3,12 +3,13 @@
   <div>
     <div>
       <showNewsCard
-      @getNewsById='getNewsById'
-      :category='category'
-      :newsList='itemsList'
-      :getAllNews='getAllNews'
-      :listQuery="listQuery"
-      :total='total' />
+        @getNewsById="getNewsById"
+        :category="category"
+        :newsList="itemsList"
+        :getAllNews="getAllNews"
+        :listQuery="listQuery"
+        :total="total"
+      />
     </div>
   </div>
 </template>
@@ -17,9 +18,9 @@
 import showNewsCard from '../Center/showNewsCard'
 import { getAllNewsByCategory } from '@/api/website/getnews'
 export default {
-    components: {
-        showNewsCard
-    },
+  components: {
+    showNewsCard
+  },
   data() {
     return {
       listQuery: {
@@ -31,13 +32,15 @@ export default {
       category: '媒体聚焦'
     }
   },
-  mounted(){
+  mounted() {
     this.getAllNews()
   },
-  methods:{
+  methods: {
     // 获取‘院务公开’下的所有新闻
-    getAllNews(){
-      const temp = Object.assign({}, this.listQuery, { category: this.category })
+    getAllNews() {
+      const temp = Object.assign({}, this.listQuery, {
+        category: this.category
+      })
       getAllNewsByCategory(temp).then(res => {
         const { items, total } = res
         this.total = total

@@ -6,7 +6,7 @@
           <div class="user-images">
             <el-carousel :interval="6000" type="card" height="320px">
               <el-carousel-item v-for="item in carouselImages" :key="item">
-                <img :src="item" class="image">
+                <img :src="item" class="image" />
               </el-carousel-item>
             </el-carousel>
           </div>
@@ -22,7 +22,7 @@ export default {
   name: 'Swiper',
   data() {
     return {
-      carouselImages: [],
+      carouselImages: []
     }
   },
   mounted() {
@@ -35,20 +35,20 @@ export default {
         const { swipers } = res
         this.carouselImages = swipers.map(e => e.url)
       })
-    },
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
- .swiper-main{
-   .post {
-     font-size: 14px;
-     color: #666;
-     .image {
-       width: 100%;
-       height: 100%;
-     }
-   }
- }
+.swiper-main {
+  .post {
+    font-size: 14px;
+    color: #666;
+    .image {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
 </style>

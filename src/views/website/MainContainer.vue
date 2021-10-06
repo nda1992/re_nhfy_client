@@ -26,14 +26,14 @@ export default {
 </script>
 
 <style scoped>
-  /deep/.el-tabs__item {
-    font-size: 18px !important;
-  }
+/deep/.el-tabs__item {
+  font-size: 18px !important;
+}
 </style>
 
-<style lang='scss' scoped>
-  .Main-container {
-    position: relative;
-    margin-bottom: 50px;
-  }
+<style lang="scss" scoped>
+.Main-container {
+  position: relative;
+  margin-bottom: 50px;
+}
 </style>

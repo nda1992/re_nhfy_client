@@ -37,7 +37,7 @@ export const constantRoutes = [{
         // 用户注册页面
         path: '/register',
         component: () =>
-            import ('@/views/register/index'),
+        import ('@/views/register/index'),
         hidden: true
     },
     {
@@ -45,26 +45,26 @@ export const constantRoutes = [{
         path: '/login',
         // redirect:'/login',
         component: () =>
-            import ('@/views/login/index'),
+        import ('@/views/login/index'),
         hidden: true
     },
     {
         // 密码找回
         path: '/passwd',
         component: () =>
-            import ('@/views/password/index'),
+        import ('@/views/password/index'),
         hidden: true
     },
     {
         path: '/401',
         component: () =>
-            import ('@/views/error-page/401'),
+        import ('@/views/error-page/401'),
         hidden: true
     },
     {
         path: '/404',
         component: () =>
-            import ('@/views/error-page/404'),
+        import ('@/views/error-page/404'),
         hidden: true
     },
     // 医院官网相关页面
@@ -78,7 +78,7 @@ export const constantRoutes = [{
                 path: 'home',
                 name: 'Home',
                 component: () =>
-                    import ('@/views/website/MainContainer'),
+                import ('@/views/website/MainContainer'),
                 hidden: true
             },
             // 查看新闻页面
@@ -86,7 +86,7 @@ export const constantRoutes = [{
                 path: 'getnews/:id(\\d+)',
                 name: 'getNews',
                 component: () =>
-                    import ('@/views/website/getNewsById'),
+                import ('@/views/website/getNewsById'),
                 hidden: true
             },
             // 匹配content组件中的所有路径
@@ -94,7 +94,7 @@ export const constantRoutes = [{
                 path: 'content/*',
                 name: 'Content',
                 component: () =>
-                    import ('@/views/website/ContentTarget'),
+                import ('@/views/website/ContentTarget'),
                 hidden: true
             }
         ]
@@ -108,21 +108,21 @@ export const constantRoutes = [{
                 path: 'list',
                 name: 'List',
                 component: () =>
-                    import ('@/views/position/positionList'),
+                import ('@/views/position/positionList'),
                 hidden: true
             },
             {
                 path: 'positionNoticeList',
                 name: 'PositionNoticeList',
                 component: () =>
-                    import ('@/views/position/positionNoticeList'),
+                import ('@/views/position/positionNoticeList'),
                 hidden: true
             },
             {
                 path: 'positionUserinfo',
                 name: 'PositionUserinfor',
                 component: () =>
-                    import ('@/views/position/positionUserinfo'),
+                import ('@/views/position/positionUserinfo'),
                 hidden: true
             }
         ]

@@ -1,30 +1,30 @@
 <template>
-    <!--显示所有医生的列表-->
-    <div class='main'>
-      <div class='card'>
-        <showDoctorCard
-        v-for='item in doctorList'
-        :key='item.id'
-        :id='item.id'
-        :avatar='item.avatar'
-        :username='item.username'
-        :deptName='item.deptName'
-        :jobTitle='item.jobTitle'
-        @openDialog='openDialog'
-        @closeDialog='closeDialog' />
-      </div>
+  <!--显示所有医生的列表-->
+  <div class="main">
+    <div class="card">
+      <showDoctorCard
+        v-for="item in doctorList"
+        :key="item.id"
+        :id="item.id"
+        :avatar="item.avatar"
+        :username="item.username"
+        :deptName="item.deptName"
+        :jobTitle="item.jobTitle"
+        @openDialog="openDialog"
+      />
+    </div>
 
-      <div class='page'>
-        <pagination
-        :pageSizes='[12]'
+    <div class="page">
+      <pagination
+        :pageSizes="[12]"
         v-show="total > 0"
         :total="total"
         :page.sync="listQuery.page"
         :limit.sync="listQuery.limit"
-        @pagination="getAllExpertList" />
-      </div>
-
+        @pagination="getAllExpertList"
+      />
     </div>
+  </div>
 </template>
 <script>
 import showDoctorCard from './showDoctorCard'
@@ -58,7 +58,7 @@ export default {
       }
     }
   },
-  
+
   methods: {
     getAllExpertList() {
       this.$emit('getAllExpertList')
@@ -73,17 +73,17 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-  .main {
-    .card {
-      height: 450px;
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-    }
-    .page {
-      .pagination-container {
-        padding: 0;
-      }
+.main {
+  .card {
+    height: 450px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  .page {
+    .pagination-container {
+      padding: 0;
     }
   }
+}
 </style>

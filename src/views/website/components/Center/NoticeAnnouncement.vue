@@ -2,14 +2,15 @@
   <!--通知公告-->
   <div>
     <el-row>
-      <el-col :span='24' :md='24'>
+      <el-col :span="24" :md="24">
         <showNewsCard
-        @getNewsById='getNewsById'
-        :category='category'
-        :newsList='itemsList'
-        :getAllNews='getAllNews'
-        :listQuery="listQuery"
-        :total='total'/>
+          @getNewsById="getNewsById"
+          @getAllNews="getAllNews"
+          :category="category"
+          :newsList="itemsList"
+          :listQuery="listQuery"
+          :total="total"
+        />
       </el-col>
     </el-row>
   </div>
@@ -34,13 +35,15 @@ export default {
       category: '通知公告'
     }
   },
-  mounted(){
+  mounted() {
     this.getAllNews()
   },
-  methods:{
+  methods: {
     // 获取‘通知公告’下的所有新闻
-    getAllNews(){
-      const temp = Object.assign({}, this.listQuery, { category: this.category })
+    getAllNews() {
+      const temp = Object.assign({}, this.listQuery, {
+        category: this.category
+      })
       getAllNewsByCategory(temp).then(res => {
         const { items, total } = res
         this.total = total

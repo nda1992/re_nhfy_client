@@ -43,10 +43,11 @@ export function SetVideoStatus(data) {
 }
 
 // 获取status=1的视频
-export function getVideoListByStatus() {
+export function getVideoListByStatus(data) {
     return request({
         url: '/website/getVideoListByStatus',
-        method: 'get'
+        method: 'get',
+        params: data
     })
 }
 

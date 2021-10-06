@@ -9,61 +9,71 @@
           <NewsCategory @createData="createData" />
         </el-tab-pane>
         <el-tab-pane label="官网菜单管理" name="second">
-          <Menu @submit="submit"/>
+          <Menu @submit="submit" />
         </el-tab-pane>
         <el-tab-pane label="招聘网站轮播图" name="third">
           <div class="swiper-header">
-            <div style="color: #ff4949;font-size: 12px;margin-bottom: 10px;">(切换状态选择要播放的轮播图，招聘网站和官网都是最多5张)</div>
+            <div style="color: #ff4949;font-size: 12px;margin-bottom: 10px;">
+              (切换状态选择要播放的轮播图，招聘网站和官网都是最多5张)
+            </div>
           </div>
           <ImgList
-            :imgList='imgList'
-            :srcList='srcList'
-            :num='num'
-            :websiteNum='websiteNum'
-            @handleDelete='handleDelete'
-            @handleSetStatus='handleSetStatus'
-            @handleSetWebsiteStatus='handleSetWebsiteStatus'
+            :imgList="imgList"
+            :srcList="srcList"
+            :num="num"
+            :websiteNum="websiteNum"
+            @handleDelete="handleDelete"
+            @handleSetStatus="handleSetStatus"
+            @handleSetWebsiteStatus="handleSetWebsiteStatus"
           />
           <pagination
-          v-show="total>0"
-          :total="total"
-          :page.sync="listQuery.page"
-          :limit.sync="listQuery.limit"
-          @pagination="getAllSwiperImgs" />
+            v-show="total > 0"
+            :total="total"
+            :page.sync="listQuery.page"
+            :limit.sync="listQuery.limit"
+            @pagination="getAllSwiperImgs"
+          />
           <el-divider />
           <UploadImg
-          :user-code="userCode"
-          @getAllSwiperImgs="getAllSwiperImgs" />
+            :user-code="userCode"
+            @getAllSwiperImgs="getAllSwiperImgs"
+          />
         </el-tab-pane>
 
         <el-tab-pane label="官网视频" name="fourth">
           <div class="video-header">
-            <div style="color: #ff4949;font-size: 12px;margin-bottom: 10px;">(切换状态选择在官网中要展示的视频，最多4个)</div>
+            <div style="color: #ff4949;font-size: 12px;margin-bottom: 10px;">
+              (切换状态选择在官网中要展示的视频，最多4个)
+            </div>
           </div>
           <VideoList
-          :videoList='videoList'
-          :num='videoNum'
-          @handleSetVideoStatus='handleSetVideoStatus'
-          @handleDeleteVideo='handleDeleteVideo'
-          @openVideoPlayerVisible='openVideoPlayerVisible' />
+            :videoList="videoList"
+            :num="videoNum"
+            @handleSetVideoStatus="handleSetVideoStatus"
+            @handleDeleteVideo="handleDeleteVideo"
+            @openVideoPlayerVisible="openVideoPlayerVisible"
+          />
 
           <pagination
-          v-show="videoTotal>0"
-          :total="videoTotal"
-          :page.sync="listQuery.page"
-          :limit.sync="listQuery.limit"
-          @pagination="getAllVideosList" />
-          <UploadVideo 
-          :userCode='userCode'
-          :deptName='deptName'
-          @getAllVideosList='getAllVideosList'/>
+            v-show="videoTotal > 0"
+            :total="videoTotal"
+            :page.sync="listQuery.page"
+            :limit.sync="listQuery.limit"
+            @pagination="getAllVideosList"
+          />
+          <UploadVideo
+            :userCode="userCode"
+            :deptName="deptName"
+            @getAllVideosList="getAllVideosList"
+          />
         </el-tab-pane>
 
         <div>
           <VideoPlay
-          :openDialogvisible='openDialogvisible'
-          :video='videoConfig'
-          @closeDialog='closeDialog' />
+            :openDialogvisible="openDialogvisible"
+            :video="videoConfig"
+            @closeDialog="closeDialog"
+          />
         </div>
       </el-tabs>
     </div>
@@ -72,8 +82,17 @@
 
 <script>
 import { createCategory, submitMenu } from '@/api/news/news'
-import { getAllSwiperImgs, deleteImgById, SetSwiperStatus, SetWebsiteSwiperStatus } from '@/api/recruit/recruit'
-import { getAllVideos, deleteVideoById, SetVideoStatus } from '@/api/website/website'
+import {
+  getAllSwiperImgs,
+  deleteImgById,
+  SetSwiperStatus,
+  SetWebsiteSwiperStatus
+} from '@/api/recruit/recruit'
+import {
+  getAllVideos,
+  deleteVideoById,
+  SetVideoStatus
+} from '@/api/website/website'
 import Pagination from '@/components/Pagination'
 import VideoPlay from '@/components/VideoPlayer/index'
 import NewsCategory from './components/Category/NewsCategory'
@@ -138,8 +157,9 @@ export default {
       this.$confirm('是否添加?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'warning' }).then(() => {
-        createCategory(temp).then((res) => {
+        type: 'warning'
+      }).then(() => {
+        createCategory(temp).then(res => {
           const { msg } = res
           this.$notify({
             title: 'Success',
@@ -152,11 +172,15 @@ export default {
     },
     // 查询已经上传的所有轮播图
     getAllSwiperImgs() {
-      const temp = Object.assign({}, { userCode: this.userCode }, this.listQuery)
+      const temp = Object.assign(
+        {},
+        { userCode: this.userCode },
+        this.listQuery
+      )
       getAllSwiperImgs(temp).then(res => {
         const { files, total, num, websiteNum } = res
         this.imgList = files
-        this.srcList = files.map(e=>e.url)
+        this.srcList = files.map(e => e.url)
         this.total = total
         this.num = num
         this.websiteNum = websiteNum
@@ -198,7 +222,10 @@ export default {
 
     // 根据switch的值来更新status的状态，websiteStatus=1：是轮播图，websiteStatus=0：不是轮播图
     handleSetWebsiteStatus(row) {
-      const temp = Object.assign({}, { websiteSwitch: row.websiteSwitch, id: row.id })
+      const temp = Object.assign(
+        {},
+        { websiteSwitch: row.websiteSwitch, id: row.id }
+      )
       SetWebsiteSwiperStatus(temp).then(res => {
         const { msg } = res
         this.$notify({
@@ -220,13 +247,17 @@ export default {
 
     // 获取某个管理员上传的所有视频列表
     getAllVideosList() {
-      const temp = Object.assign({}, { userCode: this.userCode }, this.listQuery)
+      const temp = Object.assign(
+        {},
+        { userCode: this.userCode },
+        this.listQuery
+      )
       getAllVideos(temp).then(res => {
         const { items, total, num } = res
         this.videoList = items
         this.videoNum = num
         this.videoTotal = total
-      }) 
+      })
     },
 
     handleSetVideoStatus(row) {

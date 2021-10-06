@@ -1,27 +1,39 @@
 <template>
-    <!--医生详细信息的dialog-->
-    <div>
-      <el-dialog :visible.sync="dialog" title="医生个人详细信息" @close='closeDialog'>
-        <div class="main">
-          <div class="basic">
-            <img :src="doctorItem.avatar" />
-            <div class="info">
-              <span>科室名称：{{ doctorItem.deptName }}</span>
-              <span>医生姓名：{{ doctorItem.username }}</span>
-              <span>医生学历：{{ doctorItem.education }}</span>
-              <span>医生职称：{{ doctorItem.jobTitle }}</span>
-              <el-tooltip class="item" effect="dark" content="前往163邮箱发送邮件" placement="bottom">
-                <a href="https://mail.163.com/" target="_blank">医生邮箱：{{ doctorItem.email }}</a>
-              </el-tooltip>
-              <span>擅长专业：{{ doctorItem.professional }}</span>
-            </div>
-          </div>
-          <div class="desc">
-            <span style="font-weight:bold;">简历：</span>{{ doctorItem.desc }}
+  <!--医生详细信息的dialog-->
+  <div>
+    <el-dialog
+      :visible.sync="dialog"
+      title="医生个人详细信息"
+      @close="closeDialog"
+      custom-class="detailDialog"
+    >
+      <div class="main">
+        <div class="basic">
+          <img :src="doctorItem.avatar" />
+          <div class="info">
+            <span>科室名称：{{ doctorItem.deptName }}</span>
+            <span>医生姓名：{{ doctorItem.username }}</span>
+            <span>医生学历：{{ doctorItem.education }}</span>
+            <span>医生职称：{{ doctorItem.jobTitle }}</span>
+            <el-tooltip
+              class="item"
+              effect="dark"
+              content="前往163邮箱发送邮件"
+              placement="bottom"
+            >
+              <a href="https://mail.163.com/" target="_blank"
+                >医生邮箱：{{ doctorItem.email }}</a
+              >
+            </el-tooltip>
+            <span>擅长专业：{{ doctorItem.professional }}</span>
           </div>
         </div>
-      </el-dialog>
-    </div>
+        <div class="desc">
+          <span style="font-weight:bold;">简历：</span>{{ doctorItem.desc }}
+        </div>
+      </div>
+    </el-dialog>
+  </div>
 </template>
 <script>
 export default {
@@ -56,35 +68,42 @@ export default {
   }
 }
 </script>
+<style scoped>
+.detailDialog {
+  width: 520px;
+  height: 460px;
+}
+</style>
 <style lang="scss" scoped>
-  .main {
-    width: 100%;
-    height: 390px;
-    .basic {
-        display: flex;
-        justify-content: start;
-        img {
-          border-radius: 6px;
-          width: 195px;
-          height: 220px;
-          &:hover {
-            cursor: pointer;
-            box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-          }
-        }
-        .info {
-          margin-left: 20px;
-          font-size: 15px;
-          color: #909399;
-          height: 220px;
-          display: flex;
-          flex-direction: column;
-          justify-content: space-around;
-        }
+.main {
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+  .basic {
+    display: flex;
+    justify-content: start;
+    img {
+      border-radius: 6px;
+      width: 195px;
+      height: 220px;
+      &:hover {
+        cursor: pointer;
+        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+      }
     }
-    .desc {
-      margin-top: 20px;
-      line-height: 20px;
+    .info {
+      margin-left: 20px;
+      font-size: 15px;
+      color: #909399;
+      height: 220px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
     }
   }
+  .desc {
+    margin-top: 30px;
+    line-height: 20px;
+  }
+}
 </style>

@@ -32,22 +32,22 @@ import PolicyLaw from './Center/PolicyLaw'
 import PurchaseMessage from './Center/PurchaseMessage'
 import NoticeAnnouncement from './Center/NoticeAnnouncement'
 import Recruit from './Center/Recruit'
-  export default {
-    components: {
-      HospitalTrend,
-      HospitalPublic,
-      PolicyLaw,
-      PurchaseMessage,
-      NoticeAnnouncement,
-      Recruit
-    },
-    name: 'Center',
-    data() {
-      return {
-        activeName: 'first'
-      }
+export default {
+  components: {
+    HospitalTrend,
+    HospitalPublic,
+    PolicyLaw,
+    PurchaseMessage,
+    NoticeAnnouncement,
+    Recruit
+  },
+  name: 'Center',
+  data() {
+    return {
+      activeName: 'first'
     }
   }
+}
 </script>
 
 <style lang="scss" scoped>

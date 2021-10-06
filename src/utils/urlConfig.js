@@ -21,7 +21,7 @@ export const VIDEO_COVER_UPLOAD = 'http://localhost:3000/website/uploadCover'
 export const DOCTOR_AVATAR_UPLOAD = 'http://localhost:3000/websitemanager/uploadAvatar'
 
 // 常用网站图片
-export const USUALLY_WEBSITE_IMG = 'http://localhost:3000/websitemanager/uploadImg'
+export const USUALLY_WEBSITE_IMG_UPLOAD = 'http://localhost:3000/websitemanager/uploadImg'
 
 // 头像和文件下载
 // 管理员头像下载
@@ -43,4 +43,4 @@ export const BACKGROUND_IMAGE_DOWNLOAD = 'http://localhost:3000/background/main-
 export const QRCODE_DOWNLOAD = 'http://localhost:3000/background/qrcode.jpg'
 
 // 底部二维码
-export const FOOTER_QRCODE_WOWNLOAD = 'http://localhost:3000/background/qrcode1.png'
+export const FOOTER_QRCODE_DOWNLOAD = 'http://localhost:3000/background/qrcode1.png'

@@ -2,17 +2,19 @@
   <!--专家介绍-->
   <div>
     <DoctorList
-    :listQuery='listQuery'
-    :total='total'
-    :doctorList='list'
-    @getAllExpertList='getAllExpertList'
-    @openDialog='openDialog'
-    @closeDialog='closeDialog' />
+      :listQuery="listQuery"
+      :total="total"
+      :doctorList="list"
+      @getAllExpertList="getAllExpertList"
+      @openDialog="openDialog"
+    />
 
     <!--医生详细信息-->
     <doctorDetail
-    :openVisible='visible'
-    :doctorItem='doctorItem' />
+      :openVisible="visible"
+      @closeDialog="closeDialog"
+      :doctorItem="doctorItem"
+    />
   </div>
 </template>
 

@@ -1,13 +1,14 @@
 <template>
-    <!--学科荟萃-->
-    <div class="main">
-      <showSubjectAssemble
-      :total='total'
-      :newsList='list'
-      :listQuery='listQuery'
-      @getSubjectAssembleList='getSubjectAssembleList'
-      @gotoDetail='gotoDetail' />
-    </div>
+  <!--学科荟萃-->
+  <div class="main">
+    <showSubjectAssemble
+      :total="total"
+      :newsList="list"
+      :listQuery="listQuery"
+      @getSubjectAssembleList="getSubjectAssembleList"
+      @gotoDetail="gotoDetail"
+    />
+  </div>
 </template>
 
 <script>

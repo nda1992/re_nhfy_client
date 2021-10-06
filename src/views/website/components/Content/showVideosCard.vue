@@ -1,18 +1,14 @@
 <template>
-  <!--展示中间部分不同tab下的所有新闻内容-->
+  <!-- 显示所有视频列表的组件 -->
   <div class="main">
     <el-card class="box-card" shadow="hover">
       <div slot="header" class="clearfix">
         <span>{{ category }}</span>
       </div>
-      <div v-for="item in newsList" :key="item.ud" class="news">
-        <div class="item">
-          <span class="time">[{{ item.createTime }}]</span>
-          <span @click="getNewsById(item.id)" class="title">{{
-            item.title
-          }}</span>
-          <span style="margin-right:8px;color:#C0C4CC">|</span>
-          <span>({{ item.deptName }})</span>
+      <div v-for="item in videoList" :key="item.id" class="videos">
+        <div class="item" @click="openDialog">
+          <img :src="item.cover" class="img" />
+          <span class="title">{{ item.title }}</span>
         </div>
       </div>
       <pagination
@@ -21,20 +17,25 @@
         :total="total"
         :page.sync="listQuery.page"
         :limit.sync="listQuery.limit"
-        @pagination="getAllNews"
+        @pagination="getAllVideos"
       />
     </el-card>
   </div>
 </template>
-
 <script>
 import Pagination from '@/components/Pagination'
 export default {
-  name: 'showNewsCard',
+  name: 'showVideosCard',
   components: {
     Pagination
   },
   props: {
+    videoList: {
+      type: Array,
+      default: () => {
+        return []
+      }
+    },
     total: {
       type: Number,
       default: () => {
@@ -55,25 +56,18 @@ export default {
       default: () => {
         return ''
       }
-    },
-    newsList: {
-      type: Array,
-      default: () => {
-        return []
-      }
     }
   },
   methods: {
-    getNewsById(id) {
-      this.$emit('getNewsById', id)
+    getAllVideos() {
+      this.$emit('getAllVideos')
     },
-    getAllNews() {
-      this.$emit('getAllNews')
+    openDialog() {
+      this.$emit('openDialog')
     }
   }
 }
 </script>
-
 <style lang="scss" scoped>
 .main {
   .box-card {
@@ -82,22 +76,25 @@ export default {
       font-size: 17px;
       color: #3b7960;
     }
-    .news {
-      height: 40px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+    .videos {
+      width: 500px;
       .item {
-        .time {
-          font-size: 15px;
-          color: #97a8be;
+        padding: 0 20px;
+        display: flex;
+        justify-content: space-around;
+        width: 100%;
+        &:hover {
+          cursor: pointer;
+          box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+        }
+        .img {
+          height: 80px;
+          width: 80px;
+          border-radius: 6px;
         }
         .title {
-          margin: 0 8px;
-          cursor: pointer;
-          &:hover {
-            color: #3b7960;
-          }
+          font-size: 15px;
+          color: #dcdfe6;
         }
       }
     }
