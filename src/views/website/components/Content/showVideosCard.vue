@@ -6,8 +6,10 @@
         <span>{{ category }}</span>
       </div>
       <div v-for="item in videoList" :key="item.id" class="videos">
-        <div class="item" @click="openDialog">
-          <img :src="item.cover" class="img" />
+        <div class="item" @click="openDialog(item)">
+          <div>
+            <img :src="item.cover" class="img" />
+          </div>
           <span class="title">{{ item.title }}</span>
         </div>
       </div>
@@ -25,7 +27,6 @@
 <script>
 import Pagination from '@/components/Pagination'
 export default {
-  name: 'showVideosCard',
   components: {
     Pagination
   },
@@ -62,8 +63,8 @@ export default {
     getAllVideos() {
       this.$emit('getAllVideos')
     },
-    openDialog() {
-      this.$emit('openDialog')
+    openDialog(item) {
+      this.$emit('openDialog', item)
     }
   }
 }
@@ -77,24 +78,39 @@ export default {
       color: #3b7960;
     }
     .videos {
-      width: 500px;
       .item {
+        height: 105px;
         padding: 0 20px;
         display: flex;
-        justify-content: space-around;
+        justify-content: start;
+        align-items: center;
         width: 100%;
         &:hover {
           cursor: pointer;
           box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
         }
-        .img {
-          height: 80px;
-          width: 80px;
-          border-radius: 6px;
+        div {
+          height: 90px;
+          width: 90px;
+          overflow: hidden;
+          margin-right: 10px;
+          .img {
+            overflow: hidden;
+            height: 90px;
+            width: 90px;
+            border-radius: 6px;
+            transition: all 0.6s;
+            &:hover {
+              transform: scale(1.2);
+            }
+          }
         }
         .title {
           font-size: 15px;
-          color: #dcdfe6;
+          color: #123;
+          &:hover {
+            color: #3b7960;
+          }
         }
       }
     }

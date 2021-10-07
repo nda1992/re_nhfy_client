@@ -2,6 +2,9 @@
   <div class="header-main">
     <div class="header-img">
       <img :src="img_url" alt="" @click="gohome" />
+      <div class="time">
+        <ShowTime />
+      </div>
       <div class="svg" @mouseover="mouseOver" @mouseleave="mouseLeave">
         <span class="title">微信公众号</span>
         <svg-icon icon-class="nhfy-wechat" style="width: 30px;height: 30px" />
@@ -29,6 +32,10 @@
           <template slot="title">{{ item.parent.name }}</template>
           <el-menu-item
             :index="subitem.index"
+            :route="{
+              path: `content/${subitem.index}`,
+              query: { category: subitem.name }
+            }"
             v-for="(subitem, subindex) in item.children"
             :key="subindex"
             >{{ subitem.name }}</el-menu-item
@@ -41,7 +48,11 @@
 
 <script>
 import { BACKGROUND_IMAGE_DOWNLOAD, QRCODE_DOWNLOAD } from '@/utils/urlConfig'
+import ShowTime from '@/components/ShowTime/index'
 export default {
+  components: {
+    ShowTime
+  },
   name: 'Header',
   props: {
     MenuList: {

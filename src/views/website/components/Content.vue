@@ -19,6 +19,7 @@
           <div class="right">
             <div class="title">南华大学附属第一医院欢迎您~</div>
             <dropdown-menu
+              @gotoTargetPage="gotoTargetPage"
               class="document-btn"
               :items="articleList"
               title="医院概况"
@@ -49,25 +50,33 @@ export default {
       articleList: [
         {
           title: '医院文化',
-          href: 'https://juejin.im/post/59097cd7a22b9d0065fb61d2'
+          href: '/yygk/yywh'
         },
         {
           title: '院情通报',
-          href: 'https://juejin.im/post/591aa14f570c35006961acac'
+          href: '/yyxw/yqtg'
         },
         {
           title: '科研教学',
-          href: 'https://juejin.im/post/593121aa0ce4630057f70d35'
+          href: '/kyjx/kydt'
         },
         {
           title: '党建动态',
-          href: 'https://juejin.im/post/593121aa0ce4630057f70d35'
+          href: '/dqgz/djdt'
         },
         {
           title: '历史长廊',
-          href: 'https://juejin.im/post/593121aa0ce4630057f70d35'
+          href: '/yygk/lscl'
         }
       ]
+    }
+  },
+  methods: {
+    gotoTargetPage(item) {
+      this.$router.push({
+        path: `content/${item.href}`,
+        query: { category: item.title }
+      })
     }
   }
 }

@@ -5,7 +5,7 @@
       <el-col :span="24" :md="24">
         <!-- 视频列表和新闻列表分开处理 -->
         <showVideosCard
-          v-if="category === '视频中心'"
+          v-if="category === '健康视频'"
           @getAllVideos="getAllVideos"
           @openDialog="openDialog"
           :videoList="videoList"
@@ -96,7 +96,7 @@ export default {
         this.videoTotal = total
       })
     },
-    openDialog() {
+    openDialog(item) {
       this.videoConfig = {
         title: item.title,
         url: item.url

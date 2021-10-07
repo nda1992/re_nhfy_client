@@ -1,6 +1,12 @@
 <template>
   <div class="upload-container">
-    <el-button type="success" size="mini" icon="el-icon-upload2" @click="dialogVisible=true">上传文件</el-button>
+    <el-button
+      type="success"
+      size="mini"
+      icon="el-icon-upload2"
+      @click="dialogVisible = true"
+      >上传文件</el-button
+    >
     <el-dialog :visible.sync="dialogVisible">
       <el-upload
         ref="upload"
@@ -17,15 +23,32 @@
       >
         <div class="select-container">
           <div class="btns">
-            <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-            <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器</el-button>
+            <el-button slot="trigger" size="small" type="primary"
+              >选取文件</el-button
+            >
+            <el-button
+              style="margin-left: 10px;"
+              size="small"
+              type="success"
+              @click="submitUpload"
+              >上传到服务器</el-button
+            >
           </div>
-          <div slot="tip" class="el-upload__tip">只能上传xls、xlsx、doc、docx、pdf文件，且不超过10MB</div>
+          <div slot="tip" class="el-upload__tip">
+            只能上传xls、xlsx、doc、docx、pdf文件，且不超过10MB
+          </div>
         </div>
       </el-upload>
       <div class="confirm-btn">
-        <el-button type="primary" style="float: right;margin-left: 13px;" @click="handleSubmit">确定</el-button>
-        <el-button style="float: right;" @click="dialogVisible = false">取消</el-button>
+        <el-button
+          type="primary"
+          style="float: right;margin-left: 13px;"
+          @click="handleSubmit"
+          >确定</el-button
+        >
+        <el-button style="float: right;" @click="dialogVisible = false"
+          >取消</el-button
+        >
       </div>
     </el-dialog>
   </div>
@@ -40,7 +63,9 @@ export default {
     // 请求头带上token
     tempToken: {
       type: Object,
-      default: () => { return { token: StorageClass.getSession('token').token } }
+      default: () => {
+        return { token: StorageClass.getSession('token').token }
+      }
     }
   },
   data() {
@@ -53,7 +78,9 @@ export default {
   },
   methods: {
     checkAllSuccess() {
-      return Object.keys(this.listObj).every(item => this.listObj[item].hasSuccess)
+      return Object.keys(this.listObj).every(
+        item => this.listObj[item].hasSuccess
+      )
     },
     // 当用户点击确定时，在编辑器中显示文件名
     handleSubmit() {
@@ -99,7 +126,11 @@ export default {
         // 用户下载文件的URL地址
         Atag.href = _URL.createObjectURL(file)
         // filename是文件名（用户上传时的文件名）
-        _self.listObj[fileName] = { hasSuccess: false, uid: file.uid, filename: file.name }
+        _self.listObj[fileName] = {
+          hasSuccess: false,
+          uid: file.uid,
+          filename: file.name
+        }
         resolve(true)
       })
     },
@@ -122,24 +153,24 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .upload-container{
-    position: relative;
-    .upload-demo{
-      height: 300px;
-      .select-container{
-        .btns{
-          margin: 0 auto;
-        }
-        .el-upload__tip{
-          margin-top: 20px;
-          display: block;
-        }
+.upload-container {
+  position: relative;
+  .upload-demo {
+    height: 300px;
+    .select-container {
+      .btns {
+        margin: 0 auto;
+      }
+      .el-upload__tip {
+        margin-top: 20px;
+        display: block;
       }
     }
-    .confirm-btn{
-      position: absolute;
-      bottom: 20px;
-      right: 20px;
-    }
   }
+  .confirm-btn {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+  }
+}
 </style>

@@ -5,7 +5,7 @@
       <div>
         <svg-icon :icon-class="icon" style="width: 50px;height: 50px" />
       </div>
-      <div>
+      <div style="margin-top:8px;">
         <span>{{ content }}</span>
       </div>
     </div>
