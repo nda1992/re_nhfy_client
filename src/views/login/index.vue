@@ -1,7 +1,13 @@
 <template>
   <div class="login-container">
-    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" auto-complete="on" label-position="left">
-
+    <el-form
+      ref="loginForm"
+      :model="loginForm"
+      :rules="loginRules"
+      class="login-form"
+      auto-complete="on"
+      label-position="left"
+    >
       <div class="title-container">
         <h3 class="title" style="letter-spacing:15px;">登录界面</h3>
       </div>
@@ -37,19 +43,37 @@
           @keyup.enter.native="handleLogin"
         />
         <span class="show-pwd" @click="showPwd">
-          <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'" />
+          <svg-icon
+            :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'"
+          />
         </span>
       </el-form-item>
 
       <div class="btns">
-        <el-button :loading="loading" type="primary" style="width:50%;margin-bottom:30px;" @click.native.prevent="handleLogin">登录</el-button>
-        <el-button :loading="loading" type="primary" style="width:50%;margin-bottom:30px;" @click="resetForm('loginForm')">重置</el-button>
+        <el-button
+          :loading="loading"
+          type="primary"
+          style="width:50%;margin-bottom:30px;"
+          @click.native.prevent="handleLogin"
+          >登录</el-button
+        >
+        <el-button
+          :loading="loading"
+          type="primary"
+          style="width:50%;margin-bottom:30px;"
+          @click="resetForm('loginForm')"
+          >重置</el-button
+        >
       </div>
 
       <div class="tips">
-        <router-link :to="{path:'passwd'}"><span>忘记密码?</span></router-link>
+        <router-link :to="{ path: 'passwd' }"
+          ><span>忘记密码?</span></router-link
+        >
         <span style="margin:0 2px;">|</span>
-        <router-link :to="{path:'register'}"><span style="margin-left:12px;">点击这里注册</span></router-link>
+        <router-link :to="{ path: 'register' }"
+          ><span style="margin-left:12px;">点击这里注册</span></router-link
+        >
       </div>
     </el-form>
 
@@ -78,8 +102,12 @@ export default {
         password: ''
       },
       loginRules: {
-        username: [{ required: true, trigger: 'blur', message: '请输入职工号' }],
-        password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+        username: [
+          { required: true, trigger: 'blur', message: '请输入职工号' }
+        ],
+        password: [
+          { required: true, trigger: 'blur', validator: validatePassword }
+        ]
       },
       loading: false,
       passwordType: 'password',
@@ -113,12 +141,15 @@ export default {
       this.$refs.loginForm.validate(valid => {
         if (valid) {
           this.loading = true
-          this.$store.dispatch('user/login', this.loginForm).then(() => {
-            this.$router.push({ path: this.redirect || '/' })
-            this.loading = false
-          }).catch(() => {
-            this.loading = false
-          })
+          this.$store
+            .dispatch('user/login', this.loginForm)
+            .then(() => {
+              this.$router.push({ path: this.redirect || '/' })
+              this.loading = false
+            })
+            .catch(() => {
+              this.loading = false
+            })
         } else {
           console.log('error submit!!')
           return false
@@ -141,8 +172,8 @@ export default {
 /* 修复input 背景不协调 和光标变色 */
 /* Detail see https://github.com/PanJiaChen/vue-element-admin/pull/927 */
 
-$bg:#283443;
-$light_gray:#fff;
+$bg: #283443;
+$light_gray: #fff;
 $cursor: #fff;
 
 @supports (-webkit-mask: none) and (not (cater-color: $cursor)) {
@@ -185,9 +216,9 @@ $cursor: #fff;
 </style>
 
 <style lang="scss" scoped>
-$bg:#2d3a4b;
-$dark_gray:#889aa4;
-$light_gray:#eee;
+$bg: #2d3a4b;
+$dark_gray: #889aa4;
+$light_gray: #eee;
 
 .login-container {
   min-height: 100%;
@@ -246,42 +277,42 @@ $light_gray:#eee;
     user-select: none;
   }
 
-  .btns{
+  .btns {
     display: flex;
     justify-content: center;
   }
 
-  .tips{
+  .tips {
     position: relative;
     left: 140px;
-    span{
-      &:nth-child(1){
-      cursor: pointer;
-        &:hover{
-          color: #409EFF;
+    span {
+      &:nth-child(1) {
+        cursor: pointer;
+        &:hover {
+          color: #409eff;
         }
       }
-      &:nth-child(3){
-      cursor: pointer;
-        &:hover{
-          color: #409EFF;
+      &:nth-child(3) {
+        cursor: pointer;
+        &:hover {
+          color: #409eff;
         }
       }
     }
   }
-  .footer{
+  .footer {
     position: relative;
     bottom: 0;
     margin-top: 20px;
     left: 44%;
-    div{
+    div {
       color: #99a9bf;
       font-size: 14px;
       padding-right: 8px;
     }
-    .el-button{
+    .el-button {
       color: #99a9bf;
-      &:hover{
+      &:hover {
         color: #20a0ff;
       }
     }

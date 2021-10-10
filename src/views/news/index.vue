@@ -2,71 +2,156 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="searchVal" :placeholder="'按'+searchType+'搜索'" style="width: 200px;" class="filter-item" clearable @keyup.enter.native="handleFilter(searchType)" />
-      <el-select v-model="searchType" placeholder="请选择搜索类型" style="width: 150px" class="filter-item">
-        <el-option v-for="item in typeItems" :key="item" :label="item" :value="item" />
-      </el-select>
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter(searchType)">搜索</el-button>
-      <el-button v-waves :loading="downloadLoading" class="filter-item" type="primary" icon="el-icon-download" style="margin-left: 0" @click="handleDownload">导出表格</el-button>
+      <el-row :gutter="20">
+        <el-col :span="7">
+          <el-input
+            v-model="searchVal"
+            :placeholder="'按' + searchType + '搜索'"
+            style="width: 200px;"
+            class="filter-item"
+            clearable
+            @keyup.enter.native="handleFilter(searchType)"
+          />
+        </el-col>
+        <el-col :span="6">
+          <el-select
+            v-model="searchType"
+            placeholder="请选择搜索类型"
+            style="width: 150px"
+            class="filter-item"
+          >
+            <el-option
+              v-for="item in typeItems"
+              :key="item"
+              :label="item"
+              :value="item"
+            />
+          </el-select>
+        </el-col>
+        <el-col :span="4">
+          <el-button
+            v-waves
+            class="filter-item"
+            type="primary"
+            icon="el-icon-search"
+            @click="handleFilter(searchType)"
+            >搜索</el-button
+          >
+        </el-col>
+        <el-col :span="7">
+          <el-button
+            v-waves
+            :loading="downloadLoading"
+            class="filter-item"
+            type="success"
+            icon="el-icon-download"
+            style="margin-left: 0"
+            @click="handleDownload"
+            >导出表格</el-button
+          >
+        </el-col>
+      </el-row>
     </div>
     <el-table
       v-loading="listLoading"
       :data="searchList"
-      :default-sort="{prop: ['createTime','clickNum'], order: 'descending'}"
+      :default-sort="{ prop: ['createTime', 'clickNum'], order: 'descending' }"
       border
       fit
       highlight-current-row
       style="width: 100%"
       stripe
+      size="mini"
     >
       <el-table-column label="ID" prop="id" align="center" min-width="3px">
-        <template slot-scope="{row}">
+        <template slot-scope="{ row }">
           <el-tooltip effect="dark" content="点击查看文章" placement="bottom">
             <span class="link-type" @click="handleScan(row)">{{ row.id }}</span>
           </el-tooltip>
         </template>
       </el-table-column>
       <!--新闻标题-->
-      <el-table-column label="新闻标题" prop="title" align="center" min-width="15px" :show-overflow-tooltip="true">
-        <template slot-scope="{row}">
+      <el-table-column
+        label="新闻标题"
+        prop="title"
+        align="center"
+        min-width="15px"
+        :show-overflow-tooltip="true"
+      >
+        <template slot-scope="{ row }">
           <span>{{ row.title }}</span>
         </template>
       </el-table-column>
       <!--发布时间-->
-      <el-table-column label="发布时间" sortable prop="createTime" align="center" min-width="13px">
-        <template slot-scope="{row}">
+      <el-table-column
+        label="发布时间"
+        sortable
+        prop="createTime"
+        align="center"
+        min-width="13px"
+      >
+        <template slot-scope="{ row }">
           <i class="el-icon-time" style="margin-right: 3px;" />
           <span>{{ row.createTime }}</span>
         </template>
       </el-table-column>
       <!--作者-->
-      <el-table-column label="作者" prop="userName" align="center" min-width="6px">
-        <template slot-scope="{row}">
+      <el-table-column
+        label="作者"
+        prop="userName"
+        align="center"
+        min-width="6px"
+      >
+        <template slot-scope="{ row }">
           <span>{{ row.userName }}</span>
         </template>
       </el-table-column>
       <!--所属部门-->
-      <el-table-column label="所属部门" prop="deptName" align="center" min-width="9px">
-        <template slot-scope="{row}">
+      <el-table-column
+        label="所属部门"
+        prop="deptName"
+        align="center"
+        min-width="9px"
+      >
+        <template slot-scope="{ row }">
           <span>{{ row.deptName }}</span>
         </template>
       </el-table-column>
       <!--所属类别-->
-      <el-table-column label="所属类别" prop="category" align="center" min-width="7px">
-        <template slot-scope="{row}">
+      <el-table-column
+        label="所属类别"
+        prop="category"
+        align="center"
+        min-width="7px"
+      >
+        <template slot-scope="{ row }">
           <span>{{ row.category }}</span>
         </template>
       </el-table-column>
       <!--浏览次数-->
-      <el-table-column label="浏览次数" sortable prop="clickNum" align="center" min-width="9px">
-        <template slot-scope="{row}">
+      <el-table-column
+        label="浏览次数"
+        sortable
+        prop="clickNum"
+        align="center"
+        min-width="9px"
+      >
+        <template slot-scope="{ row }">
           <span>{{ row.clickNum }}</span>
         </template>
       </el-table-column>
       <!--状态：发布未未审核，审核通过，审核未通过-->
-      <el-table-column label="审核状态" prop="newsStatus" align="center" min-width="9px">
-        <template slot-scope="{row}">
-          <el-tag v-if="row.newsStatus !== '草稿'" :type="row.newsStatus | newsStatusFilter">
+      <el-table-column
+        label="审核状态"
+        prop="newsStatus"
+        align="center"
+        min-width="9px"
+      >
+        <template slot-scope="{ row }">
+          <el-tag
+            v-if="row.newsStatus !== '草稿'"
+            :type="row.newsStatus | newsStatusFilter"
+          >
             {{ row.newsStatus }}
           </el-tag>
           <el-popconfirm
@@ -78,13 +163,24 @@
             title="确定发布新闻吗?"
             @onConfirm="handleStatus(row)"
           >
-            <el-button slot="reference" :type="row.newsStatus | newsStatusFilter" size="mini" :disabled="role!=='admin'">{{ row.newsStatus }}</el-button>
+            <el-button
+              slot="reference"
+              :type="row.newsStatus | newsStatusFilter"
+              size="mini"
+              :disabled="role !== 'admin'"
+              >{{ row.newsStatus }}</el-button
+            >
           </el-popconfirm>
         </template>
       </el-table-column>
       <!--更新状态：审核通过，审核未通过-->
-      <el-table-column label="更新状态" prop="newsStatus" align="center" min-width="15px">
-        <template slot-scope="{row}">
+      <el-table-column
+        label="更新状态"
+        prop="newsStatus"
+        align="center"
+        min-width="15px"
+      >
+        <template slot-scope="{ row }">
           <el-switch
             v-model="row.Switch"
             :disabled="row.newsStatus === '草稿' || role !== 'admin'"
@@ -97,31 +193,62 @@
         </template>
       </el-table-column>
       <!--发布状态-->
-      <el-table-column label="发布状态" prop="status" align="center" min-width="8px">
-        <template slot-scope="{row}">
+      <el-table-column
+        label="发布状态"
+        prop="status"
+        align="center"
+        min-width="8px"
+      >
+        <template slot-scope="{ row }">
           <el-tag :type="row.status | statusFilter">
             {{ row.status }}
           </el-tag>
         </template>
       </el-table-column>
       <!--操作按钮-->
-      <el-table-column label="操作" align="center" min-width="15px" class-name="small-padding fixed-width">
+      <el-table-column
+        label="操作"
+        align="center"
+        min-width="15px"
+        class-name="small-padding fixed-width"
+      >
         <template slot-scope="scope">
-          <router-link :to="'/news/edit/'+scope.row.id">
-            <el-button type="primary" size="mini" icon="el-icon-edit">编辑</el-button>
+          <router-link :to="'/news/edit/' + scope.row.id">
+            <el-button type="primary" size="mini" icon="el-icon-edit"
+              >编辑</el-button
+            >
           </router-link>
-          <el-button v-if="scope.row.status!='deleted'" style="margin-left: 10px;" size="mini" type="danger" icon="el-icon-delete" @click="handleDelete(scope.row)">删除</el-button>
+          <el-button
+            v-if="scope.row.status != 'deleted'"
+            style="margin-left: 10px;"
+            size="mini"
+            type="danger"
+            icon="el-icon-delete"
+            @click="handleDelete(scope.row)"
+            >删除</el-button
+          >
         </template>
       </el-table-column>
     </el-table>
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getNewsList" />
+    <pagination
+      v-show="total > 0"
+      :total="total"
+      :page.sync="listQuery.page"
+      :limit.sync="listQuery.limit"
+      @pagination="getNewsList"
+    />
   </div>
 </template>
 
 <script>
 import waves from '@/directive/waves'
 import Pagination from '@/components/Pagination'
-import { deleteNewsById, getnewsList, updateNewsStatus, releaseNews } from '@/api/news/news'
+import {
+  deleteNewsById,
+  getnewsList,
+  updateNewsStatus,
+  releaseNews
+} from '@/api/news/news'
 // 对sessionStorage加密
 import { StorageClass } from '@/utils/session'
 const defaultForm = {
@@ -146,20 +273,20 @@ export default {
   filters: {
     statusFilter(status) {
       const statusMap = {
-        '已发布': 'success',
-        '草稿': 'warning',
-        '未发布': 'info',
-        '已删除': 'danger'
+        已发布: 'success',
+        草稿: 'warning',
+        未发布: 'info',
+        已删除: 'danger'
       }
       return statusMap[status]
     },
     newsStatusFilter(status) {
       const statusMap = {
-        '未审核': 'primary',
-        '已审核': 'success',
-        '草稿': 'warning',
-        '已删除': 'danger',
-        '不通过': 'info'
+        未审核: 'primary',
+        已审核: 'success',
+        草稿: 'warning',
+        已删除: 'danger',
+        不通过: 'info'
       }
       return statusMap[status]
     }
@@ -197,13 +324,21 @@ export default {
     // 按关键字搜索内容
     handleFilter(type) {
       if (type === '新闻标题') {
-        this.searchList = this.list.filter(item => { return item.title.match(this.searchVal) })
+        this.searchList = this.list.filter(item => {
+          return item.title.match(this.searchVal)
+        })
       } else if (type === '发布作者') {
-        this.searchList = this.list.filter(item => { return item.userName.match(this.searchVal) })
+        this.searchList = this.list.filter(item => {
+          return item.userName.match(this.searchVal)
+        })
       } else if (type === '新闻类别') {
-        this.searchList = this.list.filter(item => { return item.category.match(this.searchVal) })
+        this.searchList = this.list.filter(item => {
+          return item.category.match(this.searchVal)
+        })
       } else if (type === '发布时间') {
-        this.searchList = this.list.filter(item => { return item.createTime.match(this.searchVal) })
+        this.searchList = this.list.filter(item => {
+          return item.createTime.match(this.searchVal)
+        })
       }
     },
     // 根据文章id浏览
@@ -246,7 +381,11 @@ export default {
         this.$message.error('请先完善标题或内容后提交')
         return
       }
-      if (temp.userName === '' || temp.deptName === '' || temp.category === '') {
+      if (
+        temp.userName === '' ||
+        temp.deptName === '' ||
+        temp.category === ''
+      ) {
         this.$message.error('请先完善作者或部门信息后提交')
         return
       }
@@ -286,8 +425,28 @@ export default {
     handleDownload() {
       this.downloadLoading = true
       import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['新闻标题', '新闻内容', '发布时间', '作者', '所属部门', '所属类别', '浏览次数', '审核状态', '发布状态']
-        const filterVal = ['新闻标题', '新闻内容', '发布时间', '作者', '所属部门', '所属类别', '浏览次数', '审核状态', '发布状态']
+        const tHeader = [
+          '新闻标题',
+          '新闻内容',
+          '发布时间',
+          '作者',
+          '所属部门',
+          '所属类别',
+          '浏览次数',
+          '审核状态',
+          '发布状态'
+        ]
+        const filterVal = [
+          '新闻标题',
+          '新闻内容',
+          '发布时间',
+          '作者',
+          '所属部门',
+          '所属类别',
+          '浏览次数',
+          '审核状态',
+          '发布状态'
+        ]
         const data = this.formatJson(filterVal)
         excel.export_json_to_excel({
           header: tHeader,
@@ -301,7 +460,17 @@ export default {
       const data = []
       this.searchList.forEach(item => {
         const temp = []
-        temp.push(item.title, item.content, item.createTime, item.userName, item.deptName, item.category, item.clickNum, item.newsStatus, item.status)
+        temp.push(
+          item.title,
+          item.content,
+          item.createTime,
+          item.userName,
+          item.deptName,
+          item.category,
+          item.clickNum,
+          item.newsStatus,
+          item.status
+        )
         data.push(temp)
       })
       return data
@@ -310,18 +479,17 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-  .app-container{
-    margin-top: 30px;
-    .filter-container{
-      width: 600px;
-      display: flex;
-      justify-content: space-between;
-    }
-    .el-table{
-      font-size: 12px;
-      &:hover{
-        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)
-      }
+.app-container {
+  max-width: 100%;
+  margin-top: 30px;
+  .filter-container {
+    width: 700px;
+  }
+  .el-table {
+    font-size: 12px;
+    &:hover {
+      box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
     }
   }
+}
 </style>

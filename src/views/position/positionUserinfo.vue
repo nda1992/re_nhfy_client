@@ -4,21 +4,46 @@
     <div class="title">
       <h2>个人主页</h2>
       <div class="tip">
-        <el-badge is-dot class="item" :hidden="show_badge"><span @click="HandleupdateUserinfo">更新或完善个人详细信息</span></el-badge>
-        <span style="color: #ff4949;font-size: 12px" @click="HandleupdateUserinfo">（头像请使用个人证件照）</span>
+        <el-badge is-dot class="item" :hidden="show_badge"
+          ><span @click="HandleupdateUserinfo"
+            >更新或完善个人详细信息</span
+          ></el-badge
+        >
+        <span
+          style="color: #ff4949;font-size: 12px"
+          @click="HandleupdateUserinfo"
+          >（头像请使用个人证件照）</span
+        >
       </div>
     </div>
     <div class="userinfo-main">
       <div class="basic">
         <div class="avatar">
-          <el-avatar shape="square" :size="100" :src="avatar" fit="fill" style="height: 100px;width: 100%;!important;" />
+          <el-avatar
+            shape="square"
+            :size="100"
+            :src="avatar"
+            fit="fill"
+            style="height: 100px;width: 100%;!important;"
+          />
         </div>
         <div class="username">姓名：{{ jobseekerUsername }}</div>
         <div class="phone">手机号：{{ phone }}</div>
         <div class="email">邮箱：{{ email }}</div>
         <div class="edit">
-          <el-tooltip class="item" effect="dark" content="编辑基本信息" placement="bottom">
-            <el-button type="primary" icon="el-icon-edit" circle size="mini" @click="HandleupdateBasicUserinfo" />
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="编辑基本信息"
+            placement="bottom"
+          >
+            <el-button
+              type="primary"
+              icon="el-icon-edit"
+              circle
+              size="mini"
+              @click="HandleupdateBasicUserinfo"
+            />
           </el-tooltip>
         </div>
       </div>
@@ -36,35 +61,119 @@
       </div>
       <!--岗位投递列表-->
       <div class="posted">
-        <UserinfoCard :total="postedTotal" :list-query="listQuery" :get-posted-position="getPost2PositionListByUid" :show-list="postedList" :title="Posttitle" :status-title="resumeStatus" :statusflag="1" @HandleCancelPost="HandleCancelPost" @handleConfirm="handleConfirm" />
+        <UserinfoCard
+          :total="postedTotal"
+          :list-query="listQuery"
+          :get-posted-position="getPost2PositionListByUid"
+          :show-list="postedList"
+          :title="Posttitle"
+          :status-title="resumeStatus"
+          :statusflag="1"
+          @HandleCancelPost="HandleCancelPost"
+          @handleConfirm="handleConfirm"
+        />
       </div>
     </div>
     <!--完善用户信息的对话框-->
     <el-dialog title="用户信息完善" :visible.sync="dialogVisible">
-      <el-form ref="dataForm" :model="registerForm" :rules="registerRules" auto-complete="on" label-position="left" label-width="120px" style="width: 500px; margin-left:50px;">
+      <el-form
+        ref="dataForm"
+        :model="registerForm"
+        :rules="registerRules"
+        auto-complete="on"
+        label-position="left"
+        label-width="120px"
+        style="width: 500px; margin-left:50px;"
+      >
         <el-form-item prop="sex" label="性别">
-          <el-select v-model="registerForm.sex" placeholder="请选择性别" width="20px" clearable>
-            <el-option v-for="(item,index) in sexOptions" :key="item+index" :label="item.value" :value="item.key" />
+          <el-select
+            v-model="registerForm.sex"
+            placeholder="请选择性别"
+            width="20px"
+            clearable
+          >
+            <el-option
+              v-for="(item, index) in sexOptions"
+              :key="item + index"
+              :label="item.value"
+              :value="item.key"
+            />
           </el-select>
         </el-form-item>
         <el-form-item prop="age" label="年龄">
-          <el-select v-model="registerForm.age" placeholder="请选择年龄" width="20px" clearable>
-            <el-option v-for="(item,index) in ageOptions" :key="item+index" :label="item" :value="item" />
+          <el-select
+            v-model="registerForm.age"
+            placeholder="请选择年龄"
+            width="20px"
+            clearable
+          >
+            <el-option
+              v-for="(item, index) in ageOptions"
+              :key="item + index"
+              :label="item"
+              :value="item"
+            />
           </el-select>
         </el-form-item>
-        <el-form-item label="民族" class="postInfo-container-item" prop="nation">
-          <el-select v-model="registerForm.nation" :loading="select_loading" :remote-method="getnationList" filterable clearable default-first-option remote placeholder="请输入民族">
-            <el-option v-for="(item,index) in nationListOptions" :key="item+index" :label="item" :value="item" />
+        <el-form-item
+          label="民族"
+          class="postInfo-container-item"
+          prop="nation"
+        >
+          <el-select
+            v-model="registerForm.nation"
+            :loading="select_loading"
+            :remote-method="getnationList"
+            filterable
+            clearable
+            default-first-option
+            remote
+            placeholder="请输入民族"
+          >
+            <el-option
+              v-for="(item, index) in nationListOptions"
+              :key="item + index"
+              :label="item"
+              :value="item"
+            />
           </el-select>
         </el-form-item>
         <el-form-item prop="degree" label="学历">
-          <el-select v-model="registerForm.degree" placeholder="请选择学历" width="20px" clearable>
-            <el-option v-for="(item,index) in degreeOptions" :key="item+index" :label="item" :value="item" />
+          <el-select
+            v-model="registerForm.degree"
+            placeholder="请选择学历"
+            width="20px"
+            clearable
+          >
+            <el-option
+              v-for="(item, index) in degreeOptions"
+              :key="item + index"
+              :label="item"
+              :value="item"
+            />
           </el-select>
         </el-form-item>
-        <el-form-item label="毕业学校" class="postInfo-container-item" prop="school">
-          <el-select v-model="registerForm.school" :loading="select_school_loading" :remote-method="getSchoolList" filterable clearable default-first-option remote placeholder="输入最高学历毕业学校">
-            <el-option v-for="(item,index) in schoolOptions" :key="item+index" :label="item" :value="item" />
+        <el-form-item
+          label="毕业学校"
+          class="postInfo-container-item"
+          prop="school"
+        >
+          <el-select
+            v-model="registerForm.school"
+            :loading="select_school_loading"
+            :remote-method="getSchoolList"
+            filterable
+            clearable
+            default-first-option
+            remote
+            placeholder="输入最高学历毕业学校"
+          >
+            <el-option
+              v-for="(item, index) in schoolOptions"
+              :key="item + index"
+              :label="item"
+              :value="item"
+            />
           </el-select>
         </el-form-item>
         <el-form-item prop="birthday" label="出生日期">
@@ -76,13 +185,39 @@
             placeholder="选择出生日期"
           />
         </el-form-item>
-        <el-form-item label="所在城市" class="postInfo-container-item" prop="address">
-          <el-select v-model="registerForm.address" :remote-method="getcitiesList" filterable clearable default-first-option remote placeholder="请输入所在城市">
-            <el-option v-for="(item,index) in citiesListOptions" :key="item+index" :label="item" :value="item" />
+        <el-form-item
+          label="所在城市"
+          class="postInfo-container-item"
+          prop="address"
+        >
+          <el-select
+            v-model="registerForm.address"
+            :remote-method="getcitiesList"
+            filterable
+            clearable
+            default-first-option
+            remote
+            placeholder="请输入所在城市"
+          >
+            <el-option
+              v-for="(item, index) in citiesListOptions"
+              :key="item + index"
+              :label="item"
+              :value="item"
+            />
           </el-select>
         </el-form-item>
         <el-form-item prop="professional" label="专业名称">
-          <el-input ref="professional" v-model="registerForm.professional" placeholder="专业名称" name="professional" type="text" tabindex="1" auto-complete="on" clearable />
+          <el-input
+            ref="professional"
+            v-model="registerForm.professional"
+            placeholder="专业名称"
+            name="professional"
+            type="text"
+            tabindex="1"
+            auto-complete="on"
+            clearable
+          />
         </el-form-item>
         <el-form-item prop="undergraduateTime" label="毕业时间">
           <el-date-picker
@@ -103,11 +238,16 @@
             :on-success="handleSuccessAvatar"
             :on-remove="handleRemoveAvatar"
           >
-            <img v-if="registerForm.faceimgUrl" :src="registerForm.faceimgUrl" class="avatar" style="width: 88px;height: 93px">
+            <img
+              v-if="registerForm.faceimgUrl"
+              :src="registerForm.faceimgUrl"
+              class="avatar"
+              style="width: 88px;height: 93px"
+            />
             <i v-else class="el-icon-plus avatar-uploader-icon" />
           </el-upload>
           <el-dialog :visible.sync="showdialogVisible">
-            <img width="100%" :src="registerForm.faceimgUrl" alt="">
+            <img width="100%" :src="registerForm.faceimgUrl" alt="" />
           </el-dialog>
         </el-form-item>
         <el-form-item prop="attachmentUrl" label="附件简历">
@@ -123,8 +263,12 @@
             :on-exceed="handleExceed"
             :file-list="fileList"
           >
-            <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
-            <div slot="tip" class="el-upload__tip">只能上传docx或pdf文件，且不超过3MB</div>
+            <el-button slot="trigger" size="small" type="primary"
+              >选取文件</el-button
+            >
+            <div slot="tip" class="el-upload__tip">
+              只能上传docx或pdf文件，且不超过3MB
+            </div>
           </el-upload>
         </el-form-item>
       </el-form>
@@ -135,15 +279,48 @@
     </el-dialog>
     <!--更新基本信息的dialog-->
     <el-dialog title="基本信息更新" :visible.sync="BaiscdialogVisible">
-      <el-form ref="basicForm" :model="basicForm" label-position="left" label-width="120px" style="width: 500px; margin-left:50px;">
+      <el-form
+        ref="basicForm"
+        :model="basicForm"
+        label-position="left"
+        label-width="120px"
+        style="width: 500px; margin-left:50px;"
+      >
         <el-form-item prop="username" label="真实姓名">
-          <el-input ref="username" v-model="basicForm.username" placeholder="真实姓名" name="username" type="text" tabindex="1" auto-complete="on" clearable />
+          <el-input
+            ref="username"
+            v-model="basicForm.username"
+            placeholder="真实姓名"
+            name="username"
+            type="text"
+            tabindex="1"
+            auto-complete="on"
+            clearable
+          />
         </el-form-item>
         <el-form-item prop="phone" label="手机号">
-          <el-input ref="phone" v-model="basicForm.phone" placeholder="手机号" name="phone" type="text" tabindex="1" auto-complete="on" clearable />
+          <el-input
+            ref="phone"
+            v-model="basicForm.phone"
+            placeholder="手机号"
+            name="phone"
+            type="text"
+            tabindex="1"
+            auto-complete="on"
+            clearable
+          />
         </el-form-item>
         <el-form-item prop="email" label="邮箱">
-          <el-input ref="email" v-model="basicForm.email" placeholder="邮箱" name="email" type="text" tabindex="1" auto-complete="on" clearable />
+          <el-input
+            ref="email"
+            v-model="basicForm.email"
+            placeholder="邮箱"
+            name="email"
+            type="text"
+            tabindex="1"
+            auto-complete="on"
+            clearable
+          />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -155,12 +332,22 @@
 </template>
 
 <script>
-import { getPost2PositionListByUid, cancelPostedByPid, confirmStauts, UserinfoDetail, updateUserinfo, handleCollect } from '@/api/recruit/position'
+import {
+  getPost2PositionListByUid,
+  cancelPostedByPid,
+  confirmStauts,
+  UserinfoDetail,
+  updateUserinfo,
+  handleCollect
+} from '@/api/recruit/position'
 import UserinfoCard from './components/UserinfoCard'
 // 对sessionStorage加密
 import { StorageClass } from '@/utils/session'
 import { postPosition } from '@/api/recruit/position'
-import { JOBSEEKER_AVATAR_UPLOAD, JOBSEEKER_RESUME_UPLOAD } from '@/utils/urlConfig'
+import {
+  JOBSEEKER_AVATAR_UPLOAD,
+  JOBSEEKER_RESUME_UPLOAD
+} from '@/utils/urlConfig'
 export default {
   name: 'Userinfo',
   components: {
@@ -172,8 +359,7 @@ export default {
       fileUpload_url: JOBSEEKER_RESUME_UPLOAD,
       listQuery: {
         page: 1,
-        limit: 10,
-        role: StorageClass.getSession('role').role
+        limit: 10
       },
       collectedTotal: 0,
       collectedList: [],
@@ -190,8 +376,33 @@ export default {
       userinfo: {},
       // 用户信息完善表单信息
       dialogVisible: false,
-      sexOptions: [{ key: 1, value: '男' }, { key: 2, value: '女' }],
-      ageOptions: [20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40],
+      sexOptions: [
+        { key: 1, value: '男' },
+        { key: 2, value: '女' }
+      ],
+      ageOptions: [
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40
+      ],
       degreeOptions: ['本科', '研究生', '博士'],
       registerForm: {
         sex: '',
@@ -209,15 +420,27 @@ export default {
       registerRules: {
         sex: [{ required: true, message: '请选择性别', trigger: 'blur' }],
         age: [{ required: true, message: '请选择年龄', trigger: 'blur' }],
-        birthday: [{ required: true, message: '请选择出生日期', trigger: 'blur' }],
+        birthday: [
+          { required: true, message: '请选择出生日期', trigger: 'blur' }
+        ],
         nation: [{ required: true, message: '请选择民族', trigger: 'blur' }],
         degree: [{ required: true, message: '请选择学历', trigger: 'blur' }],
         school: [{ required: true, message: '请选择学校', trigger: 'blur' }],
-        address: [{ required: true, message: '请输入所在城市', trigger: 'blur' }],
-        professional: [{ required: true, message: '请输入专业', trigger: 'blur' }],
-        undergraduateTime: [{ required: true, message: '请选择毕业时间', trigger: 'blur' }],
-        faceimgUrl: [{ required: true, message: '请上传头像', trigger: 'blur' }],
-        attachmentUrl: [{ required: true, message: '请上传附件简历', trigger: 'blur' }]
+        address: [
+          { required: true, message: '请输入所在城市', trigger: 'blur' }
+        ],
+        professional: [
+          { required: true, message: '请输入专业', trigger: 'blur' }
+        ],
+        undergraduateTime: [
+          { required: true, message: '请选择毕业时间', trigger: 'blur' }
+        ],
+        faceimgUrl: [
+          { required: true, message: '请上传头像', trigger: 'blur' }
+        ],
+        attachmentUrl: [
+          { required: true, message: '请上传附件简历', trigger: 'blur' }
+        ]
       },
       select_loading: false,
       nationListOptions: [],
@@ -257,13 +480,21 @@ export default {
   mounted() {
     this.getUserinfoDetail()
     this.getPost2PositionListByUid()
+    console.log('?????')
   },
   methods: {
     // 获取已投递的岗位列表
     getPost2PositionListByUid() {
-      const temp = Object.assign({}, this.listQuery, { jobseekerId: this.jobseekerId })
+      const temp = Object.assign({}, this.listQuery, {
+        jobseekerId: this.jobseekerId
+      })
       getPost2PositionListByUid(temp).then(res => {
-        const { postedPositions, postedTotal, collectedPositions, collectedTotal } = res
+        const {
+          postedPositions,
+          postedTotal,
+          collectedPositions,
+          collectedTotal
+        } = res
         this.postedList = postedPositions
         this.postedTotal = postedTotal
         this.collectedTotal = collectedTotal
@@ -293,7 +524,8 @@ export default {
       this.$confirm('取消投递将会从列表中删除,是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'warning' }).then(() => {
+        type: 'warning'
+      }).then(() => {
         const temp = { pid: id, uid: this.jobseekerId }
         cancelPostedByPid(temp).then(res => {
           const { msg } = res
@@ -317,13 +549,23 @@ export default {
         const { userinfo, doneUserinfo } = res
         this.userinfo = userinfo
         this.show_badge = doneUserinfo
-        this.fileList.push({ name: userinfo.attachmentUrl, url: userinfo.attachmentUrl })
+        this.fileList.push({
+          name: userinfo.attachmentUrl,
+          url: userinfo.attachmentUrl
+        })
       })
     },
     // 用户信息完善或用户信息更新的相关方法
     // 更新基本信息前的设置
     HandleupdateBasicUserinfo() {
-      this.basicForm = Object.assign({}, { username: this.jobseekerUsername, email: this.email, phone: this.phone })
+      this.basicForm = Object.assign(
+        {},
+        {
+          username: this.jobseekerUsername,
+          email: this.email,
+          phone: this.phone
+        }
+      )
       this.BaiscdialogVisible = true
       this.$nextTick(() => {
         this.$refs['basicForm'].clearValidate()
@@ -336,8 +578,13 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        const tempData = Object.assign({}, this.basicForm, { basic: false }, { id: this.jobseekerId, avatar: this.avatar })
-        updateUserinfo(tempData).then((res) => {
+        const tempData = Object.assign(
+          {},
+          this.basicForm,
+          { basic: false },
+          { id: this.jobseekerId, avatar: this.avatar }
+        )
+        updateUserinfo(tempData).then(res => {
           const { msg, data } = res
           this.BaiscdialogVisible = false
           this.$store.dispatch('position/resetSession', data)
@@ -365,7 +612,7 @@ export default {
       import('@/utils/nation').then(res => {
         const { data } = res.default
         data.forEach(e => {
-          if ((e.name.indexOf(query) !== -1)) {
+          if (e.name.indexOf(query) !== -1) {
             this.nationListOptions.push(e.name)
           }
         })
@@ -395,15 +642,17 @@ export default {
     },
     // 更新用户详细信息
     updateUserinfo() {
-      this.$refs['dataForm'].validate((valid) => {
+      this.$refs['dataForm'].validate(valid => {
         if (valid) {
           this.$confirm('是否更新个人信息?', '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
           }).then(() => {
-            const tempData = Object.assign({}, this.registerForm, { basic: true })
-            updateUserinfo(tempData).then((res) => {
+            const tempData = Object.assign({}, this.registerForm, {
+              basic: true
+            })
+            updateUserinfo(tempData).then(res => {
               const { msg, data } = res
               this.dialogVisible = false
               this.$store.dispatch('position/resetSession', data)
@@ -460,72 +709,79 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .userinfo-container{
-    margin-bottom: 80px;
-    position: relative;
-    min-height: 100%;
+.userinfo-container {
+  margin-bottom: 80px;
+  position: relative;
+  min-height: 100%;
+  width: 100%;
+  .title {
+    /*position: relative;*/
+    margin-top: 50px;
+    height: 80px;
     width: 100%;
-    .title{
-      /*position: relative;*/
-      margin-top: 50px;
-      height: 80px;
-      width: 100%;
-      top: 60px;
-      padding: 0 20px;
-      h2{
-        float: left;
-      }
-      .tip{
-        margin-left: 60px;
-        float: left;
-        position: relative;
-        top: 23px;
-        color: #99a9bf;
-        cursor:pointer;
-        :hover{
-          color: #409EFF;
-        }
+    top: 60px;
+    padding: 0 20px;
+    h2 {
+      float: left;
     }
-    }
-    .userinfo-main{
-      height: 100%;
-      padding-bottom: 60px;
-      /*border: 0.5px dashed #99a9bf;*/
-      border-radius: 5px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-around;
-      /*:after{*/
-        /*content: '';*/
-        /*display: block;*/
-        /*clear: both;*/
-        /*visibility: hidden;*/
-      /*}*/
-      width: 100%;
-      &:hover{
-        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-      }
-      .basic{
-        margin: 10px 0;
-        .avatar,.username,.phone,.email,.edit{
-          float: left;
-        }
-        .username,.phone,.email{
-          transform: translateY(40px);
-          color: #99a9bf;
-        }
-        .edit{
-          transform: translateY(35px);
-        }
-        div{
-          &:nth-child(n){
-            margin: 20px 20px;
-          }
-        }
-      }
-      .collected,.posted{
-        margin: 0 20px 20px 20px;
+    .tip {
+      margin-left: 60px;
+      float: left;
+      position: relative;
+      top: 23px;
+      color: #99a9bf;
+      cursor: pointer;
+      :hover {
+        color: #409eff;
       }
     }
   }
+  .userinfo-main {
+    height: 100%;
+    padding-bottom: 60px;
+    /*border: 0.5px dashed #99a9bf;*/
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    /*:after{*/
+    /*content: '';*/
+    /*display: block;*/
+    /*clear: both;*/
+    /*visibility: hidden;*/
+    /*}*/
+    width: 100%;
+    &:hover {
+      box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+    }
+    .basic {
+      margin: 10px 0;
+      .avatar,
+      .username,
+      .phone,
+      .email,
+      .edit {
+        float: left;
+      }
+      .username,
+      .phone,
+      .email {
+        transform: translateY(40px);
+        color: #99a9bf;
+      }
+      .edit {
+        transform: translateY(35px);
+      }
+      div {
+        &:nth-child(n) {
+          margin: 20px 20px;
+        }
+      }
+    }
+    .collected,
+    .posted {
+      margin: 0 20px 20px 20px;
+    }
+  }
+}
 </style>

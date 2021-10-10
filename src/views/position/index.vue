@@ -3,18 +3,24 @@
   <div class="app-container">
     <div><el-backtop :bottom="100" /></div>
     <!--顶部-->
-    <Header
-      :msg-num="msgNum"
-      :is-login="isLogin"
-      :username="username"
-      @HandleRegister="HandleRegister"
-      @home="home"
-      @HandleLogin="HandleLogin"
-      @notice="notice"
-      @Userinfo="Userinfo"
-      @back2Login="back2Login"
-      @logout="logout"
-    />
+    <div>
+      <el-row>
+        <el-col :span="24">
+          <Header
+            :msg-num="msgNum"
+            :is-login="isLogin"
+            :username="username"
+            @HandleRegister="HandleRegister"
+            @home="home"
+            @HandleLogin="HandleLogin"
+            @notice="notice"
+            @Userinfo="Userinfo"
+            @back2Login="back2Login"
+            @logout="logout"
+          />
+        </el-col>
+      </el-row>
+    </div>
     <!--内容显示-->
     <div>
       <transition name="fade-transform" mode="out-in">
@@ -22,7 +28,9 @@
       </transition>
     </div>
     <!--底部-->
-    <Footer />
+    <div class="footer">
+      <Footer />
+    </div>
     <el-dialog
       title="用户登录"
       :visible.sync="dialogFormVisible"
@@ -534,7 +542,14 @@ export default {
   position: relative;
   padding: 0;
   min-height: 100%;
+  display: flex;
+  flex-direction: column;
   margin: 0;
+  .footer {
+    background: #3b7960;
+    margin-top: auto;
+    width: 100%;
+  }
   .el-dialog {
     .passwd {
       float: left;
