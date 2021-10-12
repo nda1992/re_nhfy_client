@@ -54,26 +54,21 @@
           :loading="loading"
           type="primary"
           style="width:50%;margin-bottom:30px;"
-          @click.native.prevent="handleLogin"
-          >登录</el-button
-        >
+          @click.native.prevent="handleLogin">
+          登录
+        </el-button>
         <el-button
           :loading="loading"
           type="primary"
           style="width:50%;margin-bottom:30px;"
           @click="resetForm('loginForm')"
-          >重置</el-button
-        >
+        >重置</el-button>
       </div>
 
       <div class="tips">
-        <router-link :to="{ path: 'passwd' }"
-          ><span>忘记密码?</span></router-link
-        >
+        <router-link :to="{ path: 'passwd' }"><span>忘记密码?</span></router-link>
         <span style="margin:0 2px;">|</span>
-        <router-link :to="{ path: 'register' }"
-          ><span style="margin-left:12px;">点击这里注册</span></router-link
-        >
+        <router-link :to="{ path: 'register' }"><span style="margin-left:12px;">点击这里注册</span></router-link>
       </div>
     </el-form>
 
@@ -300,21 +295,12 @@ $light_gray: #eee;
       }
     }
   }
-<<<<<<< HEAD
   .footer{
     margin-top: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
     div{
-=======
-  .footer {
-    position: relative;
-    bottom: 0;
-    margin-top: 20px;
-    left: 44%;
-    div {
->>>>>>> d9755f908c92509df4d2afa70d7c60c839419678
       color: #99a9bf;
       font-size: 14px;
       padding-right: 8px;
