@@ -110,7 +110,7 @@ export default {
 <style lang="scss" scoped>
 .main {
   height: 120px;
-  width: 1200px;
+  width: 100%;
   margin: 0 auto;
   display: flex;
   justify-content: space-around;

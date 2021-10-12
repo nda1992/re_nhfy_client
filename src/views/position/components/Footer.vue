@@ -13,18 +13,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .footer{
-    font-size: 13px;
-    /*margin: 30px 0;*/
-    height: 80px;
-    width: 100%;
-    position: relative;
-    bottom: 5px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-around;
-    color: #99a9bf;
-    clear: both;
-  }
+.footer {
+  font-size: 13px;
+  height: 90px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  color: #fff;
+}
 </style>

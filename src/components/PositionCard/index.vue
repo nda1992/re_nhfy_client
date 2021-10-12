@@ -48,21 +48,49 @@
       </div>
       <div class="card-main">
         <div class="line1">
-          <span>学历要求：{{ positionInfo.degree }}</span>
-          <span>专业要求：{{ positionInfo.professional }}</span>
-          <span>英语要求：{{ positionInfo.english }}</span>
-          <span>年龄要求：{{ positionInfo.age }}</span>
-          <span>岗位类型：{{ positionInfo.type }}</span>
+          <el-row :gutter="30">
+            <el-col :span="5">
+              <span>学历要求：{{ positionInfo.degree }}</span>
+            </el-col>
+            <el-col :span="7">
+              <span>专业要求：{{ positionInfo.professional }}</span>
+            </el-col>
+            <el-col :span="4">
+              <span>英语要求：{{ positionInfo.english }}</span>
+            </el-col>
+            <el-col :span="4">
+              <span>年龄要求：{{ positionInfo.age }}</span>
+            </el-col>
+            <el-col :span="4">
+              <span>岗位类型：{{ positionInfo.type }}</span>
+            </el-col>
+          </el-row>
         </div>
         <div class="line2">
-          <span>招聘科室：{{ positionInfo.deptName }}</span>
-          <span>需求人数：{{ positionInfo.requireNum }}</span>
-          <span>工作地点：{{ positionInfo.address }}</span>
-          <span>发布时间：{{ positionInfo.simpleDate }}</span>
-          <span>联系电话：{{ positionInfo.contactPhone }}</span>
+          <el-row :gutter="30">
+            <el-col :span="6">
+              <span>招聘科室：{{ positionInfo.deptName }}</span>
+            </el-col>
+            <el-col :span="3">
+              <span>需求人数：{{ positionInfo.requireNum }}</span>
+            </el-col>
+            <el-col :span="6">
+              <span>工作地点：{{ positionInfo.address }}</span>
+            </el-col>
+            <el-col :span="4">
+              <span>发布时间：{{ positionInfo.simpleDate }}</span>
+            </el-col>
+            <el-col :span="5">
+              <span>联系电话：{{ positionInfo.contactPhone }}</span>
+            </el-col>
+          </el-row>
         </div>
         <div class="line3">
-          <span>职位描述：{{ positionInfo.desc }}</span>
+          <el-row>
+            <el-col :span="24">
+              <span>职位描述：{{ positionInfo.desc }}</span>
+            </el-col>
+          </el-row>
         </div>
       </div>
     </el-card>
@@ -115,120 +143,19 @@ export default {
     .line1,
     .line2 {
       margin-bottom: 18px;
-    }
-    .line1 {
-      width: 1250px;
-      display: flex;
-      justify-content: space-around;
-      color: #909399;
       span {
-        &:nth-child(1) {
-          width: 240px;
+        &:nth-child(n) {
+          width: 100%;
           height: 25px;
-          padding: 2px;
-          background: #f2f6fc;
+          background: #ebeef5;
+          border-radius: 6px;
           display: flex;
           justify-content: center;
           align-items: center;
-          border-radius: 5px;
-        }
-        &:nth-child(2) {
-          width: 230px;
-          height: 25px;
-          padding: 2px;
-          background: #f2f6fc;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          border-radius: 5px;
-        }
-        &:nth-child(3) {
-          width: 230px;
-          height: 25px;
-          padding: 2px;
-          background: #f2f6fc;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          border-radius: 5px;
-        }
-        &:nth-child(4) {
-          width: 170px;
-          height: 25px;
-          padding: 2px;
-          background: #f2f6fc;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          border-radius: 5px;
-        }
-        &:nth-child(5) {
-          width: 150px;
-          height: 25px;
-          padding: 2px;
-          background: #f2f6fc;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          border-radius: 5px;
-        }
-      }
-    }
-    .line2 {
-      width: 1200px;
-      display: flex;
-      justify-content: space-between;
-      color: #909399;
-      span {
-        &:nth-child(1) {
-          width: 260px;
-          height: 25px;
-          padding: 2px;
-          background: #f2f6fc;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          border-radius: 5px;
-        }
-        &:nth-child(2) {
-          width: 130px;
-          height: 25px;
-          padding: 2px;
-          background: #f2f6fc;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          border-radius: 5px;
-        }
-        &:nth-child(3) {
-          width: 260px;
-          height: 25px;
-          padding: 2px;
-          background: #f2f6fc;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          border-radius: 5px;
-        }
-        &:nth-child(4) {
-          width: 180px;
-          height: 25px;
-          padding: 2px;
-          background: #f2f6fc;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          border-radius: 5px;
-        }
-        &:nth-child(5) {
-          width: 200px;
-          height: 25px;
-          padding: 2px;
-          background: #f2f6fc;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          border-radius: 5px;
+          &:hover {
+            cursor: pointer;
+            box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+          }
         }
       }
     }

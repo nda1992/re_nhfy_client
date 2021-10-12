@@ -6,20 +6,43 @@
     </div>
     <!--<div class="tip"><span>需要发布招聘信息的老师请访问"新闻管理的新闻发布"页面</span></div>-->
     <div class="post">
-      <div class="user-images">
-        <el-carousel :interval="6000" type="card" height="320px">
-          <el-carousel-item v-for="item in carouselImages" :key="item">
-            <img :src="item" class="image">
-          </el-carousel-item>
-        </el-carousel>
-      </div>
+      <el-row>
+        <el-col>
+          <div class="user-images">
+            <el-carousel :interval="6000" type="card" height="320px">
+              <el-carousel-item v-for="item in carouselImages" :key="item">
+                <img :src="item" class="image" />
+              </el-carousel-item>
+            </el-carousel>
+          </div>
+        </el-col>
+      </el-row>
     </div>
     <!--岗位列表-->
-    <div class="list">
-      <h2 style="margin-left: 20px">在招岗位</h2>
-      <PositionCard v-for="(position,index) in positionList" :position-info="position" :show-btns="false" />
-      <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getPositionList()" />
-    </div>
+
+    <el-row>
+      <el-col :xs="24">
+        <div class="list">
+          <h2 style="margin-left: 20px">在招岗位</h2>
+          <PositionCard
+            v-for="(position, index) in positionList"
+            :position-info="position"
+            :show-btns="false"
+          />
+          <el-row>
+            <el-col :span="24">
+              <pagination
+                v-show="total > 0"
+                :total="total"
+                :page.sync="listQuery.page"
+                :limit.sync="listQuery.limit"
+                @pagination="getPositionList()"
+              />
+            </el-col>
+          </el-row>
+        </div>
+      </el-col>
+    </el-row>
   </div>
 </template>
 <script>
@@ -76,30 +99,31 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-  .app-container{
-    margin: 0;
-    padding-top: 10px;
-    .tip{
+.app-container {
+  margin: 0;
+  padding-top: 10px;
+  overflow: scroll;
+  .tip {
+    width: 100%;
+    display: inline-block;
+    height: 20px;
+    background: #99a9bf;
+    color: #000;
+  }
+  .post {
+    font-size: 14px;
+    color: #666;
+    .image {
       width: 100%;
-      display: inline-block;
-      height: 20px;
-      background: #99a9bf;
-      color: #000;
-    }
-    .post {
-      font-size: 14px;
-      color: #666;
-      .image {
-        width: 100%;
-        height: 100%;
-      }
-    }
-    .list{
-      width: 100%;
-      padding: 10px 20px 0 20px;
-      &:hover{
-        box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1)
-      }
+      height: 100%;
     }
   }
+  .list {
+    width: 100%;
+    padding: 10px 20px 0 20px;
+    &:hover {
+      box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+    }
+  }
+}
 </style>

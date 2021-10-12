@@ -5,7 +5,7 @@
       <div class="user-images">
         <el-carousel :interval="6000" type="card" height="320px">
           <el-carousel-item v-for="item in carouselImages" :key="item">
-            <img :src="item" class="image">
+            <img :src="item" class="image" />
           </el-carousel-item>
         </el-carousel>
       </div>
@@ -15,56 +15,104 @@
       <div class="header" :style="scrollStyle">
         <h2 style="margin-left: 20px">在招岗位</h2>
         <div class="filter">
-          <el-tooltip class="item" effect="dark" content="添加岗位筛选条件" placement="bottom">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="添加岗位筛选条件"
+            placement="bottom"
+          >
             <div @click="openFilterDialog">
               <svg-icon icon-class="filter" />
               <span style="margin-left: 5px;">筛选</span>
             </div>
           </el-tooltip>
-          <el-button v-show="isFilter" type="text" @click="clearFilter">清除筛选</el-button>
+          <el-button v-show="isFilter" type="text" @click="clearFilter"
+            >清除筛选</el-button
+          >
         </div>
-
       </div>
       <PositionCard
-        v-for="(position) in positionList"
+        v-for="position in positionList"
         :key="position.id"
         :position-info="position"
         @gotoPosition="gotoPosition(position.id)"
         @gotoCollect="gotoCollect(position.id, position.isCollected)"
       />
-      <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getPositionList()" />
+      <pagination
+        v-show="total > 0"
+        :total="total"
+        :page.sync="listQuery.page"
+        :limit.sync="listQuery.limit"
+        @pagination="getPositionList()"
+      />
     </div>
     <div>
       <el-dialog title="岗位条件筛选" :visible.sync="dialogFormVisible">
-        <el-form ref="filterForm" :model="filterForm" label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
+        <el-form
+          ref="filterForm"
+          :model="filterForm"
+          label-position="left"
+          label-width="100px"
+          style="width: 400px; margin-left:50px;"
+        >
           <el-form-item label="岗位类型" prop="type">
             <el-select v-model="filterForm.type" default-first-option>
-              <el-option v-for="(item,index) in typeOptions" :key="index" :label="item" :value="item" />
+              <el-option
+                v-for="(item, index) in typeOptions"
+                :key="index"
+                :label="item"
+                :value="item"
+              />
             </el-select>
           </el-form-item>
           <el-form-item label="英语要求" prop="english" default-first-option>
             <el-select v-model="filterForm.english">
-              <el-option v-for="(item,index) in englishOptions" :key="index" :label="item" :value="item" />
+              <el-option
+                v-for="(item, index) in englishOptions"
+                :key="index"
+                :label="item"
+                :value="item"
+              />
             </el-select>
           </el-form-item>
           <el-form-item label="年龄要求" prop="age" default-first-option>
             <el-select v-model="filterForm.age">
-              <el-option v-for="(item,index) in ageOptions" :key="index" :label="item" :value="item" />
+              <el-option
+                v-for="(item, index) in ageOptions"
+                :key="index"
+                :label="item"
+                :value="item"
+              />
             </el-select>
           </el-form-item>
           <el-form-item label="学历要求" prop="degree" default-first-option>
             <el-select v-model="filterForm.degree">
-              <el-option v-for="(item,index) in degreeOptions" :key="index" :label="item" :value="item" />
+              <el-option
+                v-for="(item, index) in degreeOptions"
+                :key="index"
+                :label="item"
+                :value="item"
+              />
             </el-select>
           </el-form-item>
           <el-form-item label="计划人数" prop="num" default-first-option>
             <el-select v-model="filterForm.num">
-              <el-option v-for="(item,index) in numOptions" :key="index" :label="item" :value="item" />
+              <el-option
+                v-for="(item, index) in numOptions"
+                :key="index"
+                :label="item"
+                :value="item"
+              />
             </el-select>
           </el-form-item>
           <el-form-item label="招聘科室" prop="deptName" default-first-option>
             <el-select v-model="filterForm.deptName">
-              <el-option v-for="(item,index) in deptNameOptions" :key="index" :label="item" :value="item" />
+              <el-option
+                v-for="(item, index) in deptNameOptions"
+                :key="index"
+                :label="item"
+                :value="item"
+              />
             </el-select>
           </el-form-item>
         </el-form>
@@ -79,7 +127,13 @@
 
 <script>
 import PositionCard from '@/components/PositionCard/index'
-import { getPositionList, UserinfoDetail, postPosition, handleCollect, filterPositions } from '@/api/recruit/position'
+import {
+  getPositionList,
+  UserinfoDetail,
+  postPosition,
+  handleCollect,
+  filterPositions
+} from '@/api/recruit/position'
 import { getSwiperImgs2Run } from '@/api/recruit/position'
 import Pagination from '@/components/Pagination'
 // 对sessionStorage加密
@@ -153,8 +207,11 @@ export default {
     },
     // 滚动鼠标实现固定定位
     scroll() {
-      document.addEventListener('scroll', (event) => {
-        var scrollDistance = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
+      document.addEventListener('scroll', event => {
+        var scrollDistance =
+          window.pageYOffset ||
+          document.documentElement.scrollTop ||
+          document.body.scrollTop
         if (scrollDistance > 360) {
           this.scrollStyle.position = 'fixed'
           this.scrollStyle.top = '50px'
@@ -187,7 +244,9 @@ export default {
     },
     // 获取所有岗位列表
     getPositionList() {
-      const temp = Object.assign({}, this.listQuery, { jobseekerId: this.jobseekerId })
+      const temp = Object.assign({}, this.listQuery, {
+        jobseekerId: this.jobseekerId
+      })
       getPositionList(temp).then(res => {
         this.listLoading = true
         this.positionList = res.positions
@@ -205,7 +264,11 @@ export default {
         this.$message.error('你还没有登录,请先登录')
         return
       }
-      const temp = { positionId: id, jobSeekerId: this.jobseekerId, isCollected: isCollected }
+      const temp = {
+        positionId: id,
+        jobSeekerId: this.jobseekerId,
+        isCollected: isCollected
+      }
       handleCollect(temp).then(res => {
         const { msg } = res
         this.$message.success(msg)
@@ -227,7 +290,8 @@ export default {
       this.$confirm('只能投递一次,是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'warning' }).then(() => {
+        type: 'warning'
+      }).then(() => {
         postPosition(temp).then(res => {
           this.getPositionList(this.listQuery)
           const { msg } = res
@@ -280,44 +344,42 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .position-list{
-    margin-bottom: 80px;
-    .post {
-      font-size: 14px;
-      padding-top: 32px;
-      color: #666;
-      .image {
-        width: 100%;
-        height: 100%;
-      }
-      .user-images {
-        padding-top: 20px;
-      }
+.position-list {
+  .post {
+    font-size: 14px;
+    padding-top: 32px;
+    color: #666;
+    .image {
+      width: 100%;
+      height: 100%;
     }
-    .list{
-      padding: 20px;
-      box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
-      .header{
-        background: #ffffff;
-        /*background: #409EFF;*/
-        width: 100%;
+    .user-images {
+      padding-top: 20px;
+    }
+  }
+  .list {
+    padding: 20px;
+    box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1);
+    .header {
+      background: #ffffff;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .filter {
         display: flex;
+        justify-content: space-around;
         align-items: center;
-        justify-content: space-between;
-        .filter{
-          display: flex;
-          justify-content: space-around;
-          align-items: center;
-          margin-right: 30px;
-          cursor: pointer;
-          &:hover{
-            color: #409EFF;
-          }
-          .item{
-            margin-right: 10px;
-          }
+        margin-right: 30px;
+        cursor: pointer;
+        &:hover {
+          color: #409eff;
+        }
+        .item {
+          margin-right: 10px;
         }
       }
     }
   }
+}
 </style>
