@@ -65,7 +65,7 @@ export default {
     }
   }
   .news-content {
-    margin: 50px 0;
+    margin: 50px 150px;
   }
   a {
     text-decoration: none;

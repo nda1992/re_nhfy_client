@@ -270,10 +270,10 @@ $light_gray:#eee;
     }
   }
   .footer{
-    position: relative;
-    bottom: 0;
-    margin-top: 20px;
-    left: 44%;
+    margin-top: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     div{
       color: #99a9bf;
       font-size: 14px;
