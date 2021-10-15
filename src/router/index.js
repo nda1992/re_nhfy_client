@@ -298,6 +298,13 @@ export const constantRoutes = [
             component: () => import ('@/views/report/children/basicMedicineAndMaterial'),
             meta: { title: 'basic表的查询' },
             hidden: true
+          },
+          {
+            path: 'byDept',
+            name: 'ByDept',
+            component: () => import ('@/views/report/children/byDept'),
+            meta: { title: '按科室查询' },
+            hidden: true
           }
         ]
       },
@@ -339,7 +346,7 @@ export const constantRoutes = [
     component: Layout,
     redirect: '/dataAna/home',
     name: 'DataAna',
-    meta: { title: '数据分析', icon: 'el-icon-data-analysis' },
+    meta: { title: '数据展示', icon: 'el-icon-data-analysis' },
     children: [
       {
         // 首页
@@ -348,19 +355,26 @@ export const constantRoutes = [
         component: () => import ('@/views/dataAna/index'),
         meta: { title: '首页', icon: 'el-icon-house' }
       },
-      // 门诊分析
+      // 全院汇总主题
       {
-        path: 'outpatient',
-        name: 'Outpatient',
-        component: () => import ('@/views/dataAna/outpatient'),
-        meta: { title: '门诊数据分析', icon: 'el-icon-data-line' }
+        path: 'summary',
+        name: 'Summary',
+        component: () => import ('@/views/dataAna/summary'),
+        meta: { title: '全院数据主题', icon: 'el-icon-data-line' }
       },
-      // 住院分析
+      // 科室排名主题
       {
-        path: 'inpatient',
-        name: 'Intpatient',
-        component: () => import ('@/views/dataAna/inpatient'),
-        meta: { title: '住院数据分析', icon: 'el-icon-pie-chart' }
+        path: 'deptRank',
+        name: 'DeptRank',
+        component: () => import ('@/views/dataAna/deptRank'),
+        meta: { title: '科室排名主题', icon: 'el-icon-data-board' }
+      },
+      // 项目构成主题
+      {
+        path: 'componentPart',
+        name: 'ComponentPart',
+        component: () => import ('@/views/dataAna/componentPart'),
+        meta: { title: '项目构成主题', icon: 'el-icon-pie-chart' }
       }
     ]
   },

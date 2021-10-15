@@ -5,7 +5,7 @@
       <div slot="header" class="clearfix">
         <span style="color:#ff6666;font-size: 20px">欢迎使用报表查询模块提供的相关功能</span>
       </div>
-      <div v-for="(item,index) in data" :key="item.id" class="text">
+      <div v-for="(item) in data" :key="item.id" class="text">
         <span :style="item.id===1?color1:color2">{{ item.content }}</span>
       </div>
     </el-card>

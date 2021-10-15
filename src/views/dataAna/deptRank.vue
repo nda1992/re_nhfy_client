@@ -1,5 +1,5 @@
 <template>
-  <!-- 住院数据分析 -->
+  <!-- 科室排名主题 -->
   <div class="" />
 </template>
 <script>
@@ -11,6 +11,6 @@ export default {
   methods: {}
 }
 </script>
-<style lang="scss" scoped>
+<style lang="less" scoped>
 
 </style>

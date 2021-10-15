@@ -1,5 +1,5 @@
 <template>
-  <!-- 门诊数据分析 -->
+  <!-- 全院汇总主题 -->
   <div class="" />
 </template>
 <script>
@@ -11,6 +11,6 @@ export default {
   methods: {}
 }
 </script>
-<style lang="less" scoped>
+<style lang="scss" scoped>
 
 </style>

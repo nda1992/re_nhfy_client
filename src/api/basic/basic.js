@@ -7,3 +7,11 @@ export function basicMedicineAndMaterial(data) {
     data
   })
 }
+
+export function searchByDept(data) {
+  return request({
+    url: '/QueryTheam/bydept/getNumCountByDept',
+    method: 'post',
+    data
+  })
+}
