@@ -20,11 +20,9 @@
 export default {
   data() {
     return {
-      activeName: "first",
-    };
-  },
-  mounted() {},
-  methods: {},
-};
+      activeName: "first"
+    }
+  }
+}
 </script>
 <style lang="scss" scoped></style>

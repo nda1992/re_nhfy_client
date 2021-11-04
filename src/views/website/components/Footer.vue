@@ -97,7 +97,7 @@ export default {
                 title: 'Success',
                 message: msg,
                 type: 'success',
-                duration: 2000
+                duration: 4000
               })
             })
           })

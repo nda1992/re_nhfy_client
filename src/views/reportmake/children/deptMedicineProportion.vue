@@ -20,9 +20,7 @@
         :disabled="showItems.length === 0 ? true : false"
         @keyup.enter.native="handleFilter"
       />
-      <el-button icon="el-icon-search" type="primary" @click="search"
-        >查询</el-button
-      >
+      <el-button icon="el-icon-search" type="primary" @click="search">查询</el-button>
       <el-button
         icon="el-icon-download"
         type="success"
@@ -33,9 +31,7 @@
     </div>
     <div class="table-container">
       <div class="header">
-        <span style="margin-bottom: 10px;font-size: 22px;font-weight: bold"
-          >全院科室药占比</span
-        >
+        <span style="margin-bottom: 10px;font-size: 22px;font-weight: bold">全院科室药占比</span>
         <span class="sum">药品总费用: {{ sum }}</span>
       </div>
       <el-table
