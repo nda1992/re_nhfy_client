@@ -320,7 +320,23 @@ export const constantRoutes = [
         path: 'inpatient',
         name: 'Intpatient',
         component: () => import ('@/views/report/inpatient'),
-        meta: { title: '住院报表查询', icon: 'el-icon-s-unfold' }
+        meta: { title: '住院报表查询', icon: 'el-icon-s-unfold' },
+        children: [
+          {
+            path: 'inpatientMedicineMaterialProp',
+            name: 'InpatientMedicineMaterialProp',
+            component: () => import ('@/views/report/inpatient/inpatientMedicineMaterialProp'),
+            meta: { title: '住院科室药耗占比' },
+            hidden: true
+          },
+          {
+            path: 'outpatientMedicineMaterialProp',
+            name: 'OutpatientMedicineMaterialProp',
+            component: () => import ('@/views/report/outpatient/outpatientMedicineMaterialProp'),
+            meta: { title: '门诊科室药耗占比' },
+            hidden: true
+          }
+        ]
       },
       // 401页面
       {

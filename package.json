@@ -32,6 +32,7 @@
     "path-to-regexp": "2.4.0",
     "screenfull": "^5.1.0",
     "three": "^0.132.2",
+    "tinymce": "^5.10.1",
     "viewport-units-buggyfill": "^0.6.2",
     "vue": "2.6.10",
     "vue-pdf": "^4.3.0",

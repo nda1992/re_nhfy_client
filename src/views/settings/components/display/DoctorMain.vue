@@ -28,9 +28,7 @@
         type="success"
         icon="el-icon-circle-plus-outline"
         style="margin-left: 0"
-        @click="handleCreate"
-        >新增医生</el-button
-      >
+        @click="handleCreate">新增医生</el-button>
       <el-button
         v-waves
         :loading="downloadLoading"
@@ -38,9 +36,7 @@
         type="primary"
         icon="el-icon-download"
         style="margin-left: 0"
-        @click="handleDownload"
-        >导出表格</el-button
-      >
+        @click="handleDownload">导出表格</el-button>
     </div>
     <div>
       <el-table
@@ -335,95 +331,93 @@
         <el-button @click="dialogFormVisible = false">取消</el-button>
         <el-button
           type="primary"
-          @click="dialogStatus === 'create' ? createData() : updateData()"
-          >确定</el-button
-        >
+          @click="dialogStatus === 'create' ? createData() : updateData()">确定</el-button>
       </div>
     </el-dialog>
   </div>
 </template>
 <script>
-import waves from "@/directive/waves"
-import Pagination from "@/components/Pagination"
+import waves from '@/directive/waves'
+import Pagination from '@/components/Pagination'
 import {
   getAllDoctorInfo,
   addDoctorInfo,
   updateDoctorInfo,
   deleteDoctorInfo,
-  recoverDoctorInfo,
-} from "@/api/websitemanager/manager"
-import { searchDept } from "@/api/news/news"
-import { DOCTOR_AVATAR_UPLOAD } from "@/utils/urlConfig"
+  recoverDoctorInfo
+} from '@/api/websitemanager/manager'
+import { searchDept } from '@/api/news/news'
+import { DOCTOR_AVATAR_UPLOAD } from '@/utils/urlConfig'
 export default {
   components: {
-    Pagination,
+    Pagination
   },
   directives: { waves },
-  name: "DoctorMain",
+  name: 'DoctorMain',
   filters: {
     statusFilter(status) {
       const statusMap = {
-        在职: "success",
-        离职: "danger",
-        退休: "warning",
-        进修: "primary",
-        升学: "",
-      };
-      return statusMap[status];
+        在职: 'success',
+        离职: 'danger',
+        退休: 'warning',
+        进修: 'primary',
+        升学: ''
+      }
+      return statusMap[status]
     },
     HandlestatusFilter(status) {
       const statusMap = {
-        正常: "success",
-        已删除: "danger",
-      };
-      return statusMap[status];
-    },
+        正常: 'success',
+        已删除: 'danger'
+      }
+      return statusMap[status]
+    }
   },
   data() {
     const checkPhone = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("手机号不能为空"));
+      if (value === '') {
+        callback(new Error('手机号不能为空'))
       } else if (!/^1\d{10}$/.test(value)) {
-        callback(new Error("请输入正确的手机号码"));
+        callback(new Error('请输入正确的手机号码'))
       } else {
-        callback();
+        callback()
       }
-    };
+    }
     return {
       total: 0,
       listQuery: {
         limit: 10,
-        page: 1,
+        page: 1
       },
       tableKey: 0,
-      searchVal: "",
-      searchType: "医生姓名",
-      typeItems: ["医生姓名", "科室名称", "职称", "学历"],
+      searchVal: '',
+      searchType: '医生姓名',
+      typeItems: ['医生姓名', '科室名称', '职称', '学历'],
       downloadLoading: false,
       list: null,
       searchList: null,
       // 基本信息
       listLoading: false,
       temp: {
-        userCode: "",
-        username: "",
+        userCode: '',
+        username: '',
         age: undefined,
-        jobTitle: "",
-        grade: "",
-        education: "",
-        school: "",
-        deptName: "",
-        topDept: "",
-        phone: "",
-        email: "",
-        avatar: "",
-        desc: "",
-        currentStatus: "",
-        professional: "",
+        jobTitle: '',
+        grade: '',
+        education: '',
+        school: '',
+        deptName: '',
+        topDept: '',
+        phone: '',
+        email: '',
+        avatar: '',
+        desc: '',
+        currentStatus: '',
+        professional: ''
       },
       rules: {
-        userCode: [{ required: true, message: "请输入医生工号", trigger: "blur" }],
-        username: [{ required: true, message: "请输入医生姓名", trigger: "blur" }],
+        userCode: [{ required: true, message: '请输入医生工号', trigger: "blur" }],
+        username: [{ required: true, message: '请输入医生姓名', trigger: "blur" }],
         age: [{ required: true, message: "请输入医生年龄", trigger: "blur" }],
         jobTitle: [{ required: true, message: "请输入医生职称", trigger: "blur" }],
         grade: [{ required: true, message: "请输入医生级别", trigger: "blur" }],

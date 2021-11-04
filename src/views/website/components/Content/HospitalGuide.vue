@@ -56,8 +56,8 @@ export default {
             return e
           }
         })
-        for (let i in this.icons) {
-          for (let j in this.content) {
+        for (const i in this.icons) {
+          for (const j in this.content) {
             if (this.content[j].name === this.icons[i]) {
               temp = {
                 id: parseInt(i) + 1,

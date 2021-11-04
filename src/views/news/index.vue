@@ -34,9 +34,7 @@
             class="filter-item"
             type="primary"
             icon="el-icon-search"
-            @click="handleFilter(searchType)"
-            >搜索</el-button
-          >
+            @click="handleFilter(searchType)">搜索</el-button>
         </el-col>
         <el-col :span="7">
           <el-button
@@ -46,9 +44,7 @@
             type="success"
             icon="el-icon-download"
             style="margin-left: 0"
-            @click="handleDownload"
-            >导出表格</el-button
-          >
+            @click="handleDownload">导出表格</el-button>
         </el-col>
       </el-row>
     </div>
@@ -214,9 +210,7 @@
       >
         <template slot-scope="scope">
           <router-link :to="'/news/edit/' + scope.row.id">
-            <el-button type="primary" size="mini" icon="el-icon-edit"
-              >编辑</el-button
-            >
+            <el-button type="primary" size="mini" icon="el-icon-edit">编辑</el-button>
           </router-link>
           <el-button
             v-if="scope.row.status != 'deleted'"

@@ -23,19 +23,19 @@
   </div>
 </template>
 <script>
-import DoctorMain from "./components/display/DoctorMain";
-import usuallywebsiteMain from "./components/display/usuallywebsiteMain";
+import DoctorMain from './components/display/DoctorMain'
+import usuallywebsiteMain from './components/display/usuallywebsiteMain'
 export default {
   components: {
     DoctorMain,
-    usuallywebsiteMain,
+    usuallywebsiteMain
   },
   data() {
     return {
-      activeName: "first",
-    };
-  },
-};
+      activeName: "first"
+    }
+  }
+}
 </script>
 <style lang="scss" scoped>
 .app-container {
