@@ -35,7 +35,7 @@
           />
           <el-divider />
           <UploadImg
-            :user-code="userCode"
+            :userCode="userCode"
             @getAllSwiperImgs="getAllSwiperImgs"
           />
         </el-tab-pane>

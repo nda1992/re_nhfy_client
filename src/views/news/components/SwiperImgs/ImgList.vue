@@ -12,7 +12,12 @@
         style="width: 100%"
       >
         <el-table-column label="序号" align="center" prop="xh" width="50" />
-        <el-table-column label="上传者工号" prop="userCode" align="center" width="120">
+        <el-table-column
+          label="上传者工号"
+          prop="userCode"
+          align="center"
+          width="120"
+        >
           <template slot-scope="{ row }">
             <span>{{ row.userCode }}</span>
           </template>
@@ -29,7 +34,12 @@
             <span>{{ row.createdDate }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="略缩图" prop="url" align="center" min-width="80px">
+        <el-table-column
+          label="略缩图"
+          prop="url"
+          align="center"
+          min-width="80px"
+        >
           <template slot-scope="{ row }">
             <el-tooltip
               class="item"
@@ -40,12 +50,28 @@
               <el-image
                 style="width: 100px; height: 50px; border-radius: 5px"
                 :src="row.url"
-                :preview-src-list='srcList'
+                :preview-src-list="srcList"
               />
             </el-tooltip>
           </template>
         </el-table-column>
-        <el-table-column label="招聘系统轮播图" prop="Switch" align="center" width="120">
+        <el-table-column
+          label="新闻标题"
+          prop="text"
+          align="center"
+          width="300"
+          show-overflow-tooltip="true"
+        >
+          <template slot-scope="{ row }">
+            <span>{{ row.text }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="招聘系统轮播图"
+          prop="Switch"
+          align="center"
+          width="120"
+        >
           <template slot-scope="{ row }">
             <el-switch
               v-model="row.Switch"
@@ -58,7 +84,12 @@
             />
           </template>
         </el-table-column>
-        <el-table-column label="官网轮播图" prop="websiteSwitch" align="center" width="120">
+        <el-table-column
+          label="官网轮播图"
+          prop="websiteSwitch"
+          align="center"
+          width="120"
+        >
           <template slot-scope="{ row }">
             <el-switch
               v-model="row.websiteSwitch"
@@ -71,7 +102,7 @@
             />
           </template>
         </el-table-column>
-        <el-table-column label="下载图片" prop="url" align="center" width="200">
+        <el-table-column label="下载图片" prop="url" align="center" width="100">
           <template slot-scope="{ row }">
             <i class="el-icon-download" style="margin-right: 3px" />
             <span><a :href="row.url" style="color: #409eff">下载图片</a></span>
@@ -102,7 +133,7 @@
 
 <script>
 export default {
-  name: "ImgList",
+  name: 'ImgList',
   props: {
     imgList: {
       type: Array,
@@ -135,16 +166,16 @@ export default {
       row.xh = rowIndex + 1
     },
     handleDelete(row) {
-      this.$emit("handleDelete", row)
+      this.$emit('handleDelete', row)
     },
     // 更改招聘网站轮播图状态
     handleSetStatus(row) {
-      this.$emit("handleSetStatus", row)
+      this.$emit('handleSetStatus', row)
     },
     // 更改官网轮播图状态
     handleSetWebsiteStatus(row) {
       this.$emit('handleSetWebsiteStatus', row)
     }
   }
-};
+}
 </script>

@@ -114,6 +114,13 @@ export const constantRoutes = [
         name: 'PositionUserinfor',
         component: () => import ('@/views/position/positionUserinfo'),
         hidden: true
+      },
+      {
+        // 查看新闻页面
+        path: 'getnews/:id(\\d+)',
+        name: 'getNews',
+        component: () => import ('@/views/position/components/getNewsById'),
+        hidden: true
       }
     ]
   },
@@ -223,6 +230,14 @@ export const constantRoutes = [
         name: 'Postlist',
         component: () => import ('@/views/recruit/postlist'),
         meta: { title: '投递列表', icon: 'list' }
+      },
+      {
+        // 查看新闻页面
+        path: 'getnews/:id(\\d+)',
+        name: 'getNews',
+        component: () => import('@/views/recruit/getNewsById'),
+        meta: { title: '浏览新闻'},
+        hidden: true
       }
     ]
   },
