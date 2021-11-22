@@ -2,13 +2,7 @@
   <!--轮播图-->
   <div class="position-list">
     <div class="post">
-      <div class="user-images">
-        <el-carousel :interval="6000" type="card" height="320px">
-          <el-carousel-item v-for="item in carouselImages" :key="item">
-            <img :src="item" class="image" />
-          </el-carousel-item>
-        </el-carousel>
-      </div>
+      <SwiperItem :items="carouselImages" @getNewsById="getNewsById" />
     </div>
     <!--岗位列表-->
     <div class="list">
@@ -136,13 +130,15 @@ import {
 } from '@/api/recruit/position'
 import { getSwiperImgs2Run } from '@/api/recruit/position'
 import Pagination from '@/components/Pagination'
+import SwiperItem from '@/components/SwiperItem/index'
 // 对sessionStorage加密
 import { StorageClass } from '@/utils/session'
 export default {
   name: 'PositionList',
   components: {
     PositionCard,
-    Pagination
+    Pagination,
+    SwiperItem
   },
   data() {
     return {
@@ -229,8 +225,13 @@ export default {
     getSwiperImgs() {
       getSwiperImgs2Run({ swiperFlag: 'recruit' }).then(res => {
         const { swipers } = res
-        this.carouselImages = swipers.map(e => e.url)
+        this.carouselImages = swipers.map(e => {
+          return { id: e.id, url: e.url, text: e.text, newsid: e.newsid }
+        })
       })
+    },
+    getNewsById(id) {
+      this.$router.push({ path: `/position/getnews/${id}` })
     },
     // 根据用户id拉取完整信息
     getUserinfoDetail() {

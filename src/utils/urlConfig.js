@@ -44,3 +44,6 @@ export const QRCODE_DOWNLOAD = 'http://localhost:3000/background/qrcode.jpg'
 
 // 底部二维码
 export const FOOTER_QRCODE_DOWNLOAD = 'http://localhost:3000/background/qrcode1.png'
+
+// 背景音乐下载
+export const BACKGROUND_MUSIC_DOWNLOAD = 'http://localhost:3000/music/music.mp3'

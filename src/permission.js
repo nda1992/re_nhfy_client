@@ -10,7 +10,7 @@ NProgress.configure({ showSpinner: false }) // NProgress Configuration
 
 const whiteList = ['/login', '/register', '/passwd', '/position', '/position/list', '/position/positionRegister', '/position/positionUserinfo', '/position/positionNoticeList', '/nhfy', '/nhfy/home'] // no redirect whitelist
 // 官网的路径全部放通行
-const websiteList = ['/nhfy']
+const websiteList = ['/nhfy', '/position']
 router.beforeEach(async(to, from, next) => {
   // start progress bar
   NProgress.start()

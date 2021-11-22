@@ -8,13 +8,7 @@
     <div class="post">
       <el-row>
         <el-col>
-          <div class="user-images">
-            <el-carousel :interval="6000" type="card" height="320px">
-              <el-carousel-item v-for="item in carouselImages" :key="item">
-                <img :src="item" class="image" />
-              </el-carousel-item>
-            </el-carousel>
-          </div>
+          <SwiperItem :items="carouselImages" @getNewsById="getNewsById" />
         </el-col>
       </el-row>
     </div>
@@ -49,10 +43,12 @@
 import PositionCard from '@/components/PositionCard/index'
 import { getPositionList, getSwiperImgs2Run } from '@/api/recruit/recruit'
 import Pagination from '@/components/Pagination'
+import SwiperItem from '@/components/SwiperItem/index'
 export default {
   components: {
     PositionCard,
-    Pagination
+    Pagination,
+    SwiperItem
   },
   data() {
     return {
@@ -92,8 +88,14 @@ export default {
     getSwiperImgs() {
       getSwiperImgs2Run({}).then(res => {
         const { swipers } = res
-        this.carouselImages = swipers.map(e => e.url)
+        console.log(res)
+        this.carouselImages = swipers.map(e => {
+          return { id: e.id, url: e.url, text: e.text, newsid: e.newsid }
+        })
       })
+    },
+    getNewsById(id) {
+      this.$router.push({ path: `/recruit/getnews/${id}` })
     }
   }
 }

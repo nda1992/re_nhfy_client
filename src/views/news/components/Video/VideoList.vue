@@ -48,7 +48,7 @@
           label="视频封面"
           prop="url"
           align="center"
-          min-width="50px"
+          min-width="60px"
         >
           <template slot-scope="{ row }">
             <el-tooltip
@@ -70,7 +70,7 @@
           label="视频分类"
           prop="category"
           align="center"
-          width="200"
+          width="100"
         >
           <template slot-scope="{ row }">
             <span>{{ row.category }}</span>
@@ -80,7 +80,8 @@
           label="视频标题"
           prop="title"
           align="center"
-          width="300"
+          width="200"
+          show-overflow-tooltip="true"
         >
           <template slot-scope="{ row }">
             <span>{{ row.title }}</span>
