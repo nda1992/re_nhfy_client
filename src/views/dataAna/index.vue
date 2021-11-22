@@ -14,13 +14,16 @@
       <span>耗占比：{{ materialProp }}</span>
     </div>
     <div class="container-visualize">
-      <Visualize :options="option" :width="'500px'" :height="'500px'" />
+      <div class="container-visualize-char1">
+        <Visualize :options="option" :width="'500px'" :height="'500px'" />
+      </div>
     </div>
   </div>
 </template>
 <script>
 import Visualize from '@/components/Visualization/index'
 import { getBasicData } from '@/api/topic/basic/basic'
+import { getOutpatientSumm } from '@/api/visualize/summary'
 export default {
   components: {
     Visualize
@@ -44,7 +47,7 @@ export default {
       list: [],
       option: {
         title: {
-          text: 'Referer of a Website',
+          text: '门诊收入分类',
           left: 'center'
         },
         tooltip: {
@@ -93,6 +96,20 @@ export default {
         this.medicineProp = result.药占比
         this.materialProp = result.耗占比
       })
+    },
+    getChar1Data() {
+      const arr = []
+      getOutpatientSumm().then(res => {
+        const { result } = res
+        const names = Object.keys(result[0])
+        const values = Object.values(result[0])
+        for (let i = 0; i < names.length; i++) {
+          let obj = Object.assign({}, { value: parseFloat(values[i]), name: names[i] })
+          arr.push(obj)
+          obj = {}
+        }
+      })
+      this.option.series.data = arr
     }
   }
 }
@@ -131,6 +148,13 @@ export default {
         -webkit-transform: rotateX(360deg);
         transform: rotateX(360deg);
       }
+    }
+  }
+  .container-visualize {
+    .container-visualize-char1 {
+      width: 500px;
+      height: 500px;
+      border: 1px solid red;
     }
   }
 }

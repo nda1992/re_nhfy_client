@@ -7,3 +7,19 @@ export function getoutpatientMedicineMaterialProp(data) {
     data: data
   })
 }
+
+export function getAvgRevenueByDept(data) {
+  return request({
+    url: '/report/outpatient/getAvgRevenueByDept',
+    method: 'post',
+    data: data
+  })
+}
+
+export function getAvgRevenueByDoctor(data) {
+  return request({
+    url: '/report/outpatient/getAvgRevenueByDoctor',
+    method: 'post',
+    data: data
+  })
+}

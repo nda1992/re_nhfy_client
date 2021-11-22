@@ -5,7 +5,7 @@
       <el-dropdown>
         <el-button type="primary">更多功能<i class="el-icon-arrow-down el-icon--right" /></el-button>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item v-for="(item,index) in menuList" :key="item.id" @click.native="selected(item.id)">{{ item.content }}</el-dropdown-item>
+          <el-dropdown-item v-for="item in menuList" :key="item.id" @click.native="selected(item.id)">{{ item.content }}</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
