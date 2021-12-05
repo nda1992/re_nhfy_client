@@ -328,7 +328,23 @@ export const constantRoutes = [
         path: 'outpatient',
         name: 'Outpatient',
         component: () => import ('@/views/report/outpatient'),
-        meta: { title: '门诊报表查询', icon: 'el-icon-s-fold' }
+        meta: { title: '门诊报表查询', icon: 'el-icon-s-fold' },
+        children: [
+          {
+            path: 'avgRevenueByDept',
+            name: 'AvgRevenueByDept',
+            component: () => import ('@/views/report/outpatient/avgRevenueByDept'),
+            meta: { title: '各科室门诊人均费用' },
+            hidden: true
+          },
+          {
+            path: 'avgRevenueByDoctor',
+            name: 'AvgRevenueByDoctor',
+            component: () => import ('@/views/report/outpatient/avgRevenueByDoctor'),
+            meta: { title: '各科室门诊人均费用' },
+            hidden: true
+          }
+        ]
       },
       // 住院报表查询
       {
