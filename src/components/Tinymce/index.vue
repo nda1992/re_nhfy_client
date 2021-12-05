@@ -1,9 +1,17 @@
 <template>
-  <div :class="{fullscreen:fullscreen}" class="tinymce-container" :style="{width:containerWidth}">
+  <div
+    :class="{ fullscreen: fullscreen }"
+    class="tinymce-container"
+    :style="{ width: containerWidth }"
+  >
     <textarea :id="tinymceId" class="tinymce-textarea" />
     <div class="editor-custom-btn-container">
       <editorExcel class="excel-upload-btn" @successExcel="ExcelSuccessCBK" />
-      <editorImage color="#1890ff" class="editor-upload-btn" @successCBK="imageSuccessCBK" />
+      <editorImage
+        color="#1890ff"
+        class="editor-upload-btn"
+        @successCBK="imageSuccessCBK"
+      />
     </div>
   </div>
 </template>
@@ -19,7 +27,8 @@ import toolbar from './toolbar'
 import load from './dynamicLoadScript'
 import editorExcel from './components/EditorExcel'
 // why use this cdn, detail see https://github.com/PanJiaChen/tinymce-all-in-one
-const tinymceCDN = 'https://cdn.jsdelivr.net/npm/tinymce-all-in-one@4.9.3/tinymce.min.js'
+const tinymceCDN =
+  'https://cdn.jsdelivr.net/npm/tinymce-all-in-one@4.9.3/tinymce.min.js'
 // const tinymceCDN = 'https://cdn.jsdelivr.net/npm/tinymce@5.10.0/tinymce.min.js'
 
 export default {
@@ -29,7 +38,11 @@ export default {
     id: {
       type: String,
       default: function() {
-        return 'vue-tinymce-' + +new Date() + ((Math.random() * 1000).toFixed(0) + '')
+        return (
+          'vue-tinymce-' +
+          +new Date() +
+          ((Math.random() * 1000).toFixed(0) + '')
+        )
       }
     },
     value: {
@@ -65,17 +78,18 @@ export default {
       tinymceId: this.id,
       fullscreen: false,
       languageTypeList: {
-        'en': 'en',
-        'zh': 'zh_CN',
-        'es': 'es_MX',
-        'ja': 'ja'
+        en: 'en',
+        zh: 'zh_CN',
+        es: 'es_MX',
+        ja: 'ja'
       }
     }
   },
   computed: {
     containerWidth() {
       const width = this.width
-      if (/^[\d]+(\.[\d]+)?$/.test(width)) { // matches `100`, `'100'`
+      if (/^[\d]+(\.[\d]+)?$/.test(width)) {
+        // matches `100`, `'100'`
         return `${width}px`
       }
       return width
@@ -85,7 +99,8 @@ export default {
     value(val) {
       if (!this.hasChange && this.hasInit) {
         this.$nextTick(() =>
-          window.tinymce.get(this.tinymceId).setContent(val || ''))
+          window.tinymce.get(this.tinymceId).setContent(val || '')
+        )
       }
     }
   },
@@ -106,7 +121,7 @@ export default {
   methods: {
     init() {
       // dynamic load tinymce from cdn
-      load(tinymceCDN, (err) => {
+      load(tinymceCDN, err => {
         if (err) {
           this.$message.error(err.message)
           return
@@ -147,7 +162,7 @@ export default {
           })
         },
         setup(editor) {
-          editor.on('FullscreenStateChanged', (e) => {
+          editor.on('FullscreenStateChanged', e => {
             _this.fullscreen = e.state
           })
         },
@@ -207,10 +222,21 @@ export default {
       window.tinymce.get(this.tinymceId).getContent()
     },
     imageSuccessCBK(arr) {
-      arr.forEach(v => window.tinymce.get(this.tinymceId).insertContent(`<img class="wscnph" src="${v.url}" >`))
+      this.$store.dispatch('news/setNewsBackgroundUrl', { url: arr[0].url })
+      arr.forEach(v =>
+        window.tinymce
+          .get(this.tinymceId)
+          .insertContent(`<img class="wscnph" src="${v.url}" >`)
+      )
     },
     ExcelSuccessCBK(arr) {
-      arr.forEach(v => window.tinymce.get(this.tinymceId).insertContent(`<a href="${v.url}" style="text-decoration: none;">${v.filename}</a><br/>`))
+      arr.forEach(v =>
+        window.tinymce
+          .get(this.tinymceId)
+          .insertContent(
+            `<a href="${v.url}" style="text-decoration: none;">${v.filename}</a><br/>`
+          )
+      )
     }
   }
 }
@@ -246,7 +272,7 @@ export default {
   z-index: 10000;
   position: fixed;
 }
-.excel-upload-btn{
+.excel-upload-btn {
   float: right;
   margin-left: 10px;
   display: inline-block;

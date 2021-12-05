@@ -1,7 +1,13 @@
 <template>
   <!--action="https://httpbin.org/post"-->
   <div class="upload-container">
-    <el-button :style="{background:color,borderColor:color}" icon="el-icon-upload" size="mini" type="primary" @click=" dialogVisible=true">
+    <el-button
+      :style="{ background: color, borderColor: color }"
+      icon="el-icon-upload"
+      size="mini"
+      type="primary"
+      @click="dialogVisible = true"
+    >
       上传图片
     </el-button>
     <el-dialog :visible.sync="dialogVisible">
@@ -52,12 +58,16 @@ export default {
   },
   methods: {
     checkAllSuccess() {
-      return Object.keys(this.listObj).every(item => this.listObj[item].hasSuccess)
+      return Object.keys(this.listObj).every(
+        item => this.listObj[item].hasSuccess
+      )
     },
     handleSubmit() {
       const arr = Object.keys(this.listObj).map(v => this.listObj[v])
       if (!this.checkAllSuccess()) {
-        this.$message('Please wait for all images to be uploaded successfully. If there is a network problem, please refresh the page and upload again!')
+        this.$message(
+          'Please wait for all images to be uploaded successfully. If there is a network problem, please refresh the page and upload again!'
+        )
         return
       }
       // console.log(arr)
@@ -69,7 +79,6 @@ export default {
     handleSuccess(response, file) {
       const { files } = response
       const uid = file.uid
-      // console.log(this.listObj)
       const objKeyArr = Object.keys(this.listObj)
       for (let i = 0, len = objKeyArr.length; i < len; i++) {
         if (this.listObj[objKeyArr[i]].uid === uid) {
@@ -98,7 +107,12 @@ export default {
         const img = new Image()
         img.src = _URL.createObjectURL(file)
         img.onload = function() {
-          _self.listObj[fileName] = { hasSuccess: false, uid: file.uid, width: this.width, height: this.height }
+          _self.listObj[fileName] = {
+            hasSuccess: false,
+            uid: file.uid,
+            width: this.width,
+            height: this.height
+          }
         }
         resolve(true)
       })

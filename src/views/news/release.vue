@@ -1,7 +1,12 @@
 <template>
   <!-- 新闻发布页面 -->
   <div class="createPost-container">
-    <el-form ref="postForm" :model="postForm" :rules="rules" class="form-container">
+    <el-form
+      ref="postForm"
+      :model="postForm"
+      :rules="rules"
+      class="form-container"
+    >
       <sticky :z-index="10" :class-name="'sub-navbar ' + postForm.status">
         <div class="stick">
           <PlatformDropdown v-model="postForm.platforms" />
@@ -37,8 +42,15 @@
         <el-row>
           <Warning />
           <el-col :span="24">
-            <el-form-item style="margin-bottom: 40px" prop="title" name="name" required>
-              <MDinput v-model="postForm.title" :maxlength="100">新闻标题</MDinput>
+            <el-form-item
+              style="margin-bottom: 40px"
+              prop="title"
+              name="name"
+              required
+            >
+              <MDinput v-model="postForm.title" :maxlength="100"
+                >新闻标题</MDinput
+              >
             </el-form-item>
             <div class="postInfo-container">
               <el-row>
@@ -150,7 +162,6 @@ import {
   getDraftById
 } from '@/api/news/news'
 import Tinymce from '@/components/Tinymce'
-// import Upload from '@/components/Upload/SingleImage3'
 import MDinput from '@/components/MDinput'
 import Sticky from '@/components/Sticky' // 粘性header组件
 import Warning from './components/Warning'
@@ -171,7 +182,8 @@ const defaultForm = {
   type: '', // 1=发布，2=草稿
   role: '',
   newsStatus: undefined,
-  currentRoute: ''
+  currentRoute: '',
+  newsBackgroundUrl: 'http://localhost:3000/images/news/default.png'
 }
 export default {
   components: { Tinymce, Sticky, MDinput, Warning, PlatformDropdown },
@@ -217,6 +229,9 @@ export default {
     },
     role() {
       return StorageClass.getSession('role').role
+    },
+    newsBackUrl() {
+      return sessionStorage.getItem('news_url')
     }
   },
   methods: {
@@ -236,7 +251,8 @@ export default {
         deptName: '',
         type: '', // 1=发布，2=草稿
         role: '',
-        newsStatus: undefined
+        newsStatus: undefined,
+        newsBackgroundUrl: ''
       }
       this.$nextTick(() => {
         this.$refs['postForm'].clearValidate()
@@ -244,7 +260,10 @@ export default {
     },
     // 点击发布按钮触发
     submitForm() {
-      if (this.postForm.content.length === 0 || this.postForm.title.length === 0) {
+      if (
+        this.postForm.content.length === 0 ||
+        this.postForm.title.length === 0
+      ) {
         this.$message({
           message: '请填写必要的标题和内容',
           type: 'warning'
@@ -262,7 +281,7 @@ export default {
         })
         return
       }
-      this.$refs.postForm.validate((valid) => {
+      this.$refs.postForm.validate(valid => {
         if (valid) {
           this.$confirm('是否发布文章?', '提示', {
             confirmButtonText: '确定',
@@ -275,6 +294,7 @@ export default {
             this.postForm.type = 2 // 表示已经提交，申请发布
             this.postForm.newsStatus = 2 // 表示已经提交，但需要管理员审核
             this.postForm.role = this.role
+            this.postForm.newsBackgroundUrl = this.newsBackUrl //新闻封面
             releaseNews(this.postForm).then(() => {
               this.$notify({
                 title: '成功',
@@ -295,10 +315,10 @@ export default {
     /* 文章草稿相关方法 */
     // 获取该用户下所有的文章草稿标题
     getdraftTitleList() {
-      const temp = { role: this.role, loginuserCode: this.userCode };
-      getDraftList(temp).then((res) => {
+      const temp = { role: this.role, loginuserCode: this.userCode }
+      getDraftList(temp).then(res => {
         const { items } = res
-        this.draftTitleList = items.map((e) => {
+        this.draftTitleList = items.map(e => {
           return { value: e.title, id: e.id }
         })
         this.draftNums = items.length
@@ -320,7 +340,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.loading = true
-        saveDraft(this.postForm).then((res) => {
+        saveDraft(this.postForm).then(res => {
           this.getdraftTitleList()
           this.$notify({
             message: '已经保存为草稿',
@@ -349,14 +369,14 @@ export default {
     },
     // 过滤草稿标题内容
     createStateFilter(queryString) {
-      return (state) => {
-        return state.value.indexOf(queryString.toLowerCase()) === 0;
+      return state => {
+        return state.value.indexOf(queryString.toLowerCase()) === 0
       }
     },
     // 选择草稿标题后触发
     handleSelect(item) {
       const value = { id: item.id }
-      getDraftById(value).then((res) => {
+      getDraftById(value).then(res => {
         const { result } = res
         this.postForm.id = result.id
         this.postForm.title = result.title
@@ -366,16 +386,17 @@ export default {
         this.postForm.author = result.userName
         this.postForm.deptName = result.deptName
         this.postForm.status = result.status
+        this.postForm.newsBackgroundUrl = result.url
       })
     },
 
     // 查询发布新闻的作者
     getRemoteUserList(query) {
       this.select_loading = true
-      searchUser(query).then((response) => {
+      searchUser(query).then(response => {
         const { items } = response
         if (!items) return
-        this.userListOptions = items.map((v) => v.username)
+        this.userListOptions = items.map(v => v.username)
       })
       this.select_loading = false
     },
@@ -383,20 +404,20 @@ export default {
     // 获取新闻类别
     getRemoteCategoryList(query) {
       this.select_loading = true
-      searchCategory(query).then((response) => {
+      searchCategory(query).then(response => {
         const { items } = response
         if (!items) return
-        this.categoryListOptions = items.map((v) => v.name)
+        this.categoryListOptions = items.map(v => v.name)
       })
       this.select_loading = false
     },
     // 获取部门
     getRemoteDeptList(query) {
       this.select_loading = true
-      searchDept(query).then((response) => {
+      searchDept(query).then(response => {
         const { items } = response
         if (!items) return
-        this.deptListOptions = items.map((v) => v.name)
+        this.deptListOptions = items.map(v => v.name)
       })
       this.select_loading = false
     }
@@ -404,7 +425,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-@import "~@/styles/mixin.scss";
+@import '~@/styles/mixin.scss';
 .createPost-container {
   position: relative;
   .stick {
